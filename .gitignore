@@ -1,0 +1,48 @@
+# Игнорировать все файлы и папки по умолчанию
+/*
+
+# Разрешить отслеживание только кастомной темы
+!no-home-ws-files/wp-content/themes/
+!.gitignore
+
+# Разрешить необходимые файлы в проекте
+!README.md
+!docker-compose.yml
+
+# Игнорировать стандартные файлы WordPress
+no-home-ws-files/wp-admin/
+no-home-ws-files/wp-includes/
+no-home-ws-files/readme.html
+no-home-ws-files/license.txt
+
+# Игнорировать конфигурацию
+no-home-ws-files/wp-config.php
+no-home-ws-files/wp-config-sample.php
+
+# Лог-файлы
+*.log
+debug.log
+
+# Секретные данные
+.env
+.htaccess
+
+# Кэш и временные файлы
+no-home-ws-files/wp-content/cache/
+no-home-ws-files/wp-content/upgrade/
+no-home-ws-files/wp-content/uploads/wp-file-manager-pro/*
+
+# Исключаем все плагины и стандартные темы
+no-home-ws-files/wp-content/plugins/
+no-home-ws-files/wp-content/themes/*
+
+# Исключаем Docker-данные
+no-home-ws-files/db_data/
+no-home-ws-files/wp-files/
+
+# Исключаем IDE и системные файлы
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
