@@ -2,7 +2,8 @@
 /*
 
 # Разрешить отслеживание только кастомной темы
-!no-home-ws-files/wp-content/themes/blankslate
+!no-home-ws-files/wp-content/themes/blankslate/
+!no-home-ws-files/wp-content/themes/blankslate/*
 
 # Разрешить необходимые файлы в проекте
 !README.md
