@@ -1,0 +1,106 @@
+<!-- wp:html -->
+<!-- HTML -->
+<nav class="bg-success nav-bottom">
+    <div class="container-fluid">
+        <div class="row nav-content bg-light">
+            <div class="volume-control-wrapper col-xxl-2 col-xl-2 col-lg-3 col-md-3 col-sm-4">
+                <div class="volume-control bg-primary">
+                    <a href="#"><img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/desk%20volume%20control.svg" alt="Button 1"></a>
+                </div>
+            </div>
+            <div class="d-none d-md-block col-xxl-8 col-xl-8 col-lg-6 col-md-6 col-sm-4">
+                <!-- Пустая колонка для центрирования на средних и больших экранах -->
+            </div>
+            <div class="nav-bottom-buttons bg-warning button-container col-xxl-2 col-xl-2 col-lg-3 col-md-3 col-sm-4">
+                <a href="#"><img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/trnsltr.svg" alt="Button 1"></a>
+                <a href="#"><img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/x-ray.svg" alt="Button 2"></a>
+                <a href="#"><img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/items.svg" alt="Button 3"></a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- CSS -->
+<style>
+.container-fluid, .row.nav-content {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.row {
+    --bs-gutter-x: 0;
+    --bs-gutter-y: 0;
+    height: 100%;
+}
+.nav-content {
+    height: 115px; 
+    display: flex;
+    align-items: stretch; 
+    justify-content: space-between;
+    padding: 0;
+}
+.nav-bottom {
+    position: fixed; 
+    bottom: 0; 
+    left: 0;
+    width: 100%; 
+    z-index: 1000; 
+    margin: 0;
+    padding: 30px;
+}
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+}
+.button-container a {
+    margin: 0 15px;
+}
+.button-container a:first-child {
+    margin-left: 0;
+}
+.button-container a:last-child {
+    margin-right: 0;
+}
+.button-container img {
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+.nav-bottom-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    height: 100%;
+}
+.volume-control-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: auto; 
+}
+.volume-control {
+    margin-top: auto; /* Добавлено */
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.volume-control a {
+    display: block;
+}
+.volume-control img {
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+}
+.d-none.d-md-block {
+    height: 100%;
+}
+[class^="col-"], [class*=" col-"] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+</style>
+
+<!-- /wp:html -->
