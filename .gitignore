@@ -34,7 +34,6 @@ no-home-ws-files/wp-content/uploads/wp-file-manager-pro/*
 
 # Исключаем все плагины и стандартные темы
 no-home-ws-files/wp-content/plugins/
-no-home-ws-files/wp-content/themes/*
 
 # Исключаем Docker-данные
 no-home-ws-files/db_data/
