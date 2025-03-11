@@ -17,18 +17,395 @@ BlankSlate WordPress Theme 2011-2024
 BlankSlate is distributed under the terms of the GNU GPL
 */
 
-    body, html {
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        display: flex;
-        justify-content: center;
-		flex-direction: column;
-		user-select: none;
-    }
+/* ==============================
+   1. Font Declarations
+============================== */
+
+@font-face {
+  font-family: PixelScript;
+  src: url(/wp-content/themes/blankslate/fonts/PF%20Pixelscript%20Pro%20Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Avara;
+  src: url(/wp-content/themes/blankslate/fonts/Avara-BoldItalic.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Avara-Bold;
+  src: url(/wp-content/themes/blankslate/fonts/Avara-Bold.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: FT88;
+  src: url(/wp-content/themes/blankslate/fonts/FT88-Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Henny Penny;
+  src: url(/wp-content/themes/blankslate/fonts/HennyPenny-Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Hershey;
+  src: url(/wp-content/themes/blankslate/fonts/Hershey-Noailles-Futura-Triplex-Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: Hershey-Times-Mono;
+  src: url(/wp-content/themes/blankslate/fonts/Hershey-Noailles-Times-Mono-Regular.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: This Reality;
+  src: url(/wp-content/themes/blankslate/fonts/ThisReality-Regular.ttf);
+  font-weight: normal;
+}
+
+/* ==============================
+   2. Reset & Base Styles
+============================== */
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: 1;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+/* Base Elements */
+a {
+  text-decoration-skip-ink: auto;
+}
+
+a[href^="tel"] {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  outline: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+q {
+  display: inline;
+  font-style: italic;
+}
+
+q:before {
+  content: '"';
+  font-style: normal;
+}
+
+q:after {
+  content: '"';
+  font-style: normal;
+}
+
+textarea,
+input[type="text"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="search"],
+input[type="password"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 0;
+}
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 2px;
+}
+
+big {
+  font-size: 120%;
+}
+
+small,
+sup,
+sub {
+  font-size: 80%;
+}
+
+sup {
+  vertical-align: super;
+}
+
+sub {
+  vertical-align: sub;
+}
+
+dd {
+  margin-left: 20px;
+}
+
+kbd,
+tt {
+  font-family: courier;
+  font-size: 12px;
+}
+
+ins {
+  text-decoration: underline;
+}
+
+del,
+strike,
+s {
+  text-decoration: line-through;
+}
+
+dt {
+  font-weight: bold;
+}
+
+address,
+cite,
+var {
+  font-style: italic;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* WordPress Core Classes */
+
+/* .sticky {}
+.bypostauthor {}
+.wp-caption {}
+.wp-caption-text {}
+.gallery-caption {}
+.alignright {}
+.alignleft {}
+.aligncenter {} */
+
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  width: 1px;
+  word-wrap: normal !important;
+  word-break: normal;
+}
+
+.screen-reader-text:focus {
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+  clip: auto !important;
+  -webkit-clip-path: none;
+  clip-path: none;
+  color: #007acc;
+  display: block;
+  font-size: 14px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  height: auto;
+  right: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000;
+}
+
+.skip-link {
+  left: -9999rem;
+  top: 2.5rem;
+  z-index: 999999999;
+  text-decoration: underline;
+}
+
+.skip-link:focus {
+  display: block;
+  left: 6px;
+  top: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  z-index: 100000;
+  right: auto;
+}
+
+.visually-hidden:not(:focus):not(:active),
+.form-allowed-tags:not(:focus):not(:active) {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/* ==============================
+   3. Main Layout & Common Elements
+============================== */
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  user-select: none;
+}
 
 .fluid,
 #fluid {
@@ -41,1059 +418,138 @@ BlankSlate is distributed under the terms of the GNU GPL
   opacity: 0.21;
 }
 
-    /* TRANSLATOR*/
-
-    .translator-wrapper {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        font-family: 'Avara-Bold';
-		z-index: 999;
-		display: none;
-    }
-
-.translator-container {
-display: flex;
-    height: 63vh;
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.language-container {
-    /* position: absolute; */
-    top: 50%;
-    left: calc(50% - 40px);
-    /* transform: translate(-50%, -50%); */
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    align-content: stretch;
-    align-items: stretch;
-    margin: 0 40px;
-    transition: all 0.5s ease-in-out;
-    overflow-y: auto;
-    overflow-x: hidden;
-    mask-image: linear-gradient(to bottom, black calc(100% - 210px), rgba(0, 0, 0, 0.8) calc(100% - 210px), rgba(0, 0, 0, 0.7) calc(100% - 180px), rgba(0, 0, 0, 0.6) calc(100% - 150px), rgba(0, 0, 0, 0.5) calc(100% - 120px), rgba(0, 0, 0, 0.4) calc(100% - 90px), rgba(0, 0, 0, 0.3) calc(100% - 60px), rgba(0, 0, 0, 0.2) calc(100% - 30px), rgba(0, 0, 0, 0.1) calc(100% - 0px));
-}
-.language-list {
-width: 100%;
-}
-.language-unit {
-
-}
-.language-unit a {
-  font-size: 1.2em;
-  color: #B0B0B0;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 12px 0 12px 0; /* Adjust as needed for spacing between items */
-}
-.language-unit a:hover {
-  color: red;
-}
-.language-unit span {
-  font-family: Avara;
-  flex-shrink: 0; 
-}
-.language-unit span:first-child {
-  flex-shrink: 0; 
-}
-.choose-text {
-  flex-shrink: 0;
-  margin-left: auto;
-  font-family: Avara-Bold !important;
-}
-.language-unit img {
-display: none;
-}
-.dashed-line {
-  flex-grow: 1;
-  height: 2px;
-  margin: 0 10px; /* Adjust for spacing between text and dashed line */
-  background-image: 
-    linear-gradient(to right, #B0B0B0 34%, transparent 18%),
-    linear-gradient(to right, #B0B0B0 34%, transparent 18%);
-  background-position: top left, bottom left;
-  background-size: 1em; /* Adjust dash length and spacing */
-  background-repeat: repeat-x;
-  position: relative;
-}
-.language-unit a:hover .dashed-line {
-  background-image: 
-    linear-gradient(to right, red 34%, transparent 18%),
-    linear-gradient(to right, red 34%, transparent 18%);
-}
-
-    /* ITEMS */
-
-    .items-wrapper {
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        font-family: 'Avara-Bold';
-		z-index: 999;
-		display:none;
-    }
-
-    .nav-top, .skeleton-button {
-        display: none;
-    }
-
-    .items-background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-		pointer-events: none;
-		z-index: -2;
-    }
-
-    .noise-blik {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 21%;
-        object-fit: cover;
-        mix-blend-mode: overlay;
-    }
-
-    .nav-items {
-        padding-left: 40px;
-        padding-top: 30px;
-        display: flex;
-        z-index: 902;
-    }
-
-    .nav-item {
-        padding: 0 20px 0 20px;
-        border-right: solid 2px #B0B0B0;
-    }
-
-    .nav-item:first-child {
-        padding-left: 0px;
-    }
-
-    .nav-item:last-child {
-        border-right: none;
-    }
-
-    .nav-items-link {
-        color: #B0B0B0;
-        font-size: 21px;
-        filter: blur(1px) opacity(50%);
-        text-decoration: none;
-    }
-
-    .nav-items-link:hover {
-        color: #B0B0B0;
-        filter: blur(0px) opacity(100%);
-        mix-blend-mode: normal;
-    }
-
-    .nav-items-link-now {
-        filter: blur(0px) opacity(100%);
-        mix-blend-mode: normal;
-    }
-
-    .items-hi {
-        position: fixed;
-        top: 0;
-        right: 0;
-        height: 12.5%;
-        width: auto;
-    }
-
-    .items-hi-wrapper {
-        position: absolute;
-        width: 64%;
-        height: 55%;
-        top: 25%;
-        left: 8%;
-    }
-
-    .items-hi img {
-        height: 100%;
-        width: auto;
-    }
-
-    .items-hi-text {
-        color: #B0B0B0;
-        font-size: 1.8em;
-        font-family: Avara;
-        opacity: 60%;
-    }
-
-    #exit {
-        color: #B0B0B0;
-        font-size: 21px;
-        text-decoration: none;
-		position: absolute;
-		top: 30px;
-		right: 358px;
-    }
-
-    /* CUSTOM COURSOR */
+/* ==============================
+   4. Custom Cursor
+============================== */
 
 * {
-	cursor: none;
+  cursor: none;
 }
 
 .custom-cursor {
-    position: fixed;
-    width: 25px;
-    height: 25px;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 99999;
-    transition: transform 0.1s ease;
-    background: radial-gradient(circle, #FF0000 0%, #FF0000 25%, rgba(0,0,0,0) 40%, #FF0000 60%, #FF0000 100%);
-    background-size: 100% 100%;
-    background-position: center;
-    border-radius: 50%;
-    filter: blur(2px);
+  position: fixed;
+  width: 25px;
+  height: 25px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 99999;
+  transition: transform 0.1s ease;
+  background: radial-gradient(
+    circle,
+    #ff0000 0%,
+    #ff0000 25%,
+    rgba(0, 0, 0, 0) 40%,
+    #ff0000 60%,
+    #ff0000 100%
+  );
+  background-size: 100% 100%;
+  background-position: center;
+  border-radius: 50%;
+  filter: blur(2px);
 }
 
 .custom-cursor.pulse {
-    animation: pulse 0.6s infinite alternate;
+  animation: pulse 0.6s infinite alternate;
 }
 
 .custom-cursor.clicked {
-    background: radial-gradient(circle, #000000 0%, #000000 25%, rgba(0,0,0,0) 40%, rgba(0,0,0,0) 60%, rgba(0,0,0,0) 100%);
-    filter: blur(2px);
+  background: radial-gradient(
+    circle,
+    #000000 0%,
+    #000000 25%,
+    rgba(0, 0, 0, 0) 40%,
+    rgba(0, 0, 0, 0) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  filter: blur(2px);
 }
 
 @keyframes pulse {
-    0% {
-        background-size: 100% 100%;
-        background-position: center;
-    }
-	33% {
-        background-size: 90% 90%;
-        background-position: center;
-    }
-    100% {
-        background-size: 200% 200%;
-        background-position: center;
-    }
-}
-
-
-    /* NAVIGATION */
-
-.horse-indicator-player {
-	    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 57%;
-    color: #b0b0b0;
-}
-.horse-indicator-upper {
-display: flex;
-    font-family: 'Hershey';
-    justify-content: space-between;
-    padding: 0 3% 1% 3%;
-    font-size: 69%;
-    -webkit-text-stroke: 0.5px;
-    border-bottom: 1px dashed;
-    filter: opacity(0.84);
-}
-.horse-indicator-song {
-    display: flex;
-    font-family: 'avara';
-    justify-content: space-between;
-    font-size: 96%;
-    padding-top: 3.9%;
-}
-/*.horse-indicator-song-now {
-	width: 80%;
-}*/
-.horse-indicator-song-time {
-	padding-left: 6px;
-}
-.horse-indicator-song-hashtag {
-font-family: 'Hershey';
-    font-size: 69%;
-    filter: opacity(0.6);
-    padding-left: 3%;
-    padding-top: 2%;
-}
-.player-button {
-	position:absolute;
-	width: 6.3%;
-    height: 20%;
-    padding: 0;
-    top: 73%;
-	opacity: 0;
-}
-.player-random{
-	left: 33%;
-}
-.player-previous {
-	left: 40%;
-}
-.player-stop-play {
-	left: 46.5%;
-}
-.player-next {
-	left: 53%;
-}
-.player-repeat {
-	left: 60%;
-}
-.interface-elements div {
-    transition: opacity 0.9s ease, visibility 0.9s ease, filter 0.9s ease;
-    opacity: 1;
-    visibility: visible;
-	/*filter: blur(0px)*/
-}
-
-.interface-elements.hidden div {
-    opacity: 0;
-    visibility: hidden;
-	/*filter: blur(3px)*/
-}
-
-/* Применяем ко всей навигации */
-.nav-bottom, .nav-top {
-    pointer-events: none;
-}
-
-/* Возвращаем возможность взаимодействия для элементов внутри навигации */
-.nav-bottom .volume-control-wrapper,
-.nav-bottom .nav-bottom-buttons,
-.nav-bottom button,
-.nav-bottom #volume-screen input,
-.nav-top .horse-indicator,
-.nav-top button {
-    pointer-events: auto;
-}
-
-/* Специально для пустых колонок */
-.nav-bottom .d-none.d-md-block,
-.nav-top .d-block.d-none {
-    pointer-events: none;
-}
-
-/* Дополнительно: обеспечиваем, что контент внутри .container-fluid тоже не перехватывает события */
-.nav-top .container-fluid,
-.nav-top .row.nav-top-content {
-    pointer-events: none;
-}
-
-/* Если есть какие-то интерактивные элементы внутри .container-fluid, возвращаем им взаимодействие */
-.nav-top .container-fluid .horse-indicator {
-    pointer-events: auto;
-}
-
-.xray-active {
-    filter: invert(1);
-}
-@keyframes xrayAnimation {
-    from { filter: invert(0); }
-    to { filter: invert(1); }
-}
-.xray-animate {
-    animation: xrayAnimation 0.5s ease forwards;
-}
-.xray-animate-reverse {
-    animation: xrayAnimation 0.5s ease reverse;
-}
-
-.x-ray-wrapper {
-    position: absolute;
-    top: 0;
-    left:0;
-    height: 100vh;
-    width: 100vw;
-}
-
-        .nav-top {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        .nav-top * {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-
-        .nav-top {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            margin: 0;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-        }
-
-        .horse-indicator {
-            position: fixed; /* Изменено с relative на absolute */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: move; /* Добавлено для указания, что элемент можно перетаскивать */
-			right: 0;
-			pointer-events: auto;
-        }
-
-.close-hi,
-#close-hi {
-    position: absolute;
-    top: 0%;
-    left: 43.5%;
-    width: 12%;
-    height: 21%;
-    background-color: transparent;
-    border: none;
-}
-
-.display-button-wrapper {
-	position: absolute;
-    right: 0;
-    top: 0;
-	height: 18vh;
-	width: auto;
-	padding: 30px;
-	font-family: 'Avara-Bold';
-	z-index: 1000;
-}
-
-#display-button {
-	height: 100%;
-	background-color: transparent;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-	color: white;
-}
-#display-button img {
-    height: 70%;
-    filter: drop-shadow(0 0 15px black);
-}
-
-#display-button img:hover {
-    height: 70%;
-    filter: drop-shadow(0 0 15px red);
-}
-
-#display-button p {
-    color: #ffffff;
-    mix-blend-mode: exclusion;
-    font-size: 15px;
-    margin: 10px 0 0;
-    text-wrap: nowrap;
-}
-
-        .horse-indicator img {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 0 15px black);
-        }
-
-        .horse-indicator-wrapper {
-            position: absolute;
-            width: 66%;
-            height: 60%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .horse-indicator-text {
-            font-family: Avara;
-            color: #B0B0B0;
-            font-size: clamp(10px, calc(0.9vw + 0.1vh), 30px);
-            text-align: left;
-            line-height: 1.2;
-            max-width: 100%;
-            max-height: 100%;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            padding: 9%;
-			transition: color 0.5s ease, text-shadow 0.5s ease; /* Анимация на полсекунды */
-        }
-
-
-        .horse-indicator-text-active {
-            color: #FF0000;
-            text-shadow: 0px 0px 12px #FF0000;
-        }
-
-        .horse-indicator-text-wrapper {
-            width: 80%;
-            overflow: hidden;
-        }
-
-
-        .nav-bottom {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            padding: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        	font-family: 'Avara-Bold';
-			height: 18vh;
-			z-index: 1000;
-			box-sizing: border-box;
-        }
-.nav-bottom button {
-    height: 100%;
-    background-color: transparent;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-}
-
-.nav-bottom button p {
-	color: #ffffff;
-    mix-blend-mode: exclusion;
-    font-size: 15px;
-    margin: 10px 0 0;
-	text-wrap: nowrap;
-}
-#x-ray-button {
-	padding: 0 25%;
-	box-sizing: border-box;
-}
-
-.nav-bottom img {
-    height: 70%; /* Уменьшаем высоту изображения */
-    filter: drop-shadow(0 0 15px black);
-
-}
-
-
-        .nav-bottom img:hover {
-			filter: drop-shadow(0 0 15px red);
-}
-
-.button-group {
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-
-#volume-screen {
-    height: 17vh;
-    position: absolute;
-    padding: 30px 0 30px 0;
-    display: none;
-    opacity: 0;
-    filter: blur(10px);
-}
-#volume-button, #volume-screen {
-    transition: opacity 0.3s ease, filter 0.3s ease;
-}
-.volume-hidden {
-    opacity: 0 !important;
-    pointer-events: none;
-}
-#volume-screen img {
-    height: 100%;
-}
-.drop-wrapper {
-    position: absolute;
-    width: 70%;
-    top: 43%;
-    right: 3.9%;
-    z-index: 1001;
-}
-.slider-container {
-    position: relative;
-    width: 96%;
-    height: 20px;
-}
-.drop-range {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 20px;
-    background: rgba(255, 0, 0, 0.0);
-    outline: none;
-    opacity: 1;
-    z-index: 1001;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.drop-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    z-index: 1002;
-}
-.drop-range::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    z-index: 1002;
-}
-#red-square {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 1000;
-	filter: drop-shadow(0 0 6px red);
-}
-#volume-value {
-    display: block;
-    text-align: center;
-    margin-top: 5px;
-    color: red !IMPORTANT;
-    font-size: 10px;
-	font-family: FT88;
-}
-@media (max-height: 663px) {
-    .nav-bottom {
-        height: 25vh;
-    }
-}
-
-.d-none.d-md-block {
-    height: 100%;
-}
-
-.skeleton-button {
-    position: fixed;
-    bottom: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 12vh;
-    width: 12vh; /* Добавлено фиксированное значение ширины */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-#skeleton-button::before {
-    content: '';
-    position: absolute;
-    width: 90%; /* Увеличено для лучшей видимости */
-    height: 90%; /* Увеличено для лучшей видимости */
-    background-color: black;
-    border-radius: 50%;
-    filter: blur(15px);
-    z-index: -1;
-    transition: background-color 0.3s ease;
-	mix-blend-mode: soft-light;
-}
-
-#skeleton-button:hover::before {
-    background-color: red;
-}
-
-.skeleton-button button {
-    width: 100%; /* Изменено с height на width */
-    height: 100%; /* Добавлено */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: none;
-    border: none;
-    z-index: 1;
-    position: absolute;
-    top: 0; /* Добавлено */
-    left: 0; /* Изменено */
-    transition: opacity 0.3s ease;
-}
-
-.skeleton-button a {
-	flex-direction: column;
-    display: flex;
-    color: white;
-    font-size: 15px;
-    padding-bottom: 5px;
-    text-decoration: none;
-    font-family: 'Avara-Bold';
-    position: absolute;
-    bottom: 0;
-	align-items: center;
-	transition: opacity 0.3s ease;
-}
-
-.skeleton-button button img {
-    max-width: 100%; /* Изменено с height на max-width */
-    max-height: 100%; /* Добавлено */
-    object-fit: contain; /* Добавлено для сохранения пропорций */
-}
-
-.skeleton-button a img {
-    max-width: 50%; /* Изменено с height на max-width */
-    max-height: 50%; /* Добавлено */
-    object-fit: contain; /* Добавлено для сохранения пропорций */
-	filter: grayscale(1);
-}
-
-.skeleton-button a img:hover {
-	filter: grayscale(0);
-}
-
-.skeleton-button a img {
-	padding-bottom: 12%;
-}
-
-.skeleton-button button.hidden, .skeleton-button a.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Остальные стили остаются без изменений */
-
-.skeleton-home {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.5s ease, filter 0.5s ease;
-    filter: blur(3rem);
-}
-
-.skeleton-home.show {
-    opacity: 1;
-    filter: blur(0);
-}
-
-.skeleton-home::before {
-    content: '';
-    position: absolute;
-    width: 126%;
-    height: 132%;
-    background-color: black;
-    border-radius: 50%;
-    filter: blur(12rem);
-	opacity: 95%;
-}
-
-.skeleton-home-wrapper {
-    position: relative;
-    height: 74vh;
-    width: auto;
-}
-
-.skeleton-home-wrapper img {
-    height: 100%;
-    width: auto;
-}
-
-.skeleton-home-link {
-    position: absolute;
-    width: 15.5%;
-    height: 15.5%;
-    border: dashed 1px white;
-    transition: border-color 0.3s ease;
-}
-
-.skeleton-home-link:hover {
-    border-color: red;
-}
-
-.skeleton-home-link:nth-of-type(1) { top: 0%; left: 43%; }
-.skeleton-home-link:nth-of-type(2) { top: 12%; right: -3%; }
-.skeleton-home-link:nth-of-type(3) { top: 88%; right: 14%; }
-.skeleton-home-link:nth-of-type(4) { top: 88%; left: 14%; }
-.skeleton-home-link:nth-of-type(5) { top: 10%; left: -3%; }
-/* Стили для блока перевода */
-.trnsltr {
-    display: none; /* Скрыто по умолчанию */
-    position: absolute;
-    top: -15px; /* Отступ сверху от кнопки */
-    z-index: 999; /* Слои над остальным содержимым */
-}
-
-    /* GOLDEN ROOM */
-
-    #loadingScreen {
-        position: fixed !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        border-radius: 10px !important;
-        z-index: 9999 !important;
-        width: auto !important;
-        height: 25% !important;
-    }
-    #loadingProgress {
-        height: 100%;
-    }
-.loading-horse {
-	height: 100%;
-}
-.room-wrapper {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: #000;
-}
-
-.room-background-img,
-.object-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-}
-
-
-.object-overlay svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: fill;
-}
-
-.object-overlay rect,
-.object-overlay path {
-	pointer-events: bounding-box;
-}
-
-
-    @keyframes glowing {
-        0% { filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)); }
-        50% { filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1)); }
-        100% { filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)); }
-    }
-
-    .object-overlay {
-        z-index: 50;
-        transition: filter 0.3s ease-in-out;
-    }
-
-    .object-overlay.glow {
-        animation: glowing 1s infinite;
-    }
-
-    .object-overlay.clickable {
-    cursor: pointer;
-    }
-
-    .glow {
-        filter: brightness(1.2);
-    }
-
-    .animated-display {
-        animation-duration: 1s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
-        position: absolute;
-        top: 0;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes fadeOut {
-        from { opacity: 1; }
-        to { opacity: 0; }
-    }
-
-    .overlay-svg {
-        fill: transparent;
-		stroke: transparent;
-		stroke-width: 5px;
-        animation: dash 0.5s linear infinite alternate; 
+  0% {
+    background-size: 100% 100%;
+    background-position: center;
   }
-
-    .overlay-svg:hover {
-        filter: url(#glow);
-        stroke: white;
+  33% {
+    background-size: 90% 90%;
+    background-position: center;
   }
-
-
-  @keyframes dash {
-    to {
-        stroke-width: 15px;
-    }
+  100% {
+    background-size: 200% 200%;
+    background-position: center;
   }
-
-  .no-glow {
-    stroke: transparent;
-    stroke-width: 0;
-  }
-  .no-glow:hover {
-    stroke: transparent;
-    stroke-width: 0;
-  }
-
-
-.items-in-cave-room-main:has(.items-next-to-mirror:hover) .items-next-to-mirror {
-    stroke: red;
-    stroke-width: 3;
 }
-    .room-background-img {
-        transition: filter 1s ease-out;
-    }
-        .arrow {
-            width: 40%;
-            height: auto;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: filter 1s ease-out;
-        }
 
-        .arrow-white {
-            filter: drop-shadow(0px 0px 15px #ffffff)
-                    drop-shadow(0px 0px 15px #ffffff)
-                    drop-shadow(0px 0px 15px #ffffff);
-        }
+/* ==============================
+   5. Navigation Elements
+============================== */
+/* ... */
 
-        .arrow-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: calc(8.3333% + 1.5rem);
-            height: 100vh;
-            padding: 0;
-            z-index: 60;
-            background: none;
-            border: none;
-            cursor: pointer;
-            overflow: visible;
-        }
-        .arrow-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
-            opacity: 0;
-            transition: opacity 1s ease-out;
-            pointer-events: none;
-        }
-        .arrow-left {
-            transform: translate(-50%, -50%) rotate(180deg);
-        }
-        .arrow-left-button {
-            left: 0;
-        }
-        .arrow-left-button::before {
-            background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
-            right: -100%;
-        }
-        .arrow-button:hover::before,
-        .arrow-left-button:hover::before {
-            opacity: 1;
-        }
-        .arrow-button:hover .arrow {
-            filter: none;
-        }
-        .safety-helmet {
-            opacity: 0;
-            transition: opacity 2s ease-out;
-        }
-        .room-wrapper {
-            transition: opacity 2s ease-out;
-        }
+/* ==============================
+   6. CAPTCHA
+============================== */
 
-/*********** CAPTCHA **************/
-
+/* Основной контейнер */
 .captcha {
-    display: flex;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    opacity: 1;
-    transition: opacity 0.5s ease, filter 0.5s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.5s ease, filter 0.5s ease;
 }
-.captcha::before {
-    content: '';
-    position: absolute;
-    width: 126%;
-    height: 132%;
-    background-color: black;
-    border-radius: 50%;
-    filter: blur(12rem);
-	opacity: 100%;
-}
-.captcha-wrapper {
-    position: relative;
-    height: 74vh;
-    width: 50vh;
-    display: flex;
-    flex-direction: column;
-    color: #B0B0B0;
-    font-family: 'Avara-Bold';
-}
-.captcha-header {
-    padding: 5% 0;
-    margin: 0 5%;
-    width: 90%;
-    border-bottom: 1px dashed rgba(176, 176, 176, 0.3);
 
+/* Фоновый эффект */
+.captcha::before {
+  content: "";
+  position: absolute;
+  width: 126%;
+  height: 132%;
+  background-color: black;
+  border-radius: 50%;
+  filter: blur(12rem);
+  opacity: 1;
 }
+
+/* Основная обертка */
+.captcha-wrapper {
+  position: relative;
+  height: 74vh;
+  width: 50vh;
+  display: flex;
+  flex-direction: column;
+  color: #b0b0b0;
+  font-family: "Avara-Bold";
+}
+
+/* Заголовок */
+.captcha-header {
+  padding: 5% 0;
+  margin: 0 5%;
+  width: 90%;
+  border-bottom: 1px dashed rgba(176, 176, 176, 0.3);
+}
+
 .captcha-choose {
-    font-size: 2.5vh;
+  font-size: 2.5vh;
 }
+
 .captcha-description {
-    font-family: 'Avara';
-    padding-top: 3%;
-    letter-spacing: .12rem;
-    font-size: 1.5vh;
+  font-family: "Avara";
+  padding-top: 3%;
+  letter-spacing: 0.12rem;
+  font-size: 1.5vh;
 }
+
 .captcha-red {
-color: red;
+  color: red;
 }
+
+/* Сетка изображений */
 .captcha-pics {
   display: flex;
   width: 100%;
@@ -1109,17 +565,6 @@ color: red;
   overflow: hidden;
 }
 
-.shadow-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  box-shadow: inset 0px 0px 20px 20px rgba(0,0,0,1);
-  z-index: 1001;
-  pointer-events: none;
-}
-
 .captcha-pics img {
   width: 100%;
   height: 100%;
@@ -1127,115 +572,1342 @@ color: red;
   position: relative;
   z-index: 1000;
 }
-.captcha-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 5% 0;
-    border-top: 1px dashed rgba(176, 176, 176, 0.3);
-    width: 100%;
-    margin: 0 5%;
-    width: 90%;
-}
-.captcha-footer-text {
-    font-family: 'Avara';
-    letter-spacing: .12rem;
-    font-size: 1.5vh;
-    color: rgba(176, 176, 176, 0.5);
-}
-#skip-captcha {
-    background-color: transparent;
-    border: 1px solid rgba(176, 176, 176, 0.5);
-    color: rgba(176, 176, 176, 0.8);
-    font-size: 1.2vh;
-    width: 20%;
-    letter-spacing: .1rem;
-}
-#skip-captcha:hover {
-    background-color: rgba(176, 176, 176, 0.5);
-    border: 1px solid white;
-    color: white;
-    font-size: 1.2vh;
-    width: 20%;
-    letter-spacing: .1rem;
-}
+
+/* Эффекты наложения теней */
 .shadow-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  box-shadow: inset 0px 0px 20px 20px rgba(0,0,0,1);
+  box-shadow: inset 0px 0px 20px 20px rgba(0, 0, 0, 1);
   z-index: 1001;
   pointer-events: none;
   transition: box-shadow 0.3s ease;
 }
 
 .captcha-pic:hover .shadow-overlay {
-  box-shadow: inset 0px 0px 20px 20px rgba(0,0,0,0);
+  box-shadow: inset 0px 0px 20px 20px rgba(0, 0, 0, 0);
 }
 
 .captcha-pic.correct .shadow-overlay {
-  box-shadow: inset 0px 0px 20px 20px rgba(255,255,255,1) !important;
+  box-shadow: inset 0px 0px 20px 20px rgba(255, 255, 255, 1) !important;
 }
 
 .captcha-pic.incorrect .shadow-overlay {
-  box-shadow: inset 0px 0px 20px 20px rgba(255,0,0,1);
+  box-shadow: inset 0px 0px 20px 20px rgba(255, 0, 0, 1);
 }
 
-@font-face {
- font-family: PixelScript;
- src: url(https://nohome.cloud/wp-content/themes/blankslate/fonts/PF%20Pixelscript%20Pro%20Regular.ttf);
- font-weight: normal;
- }
+/* Подвал */
+.captcha-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 5% 0;
+  margin: 0 5%;
+  width: 90%;
+  border-top: 1px dashed rgba(176, 176, 176, 0.3);
+}
 
-@font-face {
- font-family: Avara;
- src: url(/wp-content/themes/blankslate/fonts/Avara-BoldItalic.ttf);
- font-weight: normal;
- }
+.captcha-footer-text {
+  font-family: "Avara";
+  letter-spacing: 0.12rem;
+  font-size: 1.5vh;
+  color: rgba(176, 176, 176, 0.5);
+}
 
-@font-face {
- font-family: Avara-Bold;
- src: url(/wp-content/themes/blankslate/fonts/Avara-Bold.ttf);
- font-weight: normal;
- }
+/* Кнопка пропуска */
+#skip-captcha {
+  background-color: transparent;
+  border: 1px solid rgba(176, 176, 176, 0.5);
+  color: rgba(176, 176, 176, 0.8);
+  font-size: 1.2vh;
+  width: 20%;
+  letter-spacing: 0.1rem;
+  transition: all 0.3s ease;
+}
 
-@font-face {
- font-family: FT88;
- src: url(https://nohome.cloud/wp-content/themes/blankslate/fonts/FT88-Regular.ttf);
- font-weight: normal;
- }
+#skip-captcha:hover {
+  background-color: rgba(176, 176, 176, 0.5);
+  border-color: white;
+  color: white;
+}
 
-@font-face {
- font-family: FT88;
- src: url(https://nohome.cloud/wp-content/themes/blankslate/fonts/FT88-Regular.ttf);
- font-weight: normal;
- }
+/* ==============================
+  7. Translator
+============================== */
 
-@font-face {
- font-family: Henny Penny;
- src: url(https://nohome.cloud/wp-content/themes/blankslate/fonts/HennyPenny-Regular.ttf);
- font-weight: normal;
- }
+/* Основной контейнер */
+.translator-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Avara-Bold";
+  z-index: 999;
+  display: none;
+}
 
-@font-face {
- font-family: Hershey;
- src: url(https://nohome.cloud/wp-content/themes/blankslate/fonts/Hershey-Noailles-Futura-Triplex-Regular.ttf);
- font-weight: normal;
- }
+.translator-container {
+  display: flex;
+  height: 63vh;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-@font-face {
- font-family: This Reality;
- src: url(https://nohome.cloud/wp-content/themes/blankslate/fonts/ThisReality-Regular.ttf);
- font-weight: normal;
- }
+/* Контейнер списка языков */
+.language-container {
+  top: 50%;
+  left: calc(50% - 40px);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  align-content: stretch;
+  align-items: stretch;
+  margin: 0 40px;
+  transition: all 0.5s ease-in-out;
+  overflow-y: auto;
+  overflow-x: hidden;
+  mask-image: linear-gradient(
+    to bottom,
+    black calc(100% - 210px),
+    rgba(0, 0, 0, 0.8) calc(100% - 210px),
+    rgba(0, 0, 0, 0.7) calc(100% - 180px),
+    rgba(0, 0, 0, 0.6) calc(100% - 150px),
+    rgba(0, 0, 0, 0.5) calc(100% - 120px),
+    rgba(0, 0, 0, 0.4) calc(100% - 90px),
+    rgba(0, 0, 0, 0.3) calc(100% - 60px),
+    rgba(0, 0, 0, 0.2) calc(100% - 30px),
+    rgba(0, 0, 0, 0.1) calc(100% - 0px)
+  );
+}
 
+/* Список языков */
+.language-list {
+  width: 100%;
+}
 
+.language-unit a {
+  font-size: 1.2em;
+  color: #b0b0b0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 0 12px 0;
+}
 
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}html{scroll-behavior:smooth}body{line-height:1}a{text-decoration-skip-ink:auto}a[href^="tel"]{color:inherit;text-decoration:none}button{outline:0}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}q{display:inline;font-style:italic}q:before{content:'"';font-style:normal}q:after{content:'"';font-style:normal}textarea,input[type="text"],input[type="button"],input[type="submit"],input[type="reset"],input[type="search"],input[type="password"]{-webkit-appearance:none;appearance:none;border-radius:0}input[type="search"]{-webkit-appearance:textfield}table{border-collapse:collapse;border-spacing:0}th,td{padding:2px}big{font-size:120%}small,sup,sub{font-size:80%}sup{vertical-align:super}sub{vertical-align:sub}dd{margin-left:20px}kbd,tt{font-family:courier;font-size:12px}ins{text-decoration:underline}del,strike,s{text-decoration:line-through}dt{font-weight:bold}address,cite,var{font-style:italic}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-.sticky{}.bypostauthor{}.wp-caption{}.wp-caption-text{}.gallery-caption{}.alignright{}.alignleft{}.aligncenter{}
-.screen-reader-text{border:0;clip:rect(1px,1px,1px,1px);-webkit-clip-path:inset(50%);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute!important;width:1px;word-wrap:normal!important;word-break:normal}
-.screen-reader-text:focus{background-color:#f7f7f7;border-radius:3px;box-shadow:0 0 2px 2px rgba(0,0,0,.6);clip:auto!important;-webkit-clip-path:none;clip-path:none;color:#007acc;display:block;font-size:14px;font-size:.875rem;font-weight:700;height:auto;right:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}
-.skip-link{left:-9999rem;top:2.5rem;z-index:999999999;text-decoration:underline}
-.skip-link:focus{display:block;left:6px;top:7px;font-size:14px;font-weight:600;text-decoration:none;line-height:normal;padding:15px 23px 14px;z-index:100000;right:auto}
-.visually-hidden:not(:focus):not(:active), .form-allowed-tags:not(:focus):not(:active){position:absolute !important;height:1px;width:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px, 1px, 1px, 1px);white-space:nowrap}
+.language-unit a:hover {
+  color: red;
+}
+
+.language-unit span {
+  font-family: Avara;
+  flex-shrink: 0;
+}
+
+.language-unit span:first-child {
+  flex-shrink: 0;
+}
+
+.choose-text {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-family: Avara-Bold !important;
+}
+
+.language-unit img {
+  display: none;
+}
+
+/* Пунктирная линия */
+.dashed-line {
+  flex-grow: 1;
+  height: 2px;
+  margin: 0 10px;
+  background-image: linear-gradient(to right, #b0b0b0 34%, transparent 18%),
+    linear-gradient(to right, #b0b0b0 34%, transparent 18%);
+  background-position: top left, bottom left;
+  background-size: 1em;
+  background-repeat: repeat-x;
+  position: relative;
+}
+
+.language-unit a:hover .dashed-line {
+  background-image: linear-gradient(to right, red 34%, transparent 18%),
+    linear-gradient(to right, red 34%, transparent 18%);
+}
+
+/* ==============================
+  8. Items
+============================== */
+
+.items-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Avara-Bold";
+  z-index: 999;
+  display: none;
+}
+
+.nav-top,
+.skeleton-button {
+  display: none;
+}
+
+.items-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: -2;
+}
+
+.noise-blik {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 21%;
+  object-fit: cover;
+  mix-blend-mode: overlay;
+}
+
+.nav-items {
+  padding-left: 40px;
+  padding-top: 30px;
+  display: flex;
+  z-index: 902;
+}
+
+.nav-item {
+  padding: 0 20px 0 20px;
+  border-right: solid 2px #b0b0b0;
+}
+
+.nav-item:first-child {
+  padding-left: 0px;
+}
+
+.nav-item:last-child {
+  border-right: none;
+}
+
+.nav-items-link {
+  color: #b0b0b0;
+  font-size: 21px;
+  filter: blur(1px) opacity(50%);
+  text-decoration: none;
+}
+
+.nav-items-link:hover {
+  color: #b0b0b0;
+  filter: blur(0px) opacity(100%);
+  mix-blend-mode: normal;
+}
+
+.nav-items-link-now {
+  filter: blur(0px) opacity(100%);
+  mix-blend-mode: normal;
+}
+
+.items-hi {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 12.5%;
+  width: auto;
+}
+
+.items-hi-wrapper {
+  position: absolute;
+  width: 64%;
+  height: 55%;
+  top: 25%;
+  left: 8%;
+}
+
+.items-hi img {
+  height: 100%;
+  width: auto;
+}
+
+.items-hi-text {
+  color: #b0b0b0;
+  font-size: 1.8em;
+  font-family: Avara;
+  opacity: 60%;
+}
+
+#exit {
+  color: #b0b0b0;
+  font-size: 21px;
+  text-decoration: none;
+  position: absolute;
+  top: 30px;
+  right: 358px;
+}
+
+/* ==============================
+  9. Navigation
+============================== */
+
+/* Индикатор плеера */
+.horse-indicator-player {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 57%;
+  color: #b0b0b0;
+}
+
+/* Верхняя часть индикатора */
+.horse-indicator-upper {
+  display: flex;
+  font-family: "Hershey";
+  justify-content: space-between;
+  padding: 0 3% 1% 3%;
+  font-size: 69%;
+  -webkit-text-stroke: 0.5px;
+  border-bottom: 1px dashed;
+  filter: opacity(0.84);
+}
+
+/* Информация о песне */
+.horse-indicator-song {
+  display: flex;
+  font-family: "avara";
+  justify-content: space-between;
+  font-size: 96%;
+  padding-top: 3.9%;
+}
+
+/*.horse-indicator-song-now {
+	width: 80%;
+}*/
+
+.horse-indicator-song-time {
+  padding-left: 6px;
+}
+
+.horse-indicator-song-hashtag {
+  font-family: "Hershey";
+  font-size: 69%;
+  filter: opacity(0.6);
+  padding-left: 3%;
+  padding-top: 2%;
+}
+
+/* Кнопки плеера */
+.player-button {
+  position: absolute;
+  width: 6.3%;
+  height: 20%;
+  padding: 0;
+  top: 73%;
+  opacity: 0;
+}
+
+.player-random {
+  left: 33%;
+}
+
+.player-previous {
+  left: 40%;
+}
+
+.player-stop-play {
+  left: 46.5%;
+}
+
+.player-next {
+  left: 53%;
+}
+
+.player-repeat {
+  left: 60%;
+}
+
+.interface-elements div {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.9s ease, visibility 0.9s ease;
+}
+
+.interface-elements.hidden div {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Управление событиями pointer-events */
+.nav-bottom,
+.nav-top {
+  pointer-events: none;
+}
+
+/* Возвращаем возможность взаимодействия для элементов внутри навигации */
+.nav-bottom .volume-control-wrapper,
+.nav-bottom .nav-bottom-buttons,
+.nav-bottom button,
+.nav-bottom #volume-screen input,
+.nav-top .horse-indicator,
+.nav-top button {
+  pointer-events: auto;
+}
+
+/* Специально для пустых колонок */
+.nav-bottom .d-none.d-md-block,
+.nav-top .d-block.d-none {
+  pointer-events: none;
+}
+
+/* Дополнительно: обеспечиваем, что контент внутри .container-fluid тоже не перехватывает события */
+.nav-top .container-fluid,
+.nav-top .row.nav-top-content {
+  pointer-events: none;
+}
+
+/* Если есть какие-то интерактивные элементы внутри .container-fluid, возвращаем им взаимодействие */
+.nav-top .container-fluid .horse-indicator {
+  pointer-events: auto;
+}
+
+.about-link-wrapper {
+  height: 60px;
+  width: 60px;
+}
+
+.about-link {
+  font-family: "Avara";
+  font-size: 32px;
+  padding-top: 20px;
+  width: inherit;
+  height: inherit;
+  text-decoration: none;
+  color: white;
+  pointer-events: all;
+}
+
+/* ==============================
+  9. X-Rray
+============================== */
+
+/* Стили для рентген-режима */
+.xray-active {
+  filter: invert(1);
+}
+
+/* Анимации для плавного перехода между режимами просмотра */
+@keyframes xrayAnimation {
+  from {
+    filter: invert(0);
+  }
+  to {
+    filter: invert(1);
+  }
+}
+
+.xray-animate {
+  animation: xrayAnimation 0.5s ease forwards; /* Анимация перехода в рентген-режим */
+}
+
+.xray-animate-reverse {
+  animation: xrayAnimation 0.5s ease reverse; /* Анимация возврата из рентген-режима */
+}
+
+/* Основной контейнер для рентген-режима */
+.x-ray-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Стили верхней навигации */
+.nav-top {
+  user-select: none; /* Блокирует выделение текста в навигации */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.nav-top * {
+  user-select: none; /* Блокирует выделение для всех дочерних элементов */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.nav-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  margin: 0;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  /* Рекомендация: добавить background-color с прозрачностью для лучшей читаемости на разных фонах */
+  /* Рекомендация: добавить box-sizing: border-box для предотвращения проблем с шириной */
+}
+
+/* Индикатор лошади (перетаскиваемый элемент) */
+.horse-indicator {
+  position: fixed; /* Изменено с relative на absolute */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: move; /* Указывает, что элемент можно перетаскивать */
+  right: 0;
+  pointer-events: auto;
+  /* Рекомендация: добавить top: 0 или другую позицию по вертикали */
+  /* Рекомендация: добавить z-index для контроля порядка наложения */
+}
+
+/* Кнопка закрытия индикатора */
+.close-hi,
+#close-hi {
+  position: absolute;
+  top: 0%;
+  left: 43.5%;
+  width: 12%;
+  height: 21%;
+  background-color: transparent;
+  border: none;
+  /* Рекомендация: добавить cursor: pointer для лучшего UX */
+  /* Рекомендация: добавить hover-эффект для кнопки */
+}
+
+/* Обертка для кнопки дисплея */
+.display-button-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 18vh;
+  width: auto;
+  padding: 30px;
+  font-family: "Avara-Bold"; /* Рекомендация: добавить fallback-шрифты */
+  z-index: 1000;
+}
+
+/* Кнопка дисплея */
+#display-button {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  color: white;
+  /* Рекомендация: добавить cursor: pointer для улучшения UX */
+}
+
+/* Изображение на кнопке дисплея */
+#display-button img {
+  height: 70%;
+  filter: drop-shadow(0 0 15px black);
+  /* Рекомендация: добавить transition для плавного эффекта при наведении */
+}
+
+#display-button img:hover {
+  height: 70%;
+  filter: drop-shadow(0 0 15px red);
+}
+
+/* Текст на кнопке дисплея */
+#display-button p {
+  color: #ffffff;
+  mix-blend-mode: exclusion; /* Создает контрастный текст на любом фоне */
+  font-size: 15px;
+  margin: 10px 0 0;
+  text-wrap: nowrap;
+}
+
+/* Изображение индикатора лошади */
+.horse-indicator img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 15px black);
+  /* Рекомендация: добавить max-width для предотвращения переполнения */
+}
+
+/* Обертка индикатора лошади */
+.horse-indicator-wrapper {
+  position: absolute;
+  width: 66%;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Центрирование элемента */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Текст индикатора лошади */
+.horse-indicator-text {
+  font-family: Avara; /* Рекомендация: добавить fallback-шрифты */
+  color: #b0b0b0;
+  font-size: clamp(
+    10px,
+    calc(0.9vw + 0.1vh),
+    30px
+  ); /* Адаптивный размер шрифта */
+  text-align: left;
+  line-height: 1.2;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Ограничивает текст тремя строками */
+  padding: 9%;
+  transition: color 0.5s ease, text-shadow 0.5s ease; /* Плавная анимация */
+  /* Рекомендация: добавить -webkit-box-orient: vertical для корректной работы -webkit-line-clamp */
+}
+
+/* Активный текст индикатора лошади */
+.horse-indicator-text-active {
+  color: #ff0000;
+  text-shadow: 0px 0px 12px #ff0000;
+}
+
+/* Обертка текста индикатора лошади */
+.horse-indicator-text-wrapper {
+  width: 80%;
+  overflow: hidden;
+}
+
+/* Нижняя навигация */
+.nav-bottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Avara-Bold"; /* Рекомендация: добавить fallback-шрифты */
+  height: 18vh;
+  z-index: 1000;
+  box-sizing: border-box; /* Предотвращает проблемы с размерами */
+  /* Рекомендация: добавить background-color с прозрачностью для лучшей читаемости */
+}
+
+/* Кнопки в нижней навигации */
+.nav-bottom button {
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  /* Рекомендация: добавить cursor: pointer для улучшения UX */
+}
+
+/* Текст на кнопках нижней навигации */
+.nav-bottom button p {
+  color: #ffffff;
+  mix-blend-mode: exclusion; /* Создает контрастный текст на любом фоне */
+  font-size: 15px;
+  margin: 10px 0 0;
+  text-wrap: nowrap;
+}
+
+/* Кнопка рентген-режима */
+#x-ray-button {
+  padding: 0 25%;
+  box-sizing: border-box;
+}
+
+/* Изображения в нижней навигации */
+.nav-bottom img {
+  height: 70%;
+  filter: drop-shadow(0 0 15px black);
+  /* Рекомендация: добавить transition для плавного эффекта при наведении */
+}
+
+.nav-bottom img:hover {
+  filter: drop-shadow(0 0 15px red);
+}
+
+/* Группа кнопок в нижней части */
+.button-group {
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Экран громкости */
+#volume-screen {
+  height: 17vh;
+  position: absolute;
+  padding: 30px 0 30px 0;
+  display: none;
+  opacity: 0;
+  filter: blur(10px);
+  /* Рекомендация: добавить left/right позиционирование */
+}
+
+/* Переходы для кнопки громкости и экрана */
+#volume-button,
+#volume-screen {
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* Скрытый элемент громкости */
+.volume-hidden {
+  opacity: 0 !important;
+  pointer-events: none; /* Предотвращает взаимодействие со скрытым элементом */
+}
+
+/* Изображение на экране громкости */
+#volume-screen img {
+  height: 100%;
+}
+
+/* Обертка для выпадающего элемента */
+.drop-wrapper {
+  position: absolute;
+  width: 70%;
+  top: 43%;
+  right: 3.9%;
+  z-index: 1001;
+}
+
+/* Контейнер слайдера */
+.slider-container {
+  position: relative;
+  width: 96%;
+  height: 20px;
+}
+
+/* Стилизация ползунка (range) */
+.drop-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 20px;
+  background: rgba(255, 0, 0, 0); /* Прозрачный фон */
+  outline: none;
+  opacity: 1;
+  z-index: 1001;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Стилизация ползунка для Webkit браузеров */
+.drop-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1002;
+  /* Рекомендация: добавить background-color и border-radius для наглядности */
+}
+
+/* Стилизация ползунка для Firefox */
+.drop-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1002;
+  /* Рекомендация: добавить background-color и border-radius для наглядности */
+}
+
+/* Красный квадрат (индикатор значения) */
+#red-square {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1000;
+  filter: drop-shadow(0 0 6px red);
+  /* Рекомендация: указать width и height */
+}
+
+/* Отображение значения громкости */
+#volume-value {
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+  color: red !important;
+  font-size: 10px;
+  font-family: FT88; /* Рекомендация: добавить fallback-шрифты */
+}
+
+/* Медиа-запрос для низких экранов */
+@media (max-height: 663px) {
+  .nav-bottom {
+    height: 25vh;
+  }
+  /* Рекомендация: также адаптировать другие элементы для маленьких экранов */
+}
+
+/* Вспомогательный класс для отображения на средних и больших экранах */
+.d-none.d-md-block {
+  height: 100%;
+}
+
+/* Кнопка скелета */
+.skeleton-button {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%); /* Центрирование по горизонтали */
+  height: 12vh;
+  width: 12vh; /* Фиксированное значение ширины */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Псевдоэлемент для создания фона кнопки скелета */
+#skeleton-button::before {
+  content: "";
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background-color: black;
+  border-radius: 50%;
+  filter: blur(15px);
+  z-index: -1;
+  transition: background-color 0.3s ease;
+  mix-blend-mode: soft-light;
+}
+
+/* Эффект при наведении на кнопку скелета */
+#skeleton-button:hover::before {
+  background-color: red;
+}
+
+/* Стили для внутренней кнопки скелета */
+.skeleton-button button {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.3s ease;
+  /* Рекомендация: добавить cursor: pointer для улучшения UX */
+}
+
+/* Стили для ссылки внутри кнопки скелета */
+.skeleton-button a {
+  flex-direction: column;
+  display: flex;
+  color: white;
+  font-size: 15px;
+  padding-bottom: 5px;
+  text-decoration: none;
+  font-family: "Avara-Bold"; /* Рекомендация: добавить fallback-шрифты */
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  transition: opacity 0.3s ease;
+  /* Рекомендация: добавить width для лучшего контроля размеров */
+}
+
+/* Изображение на кнопке скелета */
+.skeleton-button button img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Сохраняет пропорции изображения */
+}
+
+/* Изображение на ссылке скелета */
+.skeleton-button a img {
+  max-width: 50%;
+  max-height: 50%;
+  object-fit: contain;
+  filter: grayscale(1); /* Делает изображение черно-белым */
+}
+
+/* Эффект при наведении на изображение ссылки */
+.skeleton-button a img:hover {
+  filter: grayscale(0); /* Возвращает цвета при наведении */
+}
+
+/* Отступ для изображения ссылки */
+.skeleton-button a img {
+  padding-bottom: 12%;
+}
+
+/* Скрытые элементы кнопки скелета */
+.skeleton-button button.hidden,
+.skeleton-button a.hidden {
+  opacity: 0;
+  pointer-events: none; /* Предотвращает взаимодействие со скрытыми элементами */
+}
+
+/* Главный контейнер домашнего экрана скелета */
+.skeleton-home {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease, filter 0.5s ease;
+  filter: blur(3rem);
+}
+
+/* Активное состояние домашнего экрана */
+.skeleton-home.show {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Фоновый эффект для домашнего экрана */
+.skeleton-home::before {
+  content: "";
+  position: absolute;
+  width: 126%;
+  height: 132%;
+  background-color: black;
+  border-radius: 50%;
+  filter: blur(12rem);
+  opacity: 95%;
+}
+
+/* Обертка контента домашнего экрана */
+.skeleton-home-wrapper {
+  position: relative;
+  height: 74vh;
+  width: auto;
+}
+
+/* Изображение в домашнем экране */
+.skeleton-home-wrapper img {
+  height: 100%;
+  width: auto;
+}
+
+/* Стили для навигационных ссылок домашнего экрана */
+.skeleton-home-link {
+  position: absolute;
+  width: 15.5%;
+  height: 15.5%;
+  border: dashed 1px white;
+  transition: border-color 0.3s ease;
+  /* Рекомендация: добавить cursor: pointer для улучшения UX */
+}
+
+/* Эффект при наведении на ссылку */
+.skeleton-home-link:hover {
+  border-color: red;
+}
+
+/* Позиционирование для каждой ссылки */
+.skeleton-home-link:nth-of-type(1) {
+  top: 0%;
+  left: 43%;
+}
+
+.skeleton-home-link:nth-of-type(2) {
+  top: 12%;
+  right: -3%;
+}
+
+.skeleton-home-link:nth-of-type(3) {
+  top: 88%;
+  right: 14%;
+}
+
+.skeleton-home-link:nth-of-type(4) {
+  top: 88%;
+  left: 14%;
+}
+
+.skeleton-home-link:nth-of-type(5) {
+  top: 10%;
+  left: -3%;
+}
+
+/* Блок для перевода */
+.trnsltr {
+  display: none; /* Скрыто по умолчанию */
+  position: absolute;
+  top: -15px; /* Отступ сверху от кнопки */
+  z-index: 999; /* Слои над остальным содержимым */
+  /* Рекомендация: добавить left/right позиционирование */
+  /* Рекомендация: добавить стили содержимого блока перевода */
+}
+
+/* СТИЛИ ДЛЯ ЗОЛОТОЙ КОМНАТЫ */
+/* Экран загрузки */
+#loadingScreen {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important; /* Центрирование элемента */
+  border-radius: 10px !important;
+  z-index: 9999 !important;
+  width: auto !important;
+  height: 25% !important;
+  /* Рекомендация: избегать использования !important, когда возможно */
+}
+
+#loadingProgress {
+  height: 100%;
+}
+
+.loading-horse {
+  height: 100%;
+}
+
+/* Обертка комнаты */
+.room-wrapper {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  /* Рекомендация: добавить fallback для vw/vh для старых браузеров */
+}
+
+/* Общие стили для фона комнаты и наложения объектов */
+.room-background-img,
+.object-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* SVG наложение */
+.object-overlay svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+/* Активация интерактивности для SVG элементов */
+.object-overlay rect,
+.object-overlay path {
+  pointer-events: bounding-box;
+  /* Рекомендация: использовать pointer-events: all для всей области элемента */
+}
+
+/* Анимация свечения */
+@keyframes glowing {
+  0% {
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 1));
+  }
+  100% {
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+  }
+}
+
+/* Стили для наложения объектов */
+.object-overlay {
+  z-index: 50;
+  transition: filter 0.3s ease-in-out;
+}
+
+/* Класс для свечения объекта */
+.object-overlay.glow {
+  animation: glowing 1s infinite;
+}
+
+/* Класс для кликабельных объектов */
+.object-overlay.clickable {
+  cursor: pointer;
+}
+
+/* Общий класс свечения */
+.glow {
+  filter: brightness(1.2);
+}
+
+/* Анимированный дисплей */
+.animated-display {
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  position: absolute;
+  top: 0;
+  /* Рекомендация: добавить left: 0 для полного позиционирования */
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Анимация исчезновения */
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Стили для SVG наложения */
+.overlay-svg {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 5px;
+  animation: dash 0.5s linear infinite alternate;
+}
+
+/* Эффект при наведении на SVG */
+.overlay-svg:hover {
+  filter: url(#glow); /* Применяет фильтр свечения из определения SVG */
+  stroke: white;
+}
+
+/* Анимация для контура */
+@keyframes dash {
+  to {
+    stroke-width: 15px;
+  }
+}
+
+/* Класс для отключения свечения */
+.no-glow {
+  stroke: transparent;
+  stroke-width: 0;
+}
+
+.no-glow:hover {
+  stroke: transparent;
+  stroke-width: 0;
+}
+
+/* Сложный селектор для подсветки элементов у зеркала */
+.items-in-cave-room-main:has(.items-next-to-mirror:hover)
+  .items-next-to-mirror {
+  stroke: red;
+  stroke-width: 3;
+}
+
+/* Плавный переход для фона комнаты */
+.room-background-img {
+  transition: filter 1s ease-out;
+}
+
+/* Стрелки навигации */
+.arrow {
+  width: 40%;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: filter 1s ease-out;
+}
+
+/* Белая стрелка */
+.arrow-white {
+  filter: drop-shadow(0px 0px 15px #ffffff) drop-shadow(0px 0px 15px #ffffff)
+    drop-shadow(0px 0px 15px #ffffff);
+}
+
+/* Кнопка стрелки */
+.arrow-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc(8.3333% + 1.5rem);
+  height: 100vh;
+  padding: 0;
+  z-index: 60;
+  background: none;
+  border: none;
+  cursor: pointer;
+  overflow: visible;
+}
+
+/* Градиентный эффект при наведении на кнопку стрелки */
+.arrow-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
+  opacity: 0;
+  transition: opacity 1s ease-out;
+  pointer-events: none;
+}
+
+/* Левая стрелка */
+.arrow-left {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+/* Кнопка левой стрелки */
+.arrow-left-button {
+  left: 0;
+}
+
+/* Градиент для левой стрелки */
+.arrow-left-button::before {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.8) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  right: -100%;
+}
+
+/* Эффекты при наведении на кнопки стрелок */
+.arrow-button:hover::before,
+.arrow-left-button:hover::before {
+  opacity: 1;
+}
+
+.arrow-button:hover .arrow {
+  filter: none;
+}
+
+/* Защитный шлем */
+.safety-helmet {
+  opacity: 0;
+  transition: opacity 2s ease-out;
+}
+
+/* Обертка комнаты с плавным переходом */
+.room-wrapper {
+  transition: opacity 2s ease-out;
+}
+
+/* ==============================
+  •. About 
+============================== */
+
+.about-page-wrapper {
+  background-image: url("/wp-content/themes/blankslate/files/about/bg.jpg");
+  background-size: cover;
+}
+
+.about-link {
+  position: relative;
+  z-index: 1;
+}
+
+.about-link::before {
+  content: attr(data-text); /* Дублируем текст элемента */
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  color: #ffffff; /* Цвет призрака */
+  filter: blur(10px); /* Размытие призрака */
+  opacity: 0.8; /* Прозрачность */
+  z-index: -1; /* Уводим призрак под текст */
+}
+
+.about-page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  /* background-color: #1e1e1e; */
+  background-color: #00000000;
+}
+
+.about-page-lists {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  width: 70%;
+  padding-left: 15%;
+  padding-top: 110px;
+  gap: 18px;
+}
+
+.about-page-lists {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Все элементы по умолчанию прижаты влево */
+}
+
+.about-page-list {
+  width: max-content; /* Чтобы контент не растягивал элементы */
+}
+
+.about-page-list:nth-child(1) {
+  align-self: flex-end; /* Уходит вправо */
+}
+
+.about-page-list:nth-child(2),
+.about-page-list:nth-child(4) {
+  width: 90%;
+  align-self: flex-end; /* Уходит вправо */
+}
+
+.about-page-list:nth-child(3) {
+  align-self: flex-start; /* Уходит влево */
+}
+
+.about-page-block-list-item {
+  font-family: Hershey-Times-Mono;
+  font-size: 125%;
+  letter-spacing: 6px;
+  color: #777777;
+  position: relative; /* Для позиционирования псевдоэлемента */
+  z-index: 1;
+}
+
+.about-page-block-list-item::before {
+  content: attr(data-text); /* Дублируем текст элемента */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #ffffff; /* Цвет призрака */
+  filter: blur(10px); /* Размытие призрака */
+  opacity: 0.5; /* Прозрачность */
+  z-index: 0; /* Уводим призрак под текст */
+}

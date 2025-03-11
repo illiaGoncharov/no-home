@@ -1,6 +1,4 @@
 <?php
-
-
 function my_enqueue_scripts() {
     wp_enqueue_script('jquery'); // Загружаем jQuery
     wp_enqueue_script('nav-tools', get_template_directory_uri() . '/js/nav-tools.js', array('jquery'), null, true);
@@ -44,14 +42,6 @@ function load_page_content() {
 
 add_action('wp_ajax_load_page_content', 'load_page_content');
 add_action('wp_ajax_nopriv_load_page_content', 'load_page_content');
-
-
-
-
-
-
-
-
 
 function load_items_content() {
     $content = sanitize_text_field($_POST['content']);
@@ -286,3 +276,10 @@ function add_custom_cursor() {
     <?php
 }
 add_action('wp_footer', 'add_custom_cursor');
+
+add_filter( 'rest_authentication_errors', function( $result ) {
+    if ( true === $result || is_wp_error( $result ) ) {
+        return $result;
+    }
+    return true;
+});
