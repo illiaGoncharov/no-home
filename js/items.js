@@ -4,9 +4,22 @@ document.addEventListener("DOMContentLoaded", function () {
   const itemsContent = document.getElementById("items-content");
   const itemsButton = document.getElementById("items-button"); // Кнопка items-button
 
+  // Находим элемент iPhone
+  const iphoneLink = document.getElementById("iphone-content");
+
   // Изначально добавляем класс к #mp3-content и скрываем #items-content
-  navLinks[0].classList.add("nav-items-link-now"); // Предполагаем, что первый элемент — это mp3
-  itemsContent.style.display = "none";
+  // navLinks[0].classList.add("nav-items-link-now");
+  // itemsContent.style.display = "none";
+
+  // Добавляем класс активной ссылки к iPhone
+  iphoneLink.classList.add("nav-items-link-now");
+
+  // Скрываем элемент .mp3 и показываем #items-content
+  mp3Element.style.display = "none";
+  itemsContent.style.display = "block";
+
+  // Загружаем контент iPhone по умолчанию
+  loadContent("iphone-content");
 
   navLinks.forEach((link) => {
     link.addEventListener("click", function (event) {
@@ -37,17 +50,17 @@ document.addEventListener("DOMContentLoaded", function () {
   // Обработчик клика по кнопке items-button
   itemsButton.addEventListener("click", function () {
     // Показываем mp3 и скрываем items-content
-    mp3Element.style.display = "block";
+    // mp3Element.style.display = "block";
+    iPhoneElement.style.display = "block";
     itemsContent.style.display = "none";
-    initializeMp3Script(); // Инициализируем MP3 скрипт
+    // initializeMp3Script(); // Инициализируем MP3 скрипт
+    initializeIphoneScript();
   });
 });
 
 // Функция для загрузки контента
 function loadContent(contentId) {
-  fetch(
-    `https://nohome.cloud/wp-content/themes/blankslate/items/${contentId}.php`
-  )
+  fetch(`/wp-content/themes/blankslate/items/${contentId}.php`)
     .then((response) => response.text())
     .then((data) => {
       // Вставляем контент в HTML
@@ -104,9 +117,9 @@ jQuery(document).ready(function ($) {
     // Показываем блок .about-page-wrapper, если он есть
     if ($(".about-page-wrapper").length) {
       $(".about-page-wrapper").show();
-      console.log(".about-page-wrapper показан");
+      // console.log(".about-page-wrapper показан");
     } else {
-      console.log(".about-page-wrapper не найден");
+      // console.log(".about-page-wrapper не найден");
     }
   }
 
@@ -207,7 +220,7 @@ jQuery(document).ready(function ($) {
   });
 });
 
-//////////// CAPTCHA CLICKS
+// CAPTCHA CLICKS
 
 // common.js или captcha-common.js
 window.currentCaptchaAction = null;
@@ -392,11 +405,9 @@ function handleSpeakerClick() {
     });
   }
 }
-
-// Инициализируем обработчик для динамика
 handleSpeakerClick();
 
-///////// BACKPACK
+// BACKPACK
 
 function initializeBackpackScript() {
   const container = document.getElementById("backpack-container");
@@ -564,7 +575,7 @@ function initializeBackpackScript() {
   moveImages();
 }
 
-///////// LUGGAGE
+// LUGGAGE
 
 function initializeLuggageScript() {
   const leftContainer = document.querySelector(".luggage-container.left");
@@ -708,7 +719,7 @@ function initializeLuggageScript() {
   });
 }
 
-///////// IPHONE
+// IPHONE
 
 function initializeIphoneScript() {
   const lockscreen = document.querySelector(".lockscreen");
@@ -966,7 +977,7 @@ function initializeIphoneScript() {
   });
 }
 
-//////////// DOCUMENTS
+// DOCUMENTS
 
 function initializeDocumentsScript() {
   const pages = document.querySelectorAll(".diary-page");
@@ -1012,7 +1023,7 @@ function initializeDocumentsScript() {
   showPage(currentPage);
 }
 
-//////////// CAMERA
+// CAMERA
 
 function initializeCameraScript() {
   const albumContainer = document.getElementById("album-container");
@@ -1322,7 +1333,7 @@ function initializeCameraScript() {
   preloadNextPage(1);
 }
 
-//////////// MP3
+// MP3
 
 // Инициализация скрипта для MP3
 function initializeMp3Script() {
@@ -1933,11 +1944,6 @@ function initializeMp3Script() {
   window.addEventListener("resize", checkOverflow);
   setInterval(checkOverflow, 5000);
 }
-
-///////////////////
-//
-//
-//
 
 // Назначаем обработчики кликов на каждый nav-item
 document

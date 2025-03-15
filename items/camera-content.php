@@ -27,15 +27,15 @@
         height: auto;
     }
 
-.img-cell img {
-    max-height: 63%;
-    max-width: 80%;
-    object-fit: contain;
-    transition: all 0.5s ease-in-out;
-    /*border-radius: 5px;
-    border: 5px solid white;*/
-    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
-}
+    .img-cell img {
+        max-height: 63%;
+        max-width: 80%;
+        object-fit: contain;
+        transition: all 0.5s ease-in-out;
+        /*border-radius: 5px;
+        border: 5px solid white;*/
+        filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+    }
 
     .img-number {
         margin-top: 15px;
@@ -135,97 +135,97 @@
         height: 100%;
     }
     .enlarged-img, .side-img {
-    max-height: 60vh;
-    max-width: 60%;
-    object-fit: contain;
-    transition: transform 0.3s ease-in-out;
-    border-radius: 7px;
-    filter: drop-shadow(0 0 9px rgba(0, 0, 0, 0.5));
-    transform: rotate(3deg) translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
+        max-height: 60vh;
+        max-width: 60%;
+        object-fit: contain;
+        transition: transform 0.3s ease-in-out;
+        border-radius: 7px;
+        filter: drop-shadow(0 0 9px rgba(0, 0, 0, 0.5));
+        transform: rotate(3deg) translate(-50%, -50%);
+        position: absolute;
+        top: 50%;
+        left: 50%;
     }
-.enlarged-img-container::before {
-    content: '×';
-    font-size: 3.9vh;
-    position: absolute;
-    top: -39px;
-    left: 50%;
-    color: #b0b0b0;
-}
+    .enlarged-img-container::before {
+        content: '×';
+        font-size: 3.9vh;
+        position: absolute;
+        top: -39px;
+        left: 50%;
+        color: #b0b0b0;
+    }
     .side-img:hover {
         opacity: 1;
     }
     .side-img-right {
-    opacity: 0.3;
-    cursor: pointer;
-    transform: translate(80%, -57%);
+        opacity: 0.3;
+        cursor: pointer;
+        transform: translate(80%, -57%);
     }
     .side-img-left {
-    opacity: 0.3;
-    cursor: pointer;
-    transform: rotate(-3deg) translate(-170%, -63%);
+        opacity: 0.3;
+        cursor: pointer;
+        transform: rotate(-3deg) translate(-170%, -63%);
     }
-@keyframes slideOutLeft {
-  0% {
-    opacity: 1;
-    transform: translateX(0) rotate(0deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-100%) rotate(-10deg);
-  }
-}
+    @keyframes slideOutLeft {
+    0% {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-100%) rotate(-10deg);
+    }
+    }
 
-@keyframes slideInFromRight {
-  0% {
-    opacity: 0;
-    transform: translateX(100%) rotate(10deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) rotate(0deg);
-  }
-}
+    @keyframes slideInFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100%) rotate(10deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg);
+    }
+    }
 
-@keyframes slideInToLeft {
-  0% {
-    opacity: 0.5;
-    transform: translateX(100%) rotate(3deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) rotate(0deg);
-  }
-}
+    @keyframes slideInToLeft {
+    0% {
+        opacity: 0.5;
+        transform: translateX(100%) rotate(3deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg);
+    }
+    }
 
-@keyframes slideInFromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-100%) rotate(-3deg);
-  }
-  100% {
-    opacity: 0.5;
-    transform: translateX(0) rotate(0deg);
-  }
-}
+    @keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%) rotate(-3deg);
+    }
+    100% {
+        opacity: 0.5;
+        transform: translateX(0) rotate(0deg);
+    }
+    }
 
-.side-img-left.animate-out {
-  animation: slideOutLeft 0.5s ease-in-out forwards;
-}
+    .side-img-left.animate-out {
+        animation: slideOutLeft 0.5s ease-in-out forwards;
+    }
 
-.enlarged-img.animate-in {
-  animation: slideInToLeft 0.5s ease-in-out forwards;
-}
+    .enlarged-img.animate-in {
+        animation: slideInToLeft 0.5s ease-in-out forwards;
+    }
 
-.side-img-right.animate-in {
-  animation: slideInFromRight 0.5s ease-in-out forwards;
-}
+    .side-img-right.animate-in {
+        animation: slideInFromRight 0.5s ease-in-out forwards;
+    }
 
-.new-side-img-right {
-  animation: slideInFromRight 0.5s ease-in-out forwards;
-}
+    .new-side-img-right {
+        animation: slideInFromRight 0.5s ease-in-out forwards;
+    }
 </style>
 
 <div class="album-switcher">
@@ -235,8 +235,7 @@
         <span class="nav-arrow nav-arrow-right">></span>
 </div>
 
-    <div id="album-container" class="album-container"></div>
-
+<div id="album-container" class="album-container"></div>
 
 <!--script>
 document.addEventListener("DOMContentLoaded", function() {
