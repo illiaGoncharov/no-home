@@ -31,3 +31,27 @@ if (xrayButton && secondListItem) {
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const wrapper = document.querySelector(".about-page-wrapper");
+
+  for (let i = 0; i < 20; i++) {
+    const zero = document.createElement("div");
+    zero.className = "floating-zero";
+    zero.textContent = "0";
+
+    // Случайная начальная позиция
+    zero.style.left = `${Math.random() * 90}%`;
+    zero.style.top = `${Math.random() * 90}%`;
+
+    // Более быстрая и плавная анимация
+    const duration = 10 + Math.random() * 15; // от 3 до 5 секунд
+
+    zero.style.animation = `float ${duration}s ease-in-out infinite`;
+
+    // Случайная начальная фаза анимации
+    zero.style.animationDelay = `-${Math.random() * duration}s`;
+
+    wrapper.appendChild(zero);
+  }
+});

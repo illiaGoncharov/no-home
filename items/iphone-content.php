@@ -408,9 +408,9 @@
 	}
 </style>
 
-    <div class="iphone-background">
-        <img class="noise-blik cables" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/cables.png">
-    </div>
+<div class="iphone-background">
+    <img class="noise-blik cables" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/cables.png">
+</div>
 
 <div class="sticker-info-i">
     <span class="sticker-data-i">ϲ๏𝙧єarea:\𝓷ѻℍѻოⲉ\survival𖥻៹guides.pdf"</span>

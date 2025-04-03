@@ -399,6 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", function () {
   const xrayButton = document.getElementById("x-ray-button");
   const mainElement = document.querySelector(".x-ray-wrapper");
+  const headerCornerWrapper = document.querySelector(".corner-wrapper");
 
   // Проверяем сохраненное состояние при загрузке страницы
   const savedState = localStorage.getItem("xrayState");
@@ -412,12 +413,24 @@ document.addEventListener("DOMContentLoaded", function () {
       mainElement.classList.remove("xray-animate");
       mainElement.classList.add("xray-animate-reverse");
       xrayButton.classList.remove("active");
+
+      headerCornerWrapper.classList.remove("xray-active");
+      headerCornerWrapper.classList.remove("xray-animate");
+      headerCornerWrapper.classList.add("xray-animate-reverse");
+      headerCornerWrapper.classList.remove("active");
+
       localStorage.setItem("xrayState", "inactive");
     } else {
       mainElement.classList.add("xray-active");
       mainElement.classList.remove("xray-animate-reverse");
       mainElement.classList.add("xray-animate");
       xrayButton.classList.add("active");
+
+      headerCornerWrapper.classList.add("xray-active");
+      headerCornerWrapper.classList.remove("xray-animate-reverse");
+      headerCornerWrapper.classList.add("xray-animate");
+      headerCornerWrapper.classList.add("active");
+
       localStorage.setItem("xrayState", "active");
     }
 

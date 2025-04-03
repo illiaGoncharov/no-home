@@ -13,20 +13,18 @@
 <div class="interface-elements">
     <!-- Верхняя навигация -->
 	<div class="nav-top">
+        <?php if (is_front_page()) : ?>
+        <div class="corner-wrapper">
+             <img src="/wp-content/themes/blankslate/files/nav/i_bg.jpg" alt="">
+        </div>
+        <?php endif; ?>
+
         <div class="container-fluid">
             <div class="row nav-top-content">
                 <div class="d-block col-xxl-9 col-xl-9 col-lg-8 col-md-8 col-sm-7">
-
                     <div class="about-link-wrapper">
                         <a href="<?php echo get_permalink(get_page_by_path('about')); ?>" class="about-link" id="about-link" data-text="X">i</a>
-                    </div>
-
-                    <!-- <div class="corner-wrapper">
-                        <div class="background-i">i</div>
-                        <div class="folded-corner">
-                            <div class="corner-highlight"></div>
-                        </div>
-                    </div> -->
+                    </div>      
                 </div>
 
                 <!-- Кнопка отображения -->

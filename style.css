@@ -754,6 +754,10 @@ html {
   display: none;
 }
 
+.nav-top {
+  position: relative;
+}
+
 .nav-top,
 .skeleton-button {
   display: none;
@@ -1827,34 +1831,74 @@ html {
 /* ==============================
   •. About 
 ============================== */
-
+.nav-top .corner-wrapper {
+  position: absolute;
+  left: 0;
+}
 .about-page-wrapper {
-  background-image: url("/wp-content/themes/blankslate/files/about/bg.jpg");
+  background-image: url("/wp-content/themes/blankslate/files/about/bg[no-0s].png");
   background-size: cover;
+  position: relative;
+  overflow: hidden;
+}
+
+.floating-zero {
+  font-family: Hershey-Times-Mono;
+  position: absolute;
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(20px, -15px);
+  }
+  50% {
+    transform: translate(-5px, 20px);
+  }
+  75% {
+    transform: translate(-15px, -10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .about-link {
   position: relative;
   z-index: 1;
+  margin-left: -20px;
 }
 
 .about-link::before {
-  content: attr(data-text); /* Дублируем текст элемента */
+  content: attr(data-text);
   position: absolute;
   top: 20px;
   left: 0;
   width: 100%;
-  color: #ffffff; /* Цвет призрака */
-  filter: blur(10px); /* Размытие призрака */
-  opacity: 0.8; /* Прозрачность */
-  z-index: -1; /* Уводим призрак под текст */
+  color: #ffffff;
+  filter: blur(10px);
+  opacity: 0.8;
+  z-index: -1;
+  transition: all 0.3s ease; /* Добавляем плавный переход */
+}
+
+.about-link:hover::before {
+  /* Исправленный селектор */
+  filter: blur(15px);
+  opacity: 1; /* Увеличиваем непрозрачность */
 }
 
 .about-page-wrapper {
   width: 100vw;
   height: 100vh;
-  /* background-color: #1e1e1e; */
-  background-color: #00000000;
+  background-color: #1e1e1e;
+  /* background-color: #00000000; */
 }
 
 .about-page-lists {
