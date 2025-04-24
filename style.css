@@ -25,30 +25,35 @@ BlankSlate is distributed under the terms of the GNU GPL
   font-family: PixelScript;
   src: url(/wp-content/themes/blankslate/fonts/PF%20Pixelscript%20Pro%20Regular.ttf);
   font-weight: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: Avara;
   src: url(/wp-content/themes/blankslate/fonts/Avara-BoldItalic.ttf);
   font-weight: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: Avara-Bold;
   src: url(/wp-content/themes/blankslate/fonts/Avara-Bold.ttf);
   font-weight: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: FT88;
   src: url(/wp-content/themes/blankslate/fonts/FT88-Regular.ttf);
   font-weight: normal;
+  font-display: swap;
 }
 
 @font-face {
   font-family: Henny Penny;
   src: url(/wp-content/themes/blankslate/fonts/HennyPenny-Regular.ttf);
   font-weight: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -1165,23 +1170,45 @@ html {
 
 /* Текст индикатора лошади */
 .horse-indicator-text {
-  font-family: Avara; /* Рекомендация: добавить fallback-шрифты */
+  font-family: Avara;
   color: #b0b0b0;
-  font-size: clamp(
-    10px,
-    calc(0.9vw + 0.1vh),
-    30px
-  ); /* Адаптивный размер шрифта */
+  font-size: clamp(10px, calc(0.7vw + 0.1vh), 30px);
   text-align: left;
   line-height: 1.2;
-  max-width: 100%;
-  max-height: 100%;
+  width: 70%;
+  height: 100%;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Ограничивает текст тремя строками */
+  white-space: nowrap;
   padding: 9%;
-  transition: color 0.5s ease, text-shadow 0.5s ease; /* Плавная анимация */
-  /* Рекомендация: добавить -webkit-box-orient: vertical для корректной работы -webkit-line-clamp */
+  transition: color 0.5s ease, text-shadow 0.5s ease;
+  position: relative;
+}
+
+#horse-text-original {
+  display: inline-block;
+  animation: scrollText 15s linear infinite;
+  position: relative;
+  top: 15px;
+  white-space: nowrap;
+}
+
+@keyframes scrollText {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.horse-indicator-text-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Активный текст индикатора лошади */

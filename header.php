@@ -13,19 +13,18 @@
 <div class="interface-elements">
     <!-- Верхняя навигация -->
 	<div class="nav-top">
-        <?php if (is_front_page()) : ?>
-        <div class="corner-wrapper">
-             <img src="/wp-content/themes/blankslate/files/nav/i_bg.jpg" alt="">
-        </div>
-        <?php endif; ?>
-
         <div class="container-fluid">
             <div class="row nav-top-content">
                 <div class="d-block col-xxl-9 col-xl-9 col-lg-8 col-md-8 col-sm-7">
                     <div class="about-link-wrapper">
-                        <a href="<?php echo get_permalink(get_page_by_path('about')); ?>" class="about-link" id="about-link" data-text="X">i</a>
+                        <?php if (is_page('about')) : ?>
+                            <a href="<?php echo get_home_url(); ?>" class="about-link" id="about-link" data-text="i">x</a>
+                        <?php elseif (is_front_page()) : ?>
+                            <a href="<?php echo get_permalink(get_page_by_path('about')); ?>" class="about-link" id="about-link" data-text="X">i</a>
+                        <?php endif; ?>
                     </div>      
                 </div>
+        
 
                 <!-- Кнопка отображения -->
                 <div class="display-button-wrapper">
@@ -38,18 +37,24 @@
                 <div id="horseIndicator" class="horse-indicator col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-5">
                     <!-- Нормальный режим отображения -->
                     <div class="display-normal">
-                        <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/display.png" alt="Display">
+                        <img src="/wp-content/themes/blankslate/files/nav/displayNew.png" alt="Display">
                         <button id="close-hi"></button>
                         <div class="horse-indicator-wrapper">
                             <div class="horse-indicator-text-wrapper">
-                                <div class="horse-indicator-text" id="hi-update">The horse will lead you throughout the place</div>						
+                                <div class="horse-indicator-text" id="hi-update">
+                                    <!-- <p>The horse will lead you throughout the place</p> -->
+                                    <span id="horse-text-original">
+                                        you can move me and listen to me. 
+                                        you can close me by pressing the button at the top
+                                    </span>
+                                </div>				
                             </div>
                         </div>
                     </div>
                     
                     <!-- Режим плеера -->
                     <div class="display-player" style="display:none;">
-                        <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/player.png" alt="Display">
+                        <img src="/wp-content/themes/blankslate/files/nav/playerNew.png" alt="Display">
                         <button id="close-hi"></button>
                         <!-- Информация о воспроизведении -->
                         <div class="horse-indicator-player">
@@ -96,8 +101,8 @@
                 <div class="slider-container">
                     <input type="range" min="1" max="100" value="80" class="drop-range" id="volume-range">
                     <svg id="red-square" width="24" height="40">
-        <path d="M11.0912 0H12.5519V2.18099C13.037 2.18099 13.9861 2.18099 13.9861 2.18099H14.0178V2.20955V4.84421H15.4731V8.07705H16.9249C16.9249 8.90206 16.9249 11.5569 16.9249 11.5569H18.7494V17.3051H16.9232C16.9232 17.3051 16.9249 18.735 16.9249 18.9232H15.4678V20.1464H14.0072V21H9.64818V20.1464H8.16647V18.9232H6.71111C6.71111 17.8529 6.71111 18.3973 6.71111 17.3337C6.71111 17.3286 6.70936 17.3219 6.70584 17.3169C6.70233 17.3118 6.69881 17.3068 6.69529 17.3034H5.25049V11.5552H6.71111V8.07537H8.1735V4.84253H9.63588V2.18771C9.88371 2.18771 10.1263 2.18771 10.3688 2.18771C10.6096 2.18771 10.8504 2.19443 11.0912 2.18267V0Z" fill="#D42318"/>
-                <text x="5" y="33" id="volume-value" fill="#D42318">80</text>
+                        <path d="M11.0912 0H12.5519V2.18099C13.037 2.18099 13.9861 2.18099 13.9861 2.18099H14.0178V2.20955V4.84421H15.4731V8.07705H16.9249C16.9249 8.90206 16.9249 11.5569 16.9249 11.5569H18.7494V17.3051H16.9232C16.9232 17.3051 16.9249 18.735 16.9249 18.9232H15.4678V20.1464H14.0072V21H9.64818V20.1464H8.16647V18.9232H6.71111C6.71111 17.8529 6.71111 18.3973 6.71111 17.3337C6.71111 17.3286 6.70936 17.3219 6.70584 17.3169C6.70233 17.3118 6.69881 17.3068 6.69529 17.3034H5.25049V11.5552H6.71111V8.07537H8.1735V4.84253H9.63588V2.18771C9.88371 2.18771 10.1263 2.18771 10.3688 2.18771C10.6096 2.18771 10.8504 2.19443 11.0912 2.18267V0Z" fill="#D42318"/>
+                        <text x="5" y="33" id="volume-value" fill="#D42318">80</text>
                     </svg>
                 </div>
             </div>
@@ -121,8 +126,8 @@
 <!-- Кнопка скелета (не отображается на главной странице) -->
 <!--?php
 if (!is_page('5')) : ?-->
-<div class="skeleton-button">
-    <button id="skeleton-button">
+<div class="skeleton-button" data-horse-click="please, select one of my limbs">
+    <button id="skeleton-button" >
         <img src="/wp-content/themes/blankslate/files/nav/skeleton.png" alt="To rooms">
     </button>
     <a id="skeleton-home-link" href="/" style="display: none;">
@@ -182,8 +187,14 @@ if (!is_page('5')) : ?-->
 
                 // Меняем ссылку на главную страницу
                 link.href = homePageURL;
+                link.setAttribute('data-text', 'i');
+            } else {
+                link.innerHTML = 'i';
+                link.href = '<?php echo get_permalink(get_page_by_path("about")); ?>';
+                link.setAttribute('data-text', 'x');
             }
         });
+        
     </script>
 <div id="wrapper" class="hfeed x-ray-wrapper">
 <div id="container">
