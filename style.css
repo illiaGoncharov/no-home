@@ -576,6 +576,7 @@ html {
   object-fit: cover;
   position: relative;
   z-index: 1000;
+  loading="lazy";
 }
 
 /* Эффекты наложения теней */
@@ -847,6 +848,7 @@ html {
 .items-hi img {
   height: 100%;
   width: auto;
+  loading="lazy";
 }
 
 .items-hi-text {
@@ -1130,6 +1132,7 @@ html {
   height: 70%;
   filter: drop-shadow(0 0 15px black);
   /* Рекомендация: добавить transition для плавного эффекта при наведении */
+  loading="lazy";
 }
 
 #display-button img:hover {
@@ -1152,6 +1155,7 @@ html {
   height: auto;
   filter: drop-shadow(0 0 15px black);
   /* Рекомендация: добавить max-width для предотвращения переполнения */
+  loading="lazy";
 }
 
 /* Обертка индикатора лошади */
@@ -1190,14 +1194,15 @@ html {
   position: relative;
   top: 15px;
   white-space: nowrap;
+  transform: translateX(0); /* Start at the left edge */
 }
 
 @keyframes scrollText {
   0% {
-    transform: translateX(100%);
+    transform: translateX(0%); /* Start at the left edge */
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(-100%); /* Move fully off-screen left */
   }
 }
 
@@ -1272,6 +1277,7 @@ html {
   height: 70%;
   filter: drop-shadow(0 0 15px black);
   /* Рекомендация: добавить transition для плавного эффекта при наведении */
+  loading="lazy";
 }
 
 .nav-bottom img:hover {
@@ -1312,6 +1318,7 @@ html {
 /* Изображение на экране громкости */
 #volume-screen img {
   height: 100%;
+  loading="lazy";
 }
 
 /* Обертка для выпадающего элемента */
@@ -1542,6 +1549,7 @@ html {
 .skeleton-home-wrapper img {
   height: 100%;
   width: auto;
+  loading="lazy";
 }
 
 /* Стили для навигационных ссылок домашнего экрана */
@@ -1876,6 +1884,7 @@ html {
   color: rgba(255, 255, 255, 0.6);
   pointer-events: none;
   opacity: 0.8;
+  transition: left 0.25s linear, top 0.25s linear;
 }
 
 @keyframes float {

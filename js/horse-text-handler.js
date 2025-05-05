@@ -26,6 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const setHorseText = (text) => {
     log("Setting horse text to:", text);
     horseTextEl.textContent = text || defaultText;
+
+    // Restart animation
+    horseTextEl.style.animation = 'none'; // Remove existing animation
+    horseTextEl.offsetHeight; /* Trigger reflow */
+    horseTextEl.style.animation = 'scrollText 15s linear infinite'; // Re-add animation
   };
 
   // Функция для обработки всех элементов с атрибутами
@@ -119,4 +124,63 @@ document.addEventListener("DOMContentLoaded", () => {
     attributes: true,
     attributeFilter: ["style", "class"],
   });
+
+  /**
+   * Отправляет текст со стикера на сервер по AJAX для отправки на почту.
+   * @param {string} textToSend Текст для отправки.
+   * @param {HTMLElement|null} inputElement Элемент ввода (textarea), чтобы его можно было заблокировать/разблокировать.
+   */
+  function sendStickerTextViaAjax(textToSend, inputElement = null) {
+    // Проверяем, доступны ли данные из functions.php (созданные wp_localize_script)
+    if (typeof stickerEmailData === 'undefined' || !stickerEmailData.ajaxurl || !stickerEmailData.nonce) {
+      console.error('Ошибка: Данные для отправки письма (stickerEmailData) не найдены или неполны. Проверьте wp_localize_script в functions.php.');
+      if (inputElement) inputElement.disabled = false; // Разблокируем, если что-то пошло не так
+      return; // Прерываем выполнение
+    }
+
+    console.log('Отправка текста на email:', textToSend);
+
+    // Готовим данные для отправки
+    const data = new FormData();
+    data.append("action", "send_sticker_email"); // Должно совпадать с хуком в PHP: add_action('wp_ajax_send_sticker_email', ...)
+    data.append("user_text", textToSend);
+    data.append("security", stickerEmailData.nonce); // Используем nonce из локализованных данных
+
+    // Блокируем поле ввода, если оно передано
+    if (inputElement) {
+      inputElement.disabled = true;
+    }
+
+    // Отправляем запрос
+    fetch(stickerEmailData.ajaxurl, { // Используем ajaxurl из локализованных данных
+      method: "POST",
+      body: data,
+    })
+    .then(response => {
+      if (!response.ok) { // Проверяем статус ответа HTTP
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json(); // Парсим JSON только если ответ OK
+     })
+    .then(result => {
+      if (result.success) {
+        console.log("Сервер ответил (успех отправки email):", result.data.message);
+        // Можно добавить уведомление пользователю здесь
+      } else {
+        console.error("Сервер ответил (ошибка отправки email):", result.data.message);
+        // Можно добавить уведомление об ошибке здесь
+        if (inputElement) {
+          inputElement.disabled = false; // Разблокируем поле при ошибке сервера
+        }
+      }
+      // Заметьте: hideStickerInfo() здесь не вызывается. Управление окном остается в main[local].php
+    })
+    .catch((error) => {
+      console.error("Ошибка сети или обработки ответа при отправке email:", error);
+      if (inputElement) {
+        inputElement.disabled = false; // Разблокируем поле при ошибке сети или парсинга JSON
+      }
+      // Можно добавить уведомление об ошибке сети здесь
+    });
+  }
 });

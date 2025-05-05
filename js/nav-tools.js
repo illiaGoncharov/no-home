@@ -487,6 +487,10 @@ function applyVolumeToAudio(volume) {
     audio.volume = normalizedVolume;
   });
 
+  document.querySelectorAll("video.attic-video").forEach((video) => {
+    video.volume = normalizedVolume;
+  });
+
   if (window.audioContext && window.audioContext.gainNode) {
     window.audioContext.gainNode.gain.setValueAtTime(
       normalizedVolume,

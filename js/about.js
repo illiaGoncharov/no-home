@@ -20,8 +20,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const zero = document.createElement("div");
         zero.className = "floating-zero";
         zero.textContent = "0";
-        zero.style.left = `${Math.random() * 90}%`;
-        zero.style.top = `${Math.random() * 90}%`;
+
+        // Устанавливаем начальную позицию
+        const startX = Math.random() * 80 + 10; // От 10% до 90%
+        const startY = Math.random() * 80 + 10;
+        zero.style.left = `${startX}%`;
+        zero.style.top = `${startY}%`;
+
+        // Добавляем начальные параметры анимации
+        zero.dataset.directionX = Math.random() > 0.5 ? 1 : -1;
+        zero.dataset.directionY = Math.random() > 0.5 ? 1 : -1;
+        zero.dataset.speedX = (Math.random() * 0.4 + 0.2) / 100; // От 0.2% до 0.6% за кадр
+        zero.dataset.speedY = (Math.random() * 0.4 + 0.2) / 100;
+
         zeros.push(zero);
         fragment.appendChild(zero);
       } catch (error) {
@@ -33,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Оптимизация анимации плавающих элементов
     let lastTime = 0;
-    const fps = 30; // Уменьшаем частоту обновления
+    const fps = 60;
     const interval = 1000 / fps;
 
     function animateZeros(currentTime) {
@@ -44,13 +55,33 @@ document.addEventListener("DOMContentLoaded", function () {
       lastTime = currentTime;
 
       zeros.forEach((zero) => {
-        const currentLeft = parseFloat(zero.style.left);
-        const currentTop = parseFloat(zero.style.top);
+        // Получаем текущие координаты
+        let currentX = parseFloat(zero.style.left);
+        let currentY = parseFloat(zero.style.top);
 
-        zero.style.left = `${
-          (currentLeft + (Math.random() - 0.5) * 0.5) % 90
-        }%`;
-        zero.style.top = `${(currentTop + (Math.random() - 0.5) * 0.5) % 90}%`;
+        // Получаем параметры движения
+        const directionX = parseFloat(zero.dataset.directionX);
+        const directionY = parseFloat(zero.dataset.directionY);
+        const speedX = parseFloat(zero.dataset.speedX);
+        const speedY = parseFloat(zero.dataset.speedY);
+
+        // Обновляем позицию
+        currentX += directionX * speedX;
+        currentY += directionY * speedY;
+
+        // Проверяем границы и меняем направление при необходимости
+        if (currentX <= 10 || currentX >= 90) {
+          zero.dataset.directionX = -directionX;
+          currentX = Math.max(10, Math.min(90, currentX));
+        }
+        if (currentY <= 10 || currentY >= 90) {
+          zero.dataset.directionY = -directionY;
+          currentY = Math.max(10, Math.min(90, currentY));
+        }
+
+        // Применяем новые координаты
+        zero.style.left = `${currentX}%`;
+        zero.style.top = `${currentY}%`;
       });
 
       requestAnimationFrame(animateZeros);
