@@ -22,15 +22,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const defaultText = horseTextEl.textContent;
   log("Default text:", defaultText);
 
-  // Функция для установки текста
-  const setHorseText = (text) => {
+  // Функция для установки текста в пультике
+  const setHorseText = (text, duration = 0) => {
     log("Setting horse text to:", text);
     horseTextEl.textContent = text || defaultText;
 
-    // Restart animation
-    horseTextEl.style.animation = 'none'; // Remove existing animation
-    horseTextEl.offsetHeight; /* Trigger reflow */
-    horseTextEl.style.animation = 'scrollText 15s linear infinite'; // Re-add animation
+    // Если указана длительность, возвращаем текст через указанное время
+    if (duration > 0) {
+      setTimeout(() => {
+        horseTextEl.textContent = defaultText;
+      }, duration);
+    }
   };
 
   // Функция для обработки всех элементов с атрибутами
@@ -125,6 +127,24 @@ document.addEventListener("DOMContentLoaded", () => {
     attributeFilter: ["style", "class"],
   });
 
+  // Расширение существующей логики обработки текста
+  document.querySelectorAll(".sticker-img").forEach((sticker) => {
+    if (sticker.classList.contains("note8")) {
+      sticker.addEventListener('mouseenter', () => {
+        setHorseText("you can leave a note or leave nothing");
+      });
+      
+      sticker.addEventListener('mouseleave', () => {
+        setHorseText(defaultText);
+      });
+    }
+  });
+
+  // Глобальная функция для обновления текста в пультике
+  window.updateHorseText = (text, duration = 5000) => {
+    setHorseText(text, duration);
+  };
+
   /**
    * Отправляет текст со стикера на сервер по AJAX для отправки на почту.
    * @param {string} textToSend Текст для отправки.
@@ -165,7 +185,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(result => {
       if (result.success) {
         console.log("Сервер ответил (успех отправки email):", result.data.message);
-        // Можно добавить уведомление пользователю здесь
+        
+        // Используем глобальную функцию для обновления текста
+        window.updateHorseText("successfully sent", 5000);
       } else {
         console.error("Сервер ответил (ошибка отправки email):", result.data.message);
         // Можно добавить уведомление об ошибке здесь

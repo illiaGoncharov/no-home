@@ -159,7 +159,7 @@ jQuery(document).ready(function ($) {
     var clickedClasses = $(this).attr("class").split(/\s+/);
 
     $.ajax({
-      url: ajaxurl,
+      url: ajaxData.ajaxurl,
       type: "POST",
       data: {
         action: "load_page_content",

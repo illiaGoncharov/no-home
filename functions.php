@@ -21,8 +21,10 @@ function my_enqueue_scripts() {
         )
     );
     
-    // Строку ниже можно удалить, если ajaxurl не нужен отдельно в nav-tools.js
-    // wp_localize_script('nav-tools', 'ajaxurl', admin_url('admin-ajax.php'));
+    // Передаем ajaxurl в nav-tools.js
+    wp_localize_script('nav-tools', 'ajaxData', array(
+        'ajaxurl' => admin_url('admin-ajax.php')
+    ));
 }
 add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
 
@@ -437,34 +439,28 @@ function enqueue_sticker_scripts() {
 
 // 2. Функция-обработчик AJAX для отправки письма
 function handle_send_sticker_email() {
-    // Проверяем nonce для безопасности
     check_ajax_referer('sticker_email_nonce', 'security');
 
     if (isset($_POST['user_text'])) {
         $user_text = sanitize_textarea_field($_POST['user_text']);
-        $to = 'karnebero@gmail.com'; // <-- !!! ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ EMAIL АДРЕС !!!
-        $subject = 'Новый текст со стикера (Note 8)'; // Уточнил тему письма
-        $body = "Пользователь отправил следующий текст со стикера:\n\n" . $user_text;
+        $to = array(
+            'karnebero@gmail.com', 
+            'n0h0me.cl0ud.me@gmail.com'
+        ); // Список получателей
+        $subject = 'Новый текст со стикера';
+        $body = "Текст со стикера:\n\n" . $user_text;
         $headers = array('Content-Type: text/plain; charset=UTF-8');
 
         $sent = wp_mail($to, $subject, $body, $headers);
 
         if ($sent) {
-            wp_send_json_success(array('message' => 'Письмо успешно отправлено.'));
+            wp_send_json_success(array('message' => 'Письмо отправлено'));
         } else {
-            // Попытка получить ошибку отправки (может не работать на всех конфигурациях)
-            global $phpmailer;
-            $error_message = 'Не удалось отправить письмо.';
-            if (isset($phpmailer) && $phpmailer instanceof PHPMailer\PHPMailer\PHPMailer) {
-               $error_message .= ' Ошибка: ' . $phpmailer->ErrorInfo;
-            }
-             wp_send_json_error(array('message' => $error_message));
+            wp_send_json_error(array('message' => 'Не удалось отправить письмо'));
         }
-    } else {
-        wp_send_json_error(array('message' => 'Текст не получен.'));
     }
 
-    wp_die(); // Обязательно для завершения AJAX запроса
+    wp_die();
 }
 
 // Подключаем обработчик AJAX для залогиненных и незалогиненных пользователей
@@ -472,4 +468,12 @@ add_action('wp_ajax_send_sticker_email', 'handle_send_sticker_email'); // Для
 add_action('wp_ajax_nopriv_send_sticker_email', 'handle_send_sticker_email'); // Для гостей
 
 // --- Конец кода для functions.php ---
+
+function localize_sticker_script() {
+    wp_localize_script('your-main-script', 'stickerEmailData', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('sticker_email_nonce')
+    ));
+}
+add_action('wp_enqueue_scripts', 'localize_sticker_script');
 ?>

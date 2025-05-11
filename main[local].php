@@ -239,13 +239,14 @@
     visibility: hidden;
   }
   .textarea-note {
+    font-family: "Avara";
     position: absolute;
     top: 50%;
-    left: 51%;
+    left: 50%;
     transform: translate(-50%, -50%) rotate(-10deg);
     z-index: 10001;
-    font-size: 3em;
-    width: 30%;
+    font-size: 1.4em;
+    width: 18%;
     height: 45%;
     border: none;
     background: none;
@@ -1106,18 +1107,56 @@
         inputField.classList.add("textarea-note");
         sticker.parentElement.appendChild(inputField);
         inputField.focus();
-        inputField.addEventListener("keypress", function (event) {
+
+        // Создаем контейнер для индикатора
+        const statusContainer = document.createElement("div");
+        statusContainer.style.position = "absolute";
+        statusContainer.style.top = "10px";
+        statusContainer.style.right = "10px";
+        statusContainer.style.color = "green";
+        statusContainer.style.display = "none";
+        sticker.parentElement.appendChild(statusContainer);
+
+        inputField.addEventListener("keypress", function(event) {
           if (event.key === "Enter") {
-            event.preventDefault(); // Предотвращаем стандартное поведение Enter
-            const text = inputField.value;
+            event.preventDefault();
+            const text = inputField.value.trim();
+            
+            if (text) {
+              // Блокируем поле ввода
+              inputField.disabled = true;
 
-            // Вызываем функцию отправки из horse-text-handler.js
-            // Передаем текст и сам элемент ввода для блокировки
-            sendStickerTextViaAjax(text, inputField); 
+              // Показываем индикатор отправки
+              statusContainer.textContent = "Отправка...";
+              statusContainer.style.display = "block";
 
-            // Скрываем информацию о стикере ПОСЛЕ инициации отправки
-            // (Отправка асинхронная, она продолжится в фоновом режиме)
-            hideStickerInfo(); 
+              // Вызываем функцию отправки
+              sendStickerTextViaAjax(text, (success) => {
+                // Callback после отправки
+                inputField.disabled = false;
+                
+                if (success) {
+                  // Успешная отправка
+                  statusContainer.textContent = "✓ Отправлено";
+                  statusContainer.style.color = "green";
+                  
+                  // Очищаем поле через некоторое время
+                  setTimeout(() => {
+                    inputField.value = "";
+                    statusContainer.style.display = "none";
+                  }, 2000);
+                } else {
+                  // Ошибка отправки
+                  statusContainer.textContent = "✗ Ошибка";
+                  statusContainer.style.color = "red";
+                  
+                  // Возвращаем возможность редактирования
+                  setTimeout(() => {
+                    statusContainer.style.display = "none";
+                  }, 2000);
+                }
+              });
+            }
           }
         });
       }
@@ -1222,5 +1261,36 @@
       });
     });
   });
+</script>
+
+<script>
+function sendStickerTextViaAjax(textToSend, callback) {
+    const data = new FormData();
+    data.append('action', 'send_sticker_email');
+    data.append('user_text', textToSend);
+    data.append('security', stickerEmailData.nonce);
+
+    fetch(stickerEmailData.ajaxurl, {
+        method: 'POST',
+        body: data
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        if (result.success) {
+            // Используем глобальную функцию updateHorseText
+            if (window.updateHorseText) {
+                window.updateHorseText("successfully sent", 5000);
+            }
+            callback(true);
+        } else {
+            callback(false);
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        callback(false);
+    });
+}
 </script>
 
