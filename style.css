@@ -1192,7 +1192,7 @@ html {
   display: inline-block;
   animation: scrollText 15s linear infinite;
   position: relative;
-  top: 15px;
+  top: 11px;
   white-space: nowrap;
   transform: translateX(0); /* Start at the left edge */
 }

@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Правила для AI в проекте nohome.cloud
+
+- Выводить ответы и код только на русском языке.  
+- Добавлять краткие комментарии в коде, если логика не очевидна.  
+- Использовать лучшие практики WordPress, PHP, JS.  
+- Минимизировать изменения в архитектуре.  
+- Для багфиксов — сначала простой работающий вариант.  
+- Соблюдать UI/UX текущего дизайна.  
+- В багфиксе сначала описание проблемы, затем решение.  
+- Делить большой код на части.
+
+---
+
+# AI Rules for nohome.cloud Project
+
+- Output answers and code only in Russian.  
+- Add short comments in code if logic is not obvious.  
+- Use best practices for WordPress, PHP, JS.  
+- Minimize changes in architecture.  
+- For bug fixes, provide a simple working solution first.  
+- Follow the current UI/UX design.  
+- For bug fixes, describe the problem before offering a solution.  
+- Split large code into logical parts.

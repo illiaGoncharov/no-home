@@ -811,6 +811,17 @@
     const letMeInButton = document.getElementById("letMeIn");
     const exitButton = document.getElementById("preloader-exit");
 
+    // Отключаем прелоадер в разработке
+    const isDevelopment = window.location.hostname === 'localhost' || 
+                         window.location.hostname === '127.0.0.1' || 
+                         window.location.hostname.includes('local') ||
+                         window.location.hostname.includes('dev');
+    
+    if (isDevelopment) {
+      console.log('🚧 Development mode: skipping preloader');
+      preloader.style.display = "none";
+    }
+
     letMeInButton.addEventListener("click", function () {
       preloader.style.display = "none";
     });
@@ -1246,17 +1257,27 @@
 
     document.querySelectorAll('.sticker-img').forEach(sticker => {
       sticker.addEventListener('mouseenter', () => {
-        const horseText = document.getElementById("horse-text-original");
-        if (horseText) {
-          horseText.setAttribute('data-original', horseText.textContent || '');
-          horseText.textContent = "sorry for being weird it's my first time being alive";
+        // Use the global updateHorseText function if available
+        if (window.updateHorseText) {
+          window.updateHorseText("sorry for being weird it's my first time being alive", 0);
+        } else {
+          const horseText = document.getElementById("horse-text-original");
+          if (horseText) {
+            horseText.setAttribute('data-original', horseText.textContent || '');
+            horseText.textContent = "sorry for being weird it's my first time being alive";
+          }
         }
       });
       
       sticker.addEventListener('mouseleave', () => {
-        const horseText = document.getElementById("horse-text-original");
-        if (horseText) {
-          horseText.textContent = horseText.getAttribute('data-original') || '';
+        // Use the global updateHorseText function if available
+        if (window.updateHorseText) {
+          window.updateHorseText("you can move me and listen to me. you can close me by pressing the button at the top.", 0);
+        } else {
+          const horseText = document.getElementById("horse-text-original");
+          if (horseText) {
+            horseText.textContent = horseText.getAttribute('data-original') || '';
+          }
         }
       });
     });

@@ -168,8 +168,20 @@ function initializeGolden() {
                 scene.add(room);
                 goldenRoom3D.appendChild(renderer.domElement);
                 document.getElementById("loadingScreen").style.display = "none";
-                hiUpdate.textContent = originalText;
-                hiUpdate.classList.remove("horse-indicator-text-active");
+                
+                // Обновляем текст в пультике
+                const loadUpdate = document.getElementById("loadUpdate");
+                
+                if (typeof window.updateHorseText === 'function') {
+                  window.updateHorseText("pixels are in a preparation process. wait for please. I am sorry if you encounter any bugs.", 0);
+                } else {
+                  hiUpdate.textContent = "pixels are in a preparation process. wait for please. I am sorry if you encounter any bugs.";
+                  hiUpdate.classList.add("horse-indicator-text-active");
+                }
+                loadUpdate.textContent = "100%";
+
+                // Инициализируем обработку событий после загрузки
+                initializeInteractions();
               });
             } catch (error) {
               console.error("Error processing 3D model:", error);
@@ -740,6 +752,19 @@ function initializeGolden() {
       } catch (error) {
         console.warn("Error playing sound:", error);
       }
+    }
+  }
+
+  // Новая функция для инициализации взаимодействий
+  function initializeInteractions() {
+    // Добавляем обработчики для элементов сцены в 3D модели
+    if (room) {
+      // Обработчики для 3D объектов устанавливаются через ray casting
+      // и уже реализованы в других функциях
+      
+      // Не добавляем никаких дополнительных обработчиков,
+      // так как все необходимые взаимодействия уже установлены
+      // в horse-text-handler.js
     }
   }
 
