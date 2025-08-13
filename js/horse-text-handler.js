@@ -12,7 +12,7 @@
     };
 
     // Default text
-    const DEFAULT_TEXT = "please, select one of my limbs";
+    const DEFAULT_TEXT = "you can move me and listen to me. you can close me by pressing the button at the top.";
 
     // Find the horse text element
     const findHorseTextElement = () => {

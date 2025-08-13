@@ -117,9 +117,9 @@ jQuery(document).ready(function ($) {
     // Показываем блок .about-page-wrapper, если он есть
     if ($(".about-page-wrapper").length) {
       $(".about-page-wrapper").show();
-      // 
+      // console.log(".about-page-wrapper показан");
     } else {
-      // 
+      // console.log(".about-page-wrapper не найден");
     }
   }
 
@@ -144,9 +144,9 @@ jQuery(document).ready(function ($) {
     // Скрываем блок .about-page-wrapper, если он есть
     if ($(".about-page-wrapper").length) {
       $(".about-page-wrapper").hide();
-      
+      console.log(".about-page-wrapper скрыт");
     } else {
-      
+      console.log(".about-page-wrapper не найден");
     }
   }
 
@@ -879,10 +879,17 @@ function initializeIphoneScript() {
 
   setTimeout(function () {
     let sound = document.getElementById("notification-sound");
-    sound.play();
+    if (sound) {
+      sound.play().catch(error => {
+        // Игнорируем ошибку автовоспроизведения - это нормально для браузеров
+        // console.log('Sound autoplay blocked:', error);
+      });
+    }
 
     let notification = document.querySelector(".iphone-notification");
-    notification.style.display = "block";
+    if (notification) {
+      notification.style.display = "block";
+    }
 
     setTimeout(function () {
       notification.classList.add("notification");

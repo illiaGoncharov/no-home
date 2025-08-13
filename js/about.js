@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     if (!wrapper) {
-      console.warn("Wrapper element not found");
+      // console.warn("Wrapper element not found");
       return;
     }
 
