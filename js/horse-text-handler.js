@@ -306,35 +306,76 @@
         // Mirror interaction
         setupHoverInteraction(['.mirror', '#mirror-svg-overlay'], "sorry, your reflection is not renderable");
 
-        // Cave room specific interactions
-        const caveElementsMap = {
-            '#just-cave': "do you feel your body temperature right now?",
-            '#walkiephone, .walkiephone, #walkie-phone-in-items-room': "do you know how to listen carefully?",
-            '.safety-helmet-img, .safety-helmet, .safety-helmet-f': "mind your head",
-            '.fly': "set yourself up for lighting the space",
-            '#gbl-speaker-in-items-room': "do you know how to follow well? are you a considerate person?"
+        // Universal element finder - tries multiple selectors
+        const findElementsByKeywords = (keywords, text, type = 'hover') => {
+            const selectors = [];
+            
+            keywords.forEach(keyword => {
+                // Add various selector patterns
+                selectors.push(
+                    `#${keyword}`,
+                    `.${keyword}`,
+                    `[id*="${keyword}"]`,
+                    `[class*="${keyword}"]`,
+                    `[data-item="${keyword}"]`,
+                    `.overlay-svg .${keyword}`,
+                    `.overlay-svg #${keyword}`,
+                    `#${keyword}-in-room`,
+                    `#${keyword}-overlay`,
+                    `.${keyword}-img`,
+                    `.${keyword}-button`
+                );
+            });
+            
+            if (type === 'hover') {
+                setupHoverInteraction(selectors, text);
+            } else if (type === 'click') {
+                setupClickInteraction(selectors, text);
+            }
         };
+
+        // Setup all missing interactions using keywords
+        const allInteractions = [
+            // Cave room
+            { keywords: ['cave', 'just-cave'], text: "do you feel your body temperature right now?" },
+            { keywords: ['helmet', 'safety-helmet', 'hard-hat'], text: "mind your head" },
+            { keywords: ['flashlight', 'torch', 'fly'], text: "set yourself up for lighting the space" },
+            { keywords: ['walkie', 'radio', 'walkiephone'], text: "do you know how to listen carefully?" },
+            { keywords: ['speaker', 'gbl-speaker'], text: "do you know how to follow well? are you a considerate person?" },
+            
+            // Table room  
+            { keywords: ['coffee-table', 'skeleton-chair'], text: "the ground knows so many steps…" },
+            { keywords: ['table-in-table-room', 'desk', 'work-table'], text: "I hope this table is adaptive enough for you" },
+            { keywords: ['laptop', 'tablet', 'computer'], text: "my heart is surrounded by bones. I am able to hear both the heart and the bones. What about you?" },
+            { keywords: ['iphone', 'phone', 'mobile'], text: "this phone doesn't have any secrets and is free for anyone to use" },
+            { keywords: ['camera', 'photo'], text: "the motives of this camera are not clear, the date and time are broken" },
+            { keywords: ['window-in-table-room', 'window-table'], text: "i hear the helicopters and planes behind the window but can't tell whether to expect explosions?" },
+            { keywords: ['hard-disk', 'hard-drive', 'hdd'], text: "don't rush to leave, it's a fine day" },
+            
+            // Golden room
+            { keywords: ['door', 'golden-door'], text: "what do you prefer - closed/open doors or closed/open locks?" },
+            { keywords: ['rats', 'mice', 'mouse'], text: "oh no, i am sorry, the mice have escaped the lab!" },
+            
+            // Bedroom
+            { keywords: ['silhouette', 'shadow'], text: "have you ever been activated? please, check in with your soul. there are many other souls in the walls, it can get confusing." },
+            { keywords: ['outside-bedroom', 'bedroom-window'], text: "do you know the temperature of air outside someone's window?" }
+        ];
         
-        // Set up cave interactions
-        Object.entries(caveElementsMap).forEach(([selector, text]) => {
-            setupHoverInteraction(selector, text);
+        // Apply all interactions
+        allInteractions.forEach(interaction => {
+            findElementsByKeywords(interaction.keywords, interaction.text, 'hover');
         });
-
-        // Console room specific interactions
-        const consoleElementsMap = {
-            '.overlay-svg .skeleton-chair-room': "the ground knows so many steps…",
-            '.overlay-svg .table-in-table-room': "I hope this table is adaptive enough for you",
-            '#laptop-on-table': "my heart is surrounded by bones. I am able to hear both the heart and the bones. What about you?",
-            '.overlay-svg .iphone-camera, .iphone-camera': "this phone doesn't have any secrets and is free for anyone to use",
-            '.camera-overlay, .camera': "the motives of this camera are not clear, the date and time are broken",
-            '.overlay-svg .window-in-table-room-a3 .no-glow, .overlay-svg .window-in-table-room-a2 .no-glow': "i hear the helicopters and planes behind the window but can't tell whether to expect explosions?",
-            '#window-in-table-room': "please, do not leave. I will hide away shortly and you can scroll.",
-            '.hard-disk, #hard-disk-on-skeleton-chair': "don't rush to leave, it's a fine day"
-        };
-
-        // Set up console interactions
-        Object.entries(consoleElementsMap).forEach(([selector, text]) => {
-            setupHoverInteraction(selector, text);
+        
+        // Click interactions
+        const clickInteractions = [
+            { keywords: ['lock', 'golden-lock'], text: "do you know how to cipher?" },
+            { keywords: ['outside-in-bedroom-room', 'outside-bedroom'], text: "what is your favorite transmission tower? Though let me not distract you for long, I will hide away shortly." },
+            { keywords: ['window-view', 'window-click'], text: "please, do not leave. I will hide away shortly and you can scroll." },
+            { keywords: ['outside-golden', 'isolation'], text: "welcome to complete isolation" }
+        ];
+        
+        clickInteractions.forEach(interaction => {
+            findElementsByKeywords(interaction.keywords, interaction.text, 'click');
         });
 
         // Добавляем специальный обработчик для 13 кликов по скелету в чердаке
@@ -492,59 +533,41 @@
         // Call the bedroom setup function
         setupBedroomInteractions();
 
-        // Golden Room interactions
-        const setupGoldenRoomInteractions = () => {
-            const goldenRoomMain = document.getElementById('golden-room-3d');
-            
-            if (goldenRoomMain && !goldenRoomMain.hasAttribute('data-horse-handled')) {
-                // Use event delegation for 3D elements
-                goldenRoomMain.addEventListener('mouseover', (event) => {
-                    const target = event.target;
-                    
-                    if (target.classList.contains('door')) {
-                        updateHorseText("what do you prefer - closed/open doors or closed/open locks?");
-                    } else if (target.classList.contains('rats')) {
-                        updateHorseText("oh no, i am sorry, the mice have escaped the lab!");
-                    } else if (target.classList.contains('lock')) {
-                        updateHorseText("do you know how to cipher?");
-                    }
-                });
-    
-                goldenRoomMain.addEventListener('mouseout', () => {
-                    updateHorseText(DEFAULT_TEXT);
-                });
-                
-                goldenRoomMain.setAttribute('data-horse-handled', 'true');
-            }
-            
-            // Door rats
-            setupClickInteraction('.golden-room-door-rats', "oh no, i am sorry, the mice have escaped the lab!", 5000);
-            
-            // Door lock
-            setupClickInteraction('.golden-room-door-lock', "do you know how to cipher?", 5000);
-            
-            // Lock overlay
-            setupClickInteraction('#LockInLockOverlay', "welcome to complete isolation", 5000);
-        };
+        // Additional specific interactions that need exact selectors
+        setupHoverInteraction('#arrow-right-button', "the numbers on your way are a chance to establish contact with them");
+        setupHoverInteraction(['.hopscotch', '.numbers', '[class*="number"]'], "the numbers on your way are a chance to establish contact with them");
         
-        // Call the golden room setup function
-        setupGoldenRoomInteractions();
-
-        // Loading screen interaction
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadUpdate = document.getElementById('loadUpdate');
+        // Golden room loading screen
+        setupHoverInteraction(['#loadingScreen', '#loadUpdate', '.loading'], "pixels are in a preparation process. wait for them please. I am sorry if you encounter any bugs.");
         
-        if (loadingScreen && loadUpdate && !loadUpdate.hasAttribute('data-horse-handled')) {
-            loadUpdate.addEventListener('DOMSubtreeModified', () => {
-                const percentage = parseInt(loadUpdate.textContent);
-                if (percentage < 100) {
-                    updateHorseText("pixels are in a preparation process. wait for them please. I am sorry if you encounter any bugs.");
+        // Golden room 3D interactions
+        const goldenRoom3D = document.getElementById('golden-room-3d');
+        if (goldenRoom3D && !goldenRoom3D.hasAttribute('data-horse-handled')) {
+            goldenRoom3D.addEventListener('mouseover', (event) => {
+                const target = event.target;
+                if (target.classList.contains('door') || target.id?.includes('door')) {
+                    updateHorseText("what do you prefer - closed/open doors or closed/open locks?");
+                } else if (target.classList.contains('rats') || target.classList.contains('mice')) {
+                    updateHorseText("oh no, i am sorry, the mice have escaped the lab!");
+                } else if (target.classList.contains('lock')) {
+                    updateHorseText("do you know how to cipher?");
                 }
             });
             
-            loadUpdate.setAttribute('data-horse-handled', 'true');
+            goldenRoom3D.addEventListener('mouseout', () => {
+                updateHorseText(DEFAULT_TEXT);
+            });
+            
+            goldenRoom3D.addEventListener('click', (event) => {
+                const target = event.target;
+                if (target.classList.contains('lock')) {
+                    updateHorseText("do you know how to cipher?", { duration: 5000 });
+                }
+            });
+            
+            goldenRoom3D.setAttribute('data-horse-handled', 'true');
         }
-        
+
         // Set up a MutationObserver to detect new elements that might need interactions
         const bodyObserver = new MutationObserver((mutations) => {
             let shouldRefreshInteractions = false;
@@ -571,7 +594,9 @@
                 log('🔄 New interactive elements detected, refreshing interactions');
                 setupStickerInteractions();
                 setupBedroomInteractions();
-                setupGoldenRoomInteractions();
+                // The universal findElementsByKeywords and clickInteractions are now called directly
+                // or via the setupStickerInteractions and setupBedroomInteractions functions.
+                // No need to call them here again unless they are called conditionally.
             }
         });
         
