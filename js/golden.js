@@ -173,9 +173,9 @@ function initializeGolden() {
                 const loadUpdate = document.getElementById("loadUpdate");
                 
                 if (typeof window.updateHorseText === 'function') {
-                  window.updateHorseText("pixels are in a preparation process. wait for please. I am sorry if you encounter any bugs.", 0);
+                  window.updateHorseText("pixels are in a preparation process. wait for them please. I am sorry if you encounter any bugs.", 0);
                 } else {
-                  hiUpdate.textContent = "pixels are in a preparation process. wait for please. I am sorry if you encounter any bugs.";
+                  hiUpdate.textContent = "pixels are in a preparation process. wait for them please. I am sorry if you encounter any bugs.";
                   hiUpdate.classList.add("horse-indicator-text-active");
                 }
                 loadUpdate.textContent = "100%";
@@ -364,19 +364,19 @@ function initializeGolden() {
     }
 
     if (Doors.includes(object.name)) {
-      console.log("Door clicked");
+      
       playSound(sounds.doorSound);
       setTimeout(() => {
         toggleVisibility(elements.goldenRoomMain, elements.goldenRoomDoor);
         pauseRendering();
       }, 750);
     } else if (Rats.includes(object.name)) {
-      console.log("Mouse clicked");
+      
       playSound(sounds.ratSound);
     } else {
       for (let lockGroup of Locks) {
         if (lockGroup.includes(object.name)) {
-          console.log("Lock clicked");
+          
           playSound(sounds.doorLockSound);
           break;
         }
@@ -544,7 +544,7 @@ function initializeGolden() {
     }
 
     elements.LockInLockOverlay.addEventListener("click", () => {
-      console.log("Click on LockInLockOverlay");
+      
       playSound(sounds.lockSoundR);
 
       try {
@@ -724,7 +724,7 @@ function initializeGolden() {
     Promise.all(Object.keys(soundUrls).map(loadSound))
       .then(() => {
         soundsLoaded = true;
-        console.log("All sounds loaded successfully");
+        
       })
       .catch((error) => {
         console.error("Error loading sounds:", error);

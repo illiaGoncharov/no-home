@@ -816,10 +816,13 @@
                          window.location.hostname === '127.0.0.1' || 
                          window.location.hostname.includes('local') ||
                          window.location.hostname.includes('dev') ||
-                         window.location.port === '8000';
+                         window.location.port === '8000' ||
+                         window.location.href.includes('localhost:8000');
     
     if (isDevelopment) {
       console.log('🚧 Development mode: skipping preloader');
+      console.log('🔍 Current location:', window.location.href);
+      console.log('🔍 Port:', window.location.port);
       preloader.style.display = "none";
     }
 

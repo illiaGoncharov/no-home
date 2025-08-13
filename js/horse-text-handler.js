@@ -12,7 +12,7 @@
     };
 
     // Default text
-    const DEFAULT_TEXT = "you can move me and listen to me. you can close me by pressing the button at the top.";
+    const DEFAULT_TEXT = "please, select one of my limbs";
 
     // Find the horse text element
     const findHorseTextElement = () => {
@@ -452,7 +452,7 @@
                 const arrowLeftBackpackBedroom = document.getElementById('arrow-left-backpack-bedroom');
                 if (arrowLeftBackpackBedroom) {
                     arrowLeftBackpackBedroom.addEventListener('click', () => {
-                        updateHorseText("you can move me and listen to me. you can close me by pressing the button at the top.");
+                        updateHorseText("please, select one of my limbs");
                     });
                 }
             }
@@ -470,7 +470,7 @@
                 const arrowLeftSuitcaseBedroom = document.getElementById('arrow-left-suitcase-bedroom');
                 if (arrowLeftSuitcaseBedroom) {
                     arrowLeftSuitcaseBedroom.addEventListener('click', () => {
-                        updateHorseText("you can move me and listen to me. you can close me by pressing the button at the top.");
+                        updateHorseText("please, select one of my limbs");
                     });
                 }
             }

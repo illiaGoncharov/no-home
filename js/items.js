@@ -117,9 +117,9 @@ jQuery(document).ready(function ($) {
     // Показываем блок .about-page-wrapper, если он есть
     if ($(".about-page-wrapper").length) {
       $(".about-page-wrapper").show();
-      // console.log(".about-page-wrapper показан");
+      // 
     } else {
-      // console.log(".about-page-wrapper не найден");
+      // 
     }
   }
 
@@ -144,9 +144,9 @@ jQuery(document).ready(function ($) {
     // Скрываем блок .about-page-wrapper, если он есть
     if ($(".about-page-wrapper").length) {
       $(".about-page-wrapper").hide();
-      console.log(".about-page-wrapper скрыт");
+      
     } else {
-      console.log(".about-page-wrapper не найден");
+      
     }
   }
 
