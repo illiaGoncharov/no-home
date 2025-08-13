@@ -344,7 +344,7 @@
             { keywords: ['speaker', 'gbl-speaker'], text: "do you know how to follow well? are you a considerate person?" },
             
             // Table room  
-            { keywords: ['coffee-table', 'skeleton-chair'], text: "the ground knows so many steps…" },
+            { keywords: ['coffee-table'], text: "the ground knows so many steps…" },
             { keywords: ['table-in-table-room', 'desk', 'work-table'], text: "I hope this table is adaptive enough for you" },
             { keywords: ['laptop', 'tablet', 'computer'], text: "my heart is surrounded by bones. I am able to hear both the heart and the bones. What about you?" },
             { keywords: ['iphone', 'phone', 'mobile'], text: "this phone doesn't have any secrets and is free for anyone to use" },
@@ -380,7 +380,7 @@
 
         // Добавляем специальный обработчик для 13 кликов по скелету в чердаке
         let skeletonClickCount = 0;
-        const centralSkeletonSelector = '.overlay-svg .skeleton-chair-room, #skeleton-chair-room';
+        const centralSkeletonSelector = '.overlay-svg .skeleton-attic, #skeleton-attic, .attic-skeleton, #attic-skeleton, .central-skeleton, #central-skeleton, .skeleton-in-attic, #skeleton-in-attic-room';
         
         document.addEventListener('click', (event) => {
             if (event.target.matches(centralSkeletonSelector) || event.target.closest(centralSkeletonSelector)) {
