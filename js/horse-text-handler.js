@@ -2,7 +2,7 @@
 
 (function() {
     // Debugging flag
-    const DEBUG = true;
+    const DEBUG = false;
 
     // Logging function
     const log = (...args) => {
@@ -38,7 +38,7 @@
         const {
             duration = 0,
             force = true,
-            debug = true
+            debug = false
         } = options;
 
         const horseTextEl = findHorseTextElement();

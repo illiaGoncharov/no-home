@@ -5,8 +5,35 @@ Thumbs.db
 # IDE
 .idea/
 .vscode/
+.cursor/
 
 # Temporary files
 *.log
 *.tmp
 *~
+
+# WordPress [local] files - НЕ должны попадать в GitHub
+[local]*.php
+*[local]*
+
+# FTP credentials and deploy configs
+deploy-config.env
+ftp-credentials.txt
+
+# Development files
+*.dev.js
+*.dev.css
+test-*.html
+
+# Backup files
+*.backup
+*.bak
+
+# Cache and compiled files
+*.cache
+node_modules/
+dist/
+
+# User uploads and generated content
+user-uploads/
+*.generated.*

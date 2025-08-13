@@ -37,7 +37,7 @@
                 <div id="horseIndicator" class="horse-indicator col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-5">
                     <!-- Нормальный режим отображения -->
                     <div class="display-normal">
-                        <img src="/wp-content/themes/blankslate/files/nav/displayNew.png" alt="Display">
+                        <img src="/wp-content/themes/blankslate/files/remote-control/remote-default.png" alt="Display">
                         <button id="close-hi"></button>
                         <div class="horse-indicator-wrapper">
                             <div class="horse-indicator-text-wrapper">
@@ -54,7 +54,7 @@
                     
                     <!-- Режим плеера -->
                     <div class="display-player" style="display:none;">
-                        <img src="/wp-content/themes/blankslate/files/nav/playerNew.png" alt="Display">
+                        <img src="/wp-content/themes/blankslate/files/remote-control/remote-player.png" alt="Display">
                         <button id="close-hi"></button>
                         <!-- Информация о воспроизведении -->
                         <div class="horse-indicator-player">

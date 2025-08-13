@@ -815,7 +815,8 @@
     const isDevelopment = window.location.hostname === 'localhost' || 
                          window.location.hostname === '127.0.0.1' || 
                          window.location.hostname.includes('local') ||
-                         window.location.hostname.includes('dev');
+                         window.location.hostname.includes('dev') ||
+                         window.location.port === '8000';
     
     if (isDevelopment) {
       console.log('🚧 Development mode: skipping preloader');
