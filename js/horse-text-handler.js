@@ -63,13 +63,16 @@
             // Determine if text needs scrolling
             const isOverflowing = scrollTextEl.scrollWidth > horseTextEl.clientWidth;
             
+            // Remove previous animation classes
+            horseTextEl.classList.remove('marquee');
+            scrollTextEl.style.animation = 'none';
+            scrollTextEl.style.transform = 'translateX(0)';
+            
             if (isOverflowing) {
-                horseTextEl.classList.add('marquee');
-                scrollTextEl.style.animation = 'scrollText 15s linear infinite';
-            } else {
-                horseTextEl.classList.remove('marquee');
-                scrollTextEl.style.animation = 'none';
-                scrollTextEl.style.transform = 'translateX(0)';
+                // Add marquee animation only if text is too long
+                setTimeout(() => {
+                    horseTextEl.classList.add('marquee');
+                }, 100); // Small delay to prevent jerking
             }
 
             // Force visibility and interactivity
