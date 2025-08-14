@@ -576,7 +576,6 @@ html {
   object-fit: cover;
   position: relative;
   z-index: 1000;
-  loading="lazy";
 }
 
 /* Эффекты наложения теней */
@@ -848,7 +847,6 @@ html {
 .items-hi img {
   height: 100%;
   width: auto;
-  loading="lazy";
 }
 
 .items-hi-text {
@@ -1132,7 +1130,6 @@ html {
   height: 70%;
   filter: drop-shadow(0 0 15px black);
   /* Рекомендация: добавить transition для плавного эффекта при наведении */
-  loading="lazy";
 }
 
 #display-button img:hover {
@@ -1155,7 +1152,6 @@ html {
   height: auto;
   filter: drop-shadow(0 0 15px black);
   /* Рекомендация: добавить max-width для предотвращения переполнения */
-  loading="lazy";
 }
 
 /* Обертка индикатора лошади */
@@ -1179,35 +1175,40 @@ html {
   font-size: clamp(10px, calc(0.7vw + 0.1vh), 30px);
   text-align: left;
   line-height: 1.2;
-  width: 70%;
+  width: 85%; /* Увеличил с 70% до 85% */
   height: 100%;
   overflow: hidden;
   white-space: nowrap;
-  padding: 9%;
+  padding: 8%; /* Уменьшил padding с 9% до 8% */
   transition: color 0.5s ease, text-shadow 0.5s ease;
   position: relative;
 }
 
 #horse-text-original {
   display: inline-block;
-  animation: scrollText 15s linear infinite;
   position: relative;
   top: 11px;
   white-space: nowrap;
-  transform: translateX(0); /* Start at the left edge */
+  transform: translateX(0);
+  transition: transform 0.3s ease; /* Добавил плавный переход */
+}
+
+/* Анимация только для длинного текста */
+.horse-indicator-text.marquee #horse-text-original {
+  animation: scrollText 15s linear infinite;
 }
 
 @keyframes scrollText {
   0% {
-    transform: translateX(0%); /* Start at the left edge */
+    transform: translateX(0%);
   }
   100% {
-    transform: translateX(-100%); /* Move fully off-screen left */
+    transform: translateX(-100%);
   }
 }
 
 .horse-indicator-text-wrapper {
-  width: 100%;
+  width: 90%; /* Увеличил с 80% до 90% */
   height: 100%;
   overflow: hidden;
   position: relative;
@@ -1220,12 +1221,6 @@ html {
 .horse-indicator-text-active {
   color: #ff0000;
   text-shadow: 0px 0px 12px #ff0000;
-}
-
-/* Обертка текста индикатора лошади */
-.horse-indicator-text-wrapper {
-  width: 80%;
-  overflow: hidden;
 }
 
 /* Нижняя навигация */
@@ -1277,7 +1272,6 @@ html {
   height: 70%;
   filter: drop-shadow(0 0 15px black);
   /* Рекомендация: добавить transition для плавного эффекта при наведении */
-  loading="lazy";
 }
 
 .nav-bottom img:hover {
@@ -1318,7 +1312,6 @@ html {
 /* Изображение на экране громкости */
 #volume-screen img {
   height: 100%;
-  loading="lazy";
 }
 
 /* Обертка для выпадающего элемента */
@@ -1549,7 +1542,6 @@ html {
 .skeleton-home-wrapper img {
   height: 100%;
   width: auto;
-  loading="lazy";
 }
 
 /* Стили для навигационных ссылок домашнего экрана */
