@@ -126,7 +126,7 @@
 <!-- Кнопка скелета (не отображается на главной странице) -->
 <!--?php
 if (!is_page('5')) : ?-->
-<div class="skeleton-button" data-horse-click="please, select one of my limbs">
+<div class="skeleton-button">
     <button id="skeleton-button" >
         <img src="/wp-content/themes/blankslate/files/nav/skeleton.png" alt="To rooms">
     </button>
@@ -141,11 +141,11 @@ if (!is_page('5')) : ?-->
     <div class="skeleton-home-wrapper">
          <!-- Ссылки на различные области -->
         <img src="/wp-content/themes/blankslate/files/nav/skeleton-full.png">
-		<a href="https://nohome.cloud/0selectedarea4" class="ajax-page-link skeleton-home-link mattic" data-id="1582"></a>
-		<a href="https://nohome.cloud/0selectedarea3" class="ajax-page-link skeleton-home-link mtable" data-id="1973"></a>
-		<a href="https://nohome.cloud/0selectedarea2" class="ajax-page-link skeleton-home-link mcave" data-id="95"></a>
-		<a href="https://nohome.cloud/0selectedarea1" class="ajax-page-link skeleton-home-link mbed" data-id="1891"></a>
-		<a href="https://nohome.cloud/0selectedarea5" class="ajax-page-link skeleton-home-link mgolden" data-id="1330"></a>
+		<a href="/0selectedarea4" class="skeleton-home-link mattic" data-id="1582"></a>
+		<a href="/0selectedarea3" class="skeleton-home-link mtable" data-id="1973"></a>
+		<a href="/0selectedarea2" class="skeleton-home-link mcave" data-id="95"></a>
+		<a href="/0selectedarea1" class="skeleton-home-link mbed" data-id="1891"></a>
+		<a href="/0selectedarea5" class="skeleton-home-link mgolden" data-id="1330"></a>
     </div>
 </div>
 <!--?php endif; ?-->

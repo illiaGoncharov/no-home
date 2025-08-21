@@ -240,7 +240,31 @@ window.showCaptcha = function (successCallback) {
     captchaElement.style.display = "flex";
     // Сохраняем callback для использования после успешного прохождения капчи
     window.currentCaptchaAction = successCallback;
-    initializeCaptcha();
+    // Вызываем функцию инициализации капчи
+    if (typeof initializeCaptcha === 'function') {
+      initializeCaptcha();
+    } else {
+      // ПРОСТАЯ заглушка если функция не найдена
+      console.log('🎯 Captcha initialized (simple mode)');
+      
+      // Добавляем базовую логику кликов на картинки
+      const captchaPics = document.querySelectorAll('.captcha-pic');
+      captchaPics.forEach(pic => {
+        pic.addEventListener('click', function() {
+          pic.classList.toggle('correct');
+        });
+      });
+      
+      // Кнопка skip
+      const skipButton = document.getElementById('skip-captcha');
+      if (skipButton) {
+        skipButton.addEventListener('click', function() {
+          if (window.onCaptchaSuccess) {
+            window.onCaptchaSuccess();
+          }
+        });
+      }
+    }
   } else {
     console.error("Captcha element not found");
   }
@@ -303,91 +327,87 @@ document.addEventListener("click", function (event) {
   }
 });
 
-// Обработчик для рюкзака
+// Обработчик для рюкзака - БЕЗ КАПЧИ!
 function handleBackpackClick() {
   const backpackOverlay = document.querySelector(".backpack-close-overlay");
   if (backpackOverlay) {
     backpackOverlay.addEventListener("click", function () {
-      // Передаем специфичный для рюкзака callback
-      window.showCaptcha(function () {
-        // Вызываем showElements, чтобы применить стили и показать нужные элементы
-        showElements();
+      // Прямо вызываем функционал БЕЗ капчи
+      // Вызываем showElements, чтобы применить стили и показать нужные элементы
+      showElements();
 
-        // Добавляем класс nav-items-link-now к #backpack-content
-        document
-          .getElementById("backpack-content")
-          .classList.add("nav-items-link-now");
+      // Добавляем класс nav-items-link-now к #backpack-content
+      document
+        .getElementById("backpack-content")
+        .classList.add("nav-items-link-now");
 
-        // Делаем #items-content видимым
-        const itemsContent = document.getElementById("items-content");
-        itemsContent.style.display = "block";
+      // Делаем #items-content видимым
+      const itemsContent = document.getElementById("items-content");
+      itemsContent.style.display = "block";
 
-        // Скрываем элемент с классом .mp3
-        const mp3Element = document.querySelector(".mp3");
-        if (mp3Element) {
-          mp3Element.style.display = "none";
-        }
+      // Скрываем элемент с классом .mp3
+      const mp3Element = document.querySelector(".mp3");
+      if (mp3Element) {
+        mp3Element.style.display = "none";
+      }
 
-        // Загружаем контент для backpack-content
-        fetch(
-          "https://nohome.cloud/wp-content/themes/blankslate/items/backpack-content.php"
-        )
-          .then((response) => response.text())
-          .then((data) => {
-            // Вставляем контент в #items-content
-            itemsContent.innerHTML = data;
-            // Инициализируем скрипты для backpack-content
-            initializeBackpackScript();
-          })
-          .catch((error) =>
-            console.error("Error loading backpack content:", error)
-          );
-      });
+      // Загружаем контент для backpack-content
+      fetch(
+        "https://nohome.cloud/wp-content/themes/blankslate/items/backpack-content.php"
+      )
+        .then((response) => response.text())
+        .then((data) => {
+          // Вставляем контент в #items-content
+          itemsContent.innerHTML = data;
+          // Инициализируем скрипты для backpack-content
+          initializeBackpackScript();
+        })
+        .catch((error) =>
+          console.error("Error loading backpack content:", error)
+        );
     });
   }
 }
 handleBackpackClick();
 
-// Обработчик для чемодана
+// Обработчик для чемодана - БЕЗ КАПЧИ!
 function handleSuitcaseClick() {
   const suitcaseOverlay = document.querySelector(".suitcase-close-overlay");
   if (suitcaseOverlay) {
     suitcaseOverlay.addEventListener("click", function () {
-      // Передаем специфичный для чемодана callback
-      window.showCaptcha(function () {
-        // Вызываем showElements, чтобы применить стили и показать нужные элементы
-        showElements();
+      // Прямо вызываем функционал БЕЗ капчи
+      // Вызываем showElements, чтобы применить стили и показать нужные элементы
+      showElements();
 
-        // Добавляем класс nav-items-link-now к #luggage-content
-        document
-          .getElementById("luggage-content")
-          .classList.add("nav-items-link-now");
+      // Добавляем класс nav-items-link-now к #luggage-content
+      document
+        .getElementById("luggage-content")
+        .classList.add("nav-items-link-now");
 
-        // Делаем #items-content видимым
-        const itemsContent = document.getElementById("items-content");
-        itemsContent.style.display = "block";
+      // Делаем #items-content видимым
+      const itemsContent = document.getElementById("items-content");
+      itemsContent.style.display = "block";
 
-        // Скрываем элемент с классом .mp3
-        const mp3Element = document.querySelector(".mp3");
-        if (mp3Element) {
-          mp3Element.style.display = "none";
-        }
+      // Скрываем элемент с классом .mp3
+      const mp3Element = document.querySelector(".mp3");
+      if (mp3Element) {
+        mp3Element.style.display = "none";
+      }
 
-        // Загружаем контент для luggage-content
-        fetch(
-          "https://nohome.cloud/wp-content/themes/blankslate/items/luggage-content.php"
-        )
-          .then((response) => response.text())
-          .then((data) => {
-            // Вставляем контент в #items-content
-            itemsContent.innerHTML = data;
-            // Инициализируем скрипты для чемодана
-            initializeLuggageScript();
-          })
-          .catch((error) =>
-            console.error("Error loading luggage content:", error)
-          );
-      });
+      // Загружаем контент для luggage-content
+      fetch(
+        "https://nohome.cloud/wp-content/themes/blankslate/items/luggage-content.php"
+      )
+        .then((response) => response.text())
+        .then((data) => {
+          // Вставляем контент в #items-content
+          itemsContent.innerHTML = data;
+          // Инициализируем скрипты для чемодана
+          initializeLuggageScript();
+        })
+        .catch((error) =>
+          console.error("Error loading luggage content:", error)
+        );
     });
   }
 }
@@ -1444,6 +1464,22 @@ function initializeMp3Script() {
     updateDisplay();
   }
 
+  /**
+   * ЛОГИКА ПУЛЬТА/ПЛЕЕРА - ДОКУМЕНТАЦИЯ
+   * 
+   * Пульт (horse indicator) имеет два режима отображения:
+   * 1. display-normal - обычный режим с текстом подсказок
+   * 2. display-player - режим плеера с информацией о треке
+   * 
+   * ПРАВИЛЬНАЯ ЛОГИКА:
+   * - Когда музыка НЕ играет → показываем display-normal (обычный пульт с текстом)
+   * - Когда музыка играет → показываем display-player (плеер с треком)
+   * 
+   * УПРАВЛЕНИЕ:
+   * - Кнопка display-button только показывает/скрывает весь пульт
+   * - Режим переключается автоматически при play/stop музыки
+   * - В режиме плеера кнопки left/right переключают стороны (SIDE I/II)
+   */
   function updateDisplay() {
     const displayNormal = document.querySelector(".display-normal");
     const displayPlayer = document.querySelector(".display-player");
@@ -1459,8 +1495,9 @@ function initializeMp3Script() {
     );
 
     if (isPlaying && currentTrack) {
-      displayNormal.style.display = "block";
-      displayPlayer.style.display = "none";
+      // ИСПРАВЛЕНО: Когда играет музыка → показываем плеер
+      displayNormal.style.display = "none";
+      displayPlayer.style.display = "block";
 
       horseIndicatorSide.textContent = `SIDE ${currentSide === 1 ? "I" : "II"}`;
       horseIndicatorSongNow.textContent = currentTrack.dataset.songName;
@@ -1469,8 +1506,9 @@ function initializeMp3Script() {
       );
       horseIndicatorSongHashtag.textContent = currentTrack.dataset.songHashtag;
     } else {
-      displayNormal.style.display = "none";
-      displayPlayer.style.display = "block";
+      // ИСПРАВЛЕНО: Когда музыка НЕ играет → показываем обычный режим
+      displayNormal.style.display = "block";
+      displayPlayer.style.display = "none";
     }
 
     // Update button states

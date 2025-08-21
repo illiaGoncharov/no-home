@@ -1,55 +1,47 @@
-// Horse Text Handler - Улучшенная версия
+
+// ===============================================================================
+// АРХИТЕКТУРА: Стабильная система для hover text в пультике + skeleton navigation
+// ===============================================================================
 
 (function() {
-    // Debugging flag
-    const DEBUG = false;
-
-    // Logging function
-    const log = (...args) => {
-        if (DEBUG) {
-            console.log('🐴', ...args);
-        }
-    };
-
-    // Default text
+    // 🐛 DEBUG MODE: включать только для диагностики проблем
+    const DEBUG = false; // PRODUCTION MODE: disabled для продакшена
+    
+    const log = (...args) => DEBUG && console.log('🐴 [HorseText]', ...args);
     const DEFAULT_TEXT = "you can move me and listen to me. you can close me by pressing the button at the top.";
 
-    // Find the horse text element
+    // ===============================================================================
+    // 🎯 CORE SYSTEM: Поиск элемента пульта и обновление текста
+    // ===============================================================================
+    
     const findHorseTextElement = () => {
-        const elements = [
+        const candidates = [
             document.getElementById('hi-update'),
             document.querySelector('.horse-indicator-text'),
             document.querySelector('[data-horse-text]')
         ];
 
-        for (let el of elements) {
+        for (let el of candidates) {
             if (el) {
-                log('Horse text element found:', el);
+                log('✅ Пульт найден:', el.id || el.className);
                 return el;
             }
         }
 
-        console.error('🚨 No horse text element found!');
+        console.error('🚨 КРИТИЧЕСКАЯ ОШИБКА: Пульт не найден!');
         return null;
     };
 
-    // Core text update function
+    // 🔄 СИСТЕМА ОБНОВЛЕНИЯ ТЕКСТА: стабильная анимация + принудительная видимость
     const updateHorseText = (text, options = {}) => {
-        const {
-            duration = 0,
-            force = true,
-            debug = false
-        } = options;
-
+        const { duration = 0, force = true } = options;
         const horseTextEl = findHorseTextElement();
         if (!horseTextEl) return;
 
         try {
-            if (debug) console.group('🐴 Horse Text Update');
-
             const textToSet = text || DEFAULT_TEXT;
             
-            // Create scrolling text element if it doesn't exist
+            // Создаем/находим элемент для прокрутки текста
             let scrollTextEl = horseTextEl.querySelector('#horse-text-original');
             if (!scrollTextEl) {
                 scrollTextEl = document.createElement('div');
@@ -60,22 +52,29 @@
             
             scrollTextEl.textContent = textToSet;
             
-            // Determine if text needs scrolling
-            const isOverflowing = scrollTextEl.scrollWidth > horseTextEl.clientWidth;
+            // 🎬 СТАБИЛЬНАЯ АНИМАЦИЯ: начинаем справа от контейнера
+            let position = 20; 
+            scrollTextEl.style.transform = `translateX(${position}px)`;
             
-            // Remove previous animation classes
-            horseTextEl.classList.remove('marquee');
-            scrollTextEl.style.animation = 'none';
-            scrollTextEl.style.transform = 'translateX(0)';
-            
-            if (isOverflowing) {
-                // Add marquee animation only if text is too long
-                setTimeout(() => {
-                    horseTextEl.classList.add('marquee');
-                }, 100); // Small delay to prevent jerking
+            // Очищаем предыдущую анимацию
+            if (scrollTextEl.animationInterval) {
+                clearInterval(scrollTextEl.animationInterval);
             }
+            
+            // Запускаем плавную анимацию прокрутки
+            scrollTextEl.animationInterval = setInterval(() => {
+                position -= 1;
+                scrollTextEl.style.transform = `translateX(${position}px)`;
+                
+                // Сброс когда текст ушел за левый край
+                if (position < -scrollTextEl.offsetWidth - 50) {
+                    position = horseTextEl.offsetWidth + 20;
+                }
+            }, 16);
+            
+            log('🎬 Анимация запущена для текста:', textToSet);
 
-            // Force visibility and interactivity
+            // 🔧 ПРИНУДИТЕЛЬНАЯ ВИДИМОСТЬ пульта
             if (force) {
                 Object.assign(horseTextEl.style, {
                     opacity: '1 !important',
@@ -87,7 +86,6 @@
                     transition: 'all 0.3s ease'
                 });
 
-                // Force parent styles
                 const parentWrapper = horseTextEl.closest('.horse-indicator-text-wrapper');
                 if (parentWrapper) {
                     Object.assign(parentWrapper.style, {
@@ -97,516 +95,374 @@
                 }
             }
 
-            // Trigger events
-            ['change', 'input', 'update'].forEach(eventName => {
-                const event = new Event(eventName, { bubbles: true });
-                horseTextEl.dispatchEvent(event);
-            });
-
-            if (debug) console.log('✅ Text forcefully updated');
-            if (debug) console.groupEnd();
-
-            // Optional duration-based reset
+            // ⏰ Авто-сброс через duration (если указан)
             if (duration > 0) {
-                setTimeout(() => {
-                    updateHorseText(DEFAULT_TEXT, { duration: 0, debug: false });
-                }, duration);
+                setTimeout(() => updateHorseText(DEFAULT_TEXT, { duration: 0 }), duration);
             }
 
         } catch (error) {
-            console.error('❌ Horse Text Update Failed:', error);
+            console.error('❌ ОШИБКА обновления пульта:', error);
         }
     };
 
-    // Global update function
+    // 🌍 ГЛОБАЛЬНАЯ ФУНКЦИЯ для других скриптов (items.js, golden.js, etc.)
     window.updateHorseText = (text, duration = 5000) => {
-        log('🌐 Global Horse Text Update:', { text, duration });
+        log('🌐 Внешний вызов updateHorseText:', text);
         updateHorseText(text, { duration });
     };
     
-    // Helper function to safely find elements
-    const findElements = (selectors, parent = document) => {
-        if (typeof selectors === 'string') {
-            return Array.from(parent.querySelectorAll(selectors));
-        } else if (Array.isArray(selectors)) {
-            const elements = [];
-            for (const selector of selectors) {
-                if (typeof selector === 'string') {
-                    elements.push(...Array.from(parent.querySelectorAll(selector)));
-                } else if (selector instanceof Element) {
-                    elements.push(selector);
-                } else if (selector && typeof selector === 'object' && selector.id) {
-                    const el = document.getElementById(selector.id);
-                    if (el) elements.push(el);
-                }
-            }
-            return elements.filter(Boolean);
-        }
-        return [];
-    };
+    // ===============================================================================
+    // 🔍 СИСТЕМА ПОИСКА ЭЛЕМЕНТОВ: безопасный поиск по множественным селекторам
+    // ===============================================================================
     
-    // Helper function to add hover text interaction to elements
-    const setupHoverInteraction = (elements, enterText, leaveText = DEFAULT_TEXT) => {
-        const foundElements = findElements(elements);
-        
-        if (foundElements.length === 0) {
-            log('⚠️ No elements found for hover interaction:', elements);
-            return;
-        }
-        
-        foundElements.forEach(element => {
-            // Ensure we don't add duplicate listeners
-            if (!element.hasAttribute('data-horse-text-hover')) {
-                element.addEventListener('mouseenter', () => {
-                    updateHorseText(enterText);
-                });
-                
-                element.addEventListener('mouseleave', () => {
-                    updateHorseText(leaveText);
-                });
-                
-                // Mark that we've set up hover interaction
-                element.setAttribute('data-horse-text-hover', 'true');
-                
-                log('✅ Hover interaction added for:', element);
-            }
-        });
-        
-        return foundElements;
-    };
-    
-    // Helper function to add click text interaction to elements
-    const setupClickInteraction = (elements, clickText, duration = 5000) => {
-        const foundElements = findElements(elements);
-        
-        if (foundElements.length === 0) {
-            log('⚠️ No elements found for click interaction:', elements);
-            return;
-        }
-        
-        foundElements.forEach(element => {
-            // Ensure we don't add duplicate listeners
-            if (!element.hasAttribute('data-horse-text-click')) {
-                element.addEventListener('click', () => {
-                    updateHorseText(clickText, { duration });
-                });
-                
-                // Mark that we've set up click interaction
-                element.setAttribute('data-horse-text-click', 'true');
-                
-                log('✅ Click interaction added for:', element);
-            }
-        });
-        
-        return foundElements;
-    };
+    const findElements = (selectors) => {
+        const selectorArray = Array.isArray(selectors) ? selectors : [selectors];
+        const results = [];
 
-    // Initialize with default text
-    document.addEventListener('DOMContentLoaded', () => {
-        log('🏁 Horse Text Handler Initialized');
-        updateHorseText(DEFAULT_TEXT);
-
-        // Setup sticker interactions
-        const setupStickerInteractions = () => {
-            // Clear any existing handlers to prevent duplicates
-            const stickerImgs = document.querySelectorAll(".sticker-img");
-            
-            stickerImgs.forEach(sticker => {
-                // Only set up handlers if they haven't been added before
-                if (!sticker.hasAttribute('data-horse-handled')) {
-                    // Note8 stickers - email input sticker
-                    if (sticker.classList.contains("note8")) {
-                        setupHoverInteraction([sticker], "you can leave a note or leave nothing");
-                    } else {
-                        // All other paper stickers
-                        setupHoverInteraction([sticker], "sorry for being weird it's my first time being alive");
+        selectorArray.forEach(selector => {
+            try {
+                if (selector && typeof selector === 'string') {
+                    const elements = document.querySelectorAll(selector);
+                    if (elements.length > 0) {
+                        results.push(...Array.from(elements));
+                        log('✅ Найдено', elements.length, 'элементов для:', selector);
                     }
-                    
-                    // Mark as handled
-                    sticker.setAttribute('data-horse-handled', 'true');
                 }
-            });
+            } catch (e) {
+                log('❌ Неверный селектор:', selector, '|', e.message);
+            }
+        });
+
+        // Удаляем дубликаты
+        const uniqueElements = results.filter((element, index, self) => 
+            self.indexOf(element) === index
+        );
+
+        return uniqueElements;
+    };
+
+    // ===============================================================================
+    // 🎯 HOVER INTERACTION SYSTEM: НЕ блокирует клики, ТОЛЬКО hover text
+    // ===============================================================================
+    
+    const setupHoverInteraction = (selectors, enterText, leaveText = DEFAULT_TEXT) => {
+        const foundElements = findElements(selectors);
+        
+        if (foundElements.length === 0) {
+            log('⚠️ Не найдены элементы для:', selectors);
+            return;
+        }
+        
+        foundElements.forEach(element => {
+            const elementId = element.id || element.className || 'unknown';
             
-            // Добавляем обработчики для кнопки паузы
-            const pauseButtons = document.querySelectorAll('.pause-button, [class*="pause"], [id*="pause"]');
-            pauseButtons.forEach(button => {
-                if (!button.hasAttribute('data-horse-handled')) {
-                    setupHoverInteraction([button], "this is a separate pause button for the player mode (pause changes to play button and vice versa)");
-                    button.setAttribute('data-horse-handled', 'true');
-                }
-            });
-        };
-
-        // Set up sticker interactions
-        setupStickerInteractions();
-
-        // Sticker email function
-        function sendStickerTextViaAjax(textToSend, inputElement = null) {
-            // Check if data is available
-            if (typeof stickerEmailData === 'undefined' || !stickerEmailData.ajaxurl || !stickerEmailData.nonce) {
-                console.error('Error: Email data not found');
-                if (inputElement) inputElement.disabled = false;
+            // ЗАЩИТА ОТ ДУБЛЕЙ: проверяем есть ли уже наши handlers
+            if (element.hasAttribute('data-horse-hover-setup')) {
+                log('🛡️ Элемент уже настроен:', elementId);
                 return;
             }
 
-            const data = new FormData();
-            data.append("action", "send_sticker_email");
-            data.append("user_text", textToSend);
-            data.append("security", stickerEmailData.nonce);
+            // СОЗДАЕМ НЕБЛОКИРУЮЩИЕ PASSIVE HANDLERS
+            const onMouseEnter = () => {
+                updateHorseText(enterText);
+                log('🎯 Hover IN:', elementId, '→', enterText);
+            };
 
-            if (inputElement) {
-                inputElement.disabled = true;
-            }
+            const onMouseLeave = () => {
+                updateHorseText(leaveText);
+                log('👋 Hover OUT:', elementId, '→', leaveText);
+            };
 
-            fetch(stickerEmailData.ajaxurl, {
-                method: "POST",
-                body: data,
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(result => {
-                if (result.success) {
-                    updateHorseText("successfully sent", 5000);
-                } else {
-                    console.error("Send error:", result.data.message);
-                    if (inputElement) {
-                        inputElement.disabled = false;
-                    }
-                }
-            })
-            .catch((error) => {
-                console.error("Send error:", error);
-                if (inputElement) {
-                    inputElement.disabled = false;
-                }
-            });
-        }
-
-        // Add global send function
-        window.sendStickerTextViaAjax = sendStickerTextViaAjax;
-
-        // Set up interactions for items next to mirror
-        const mirrorItemTexts = [
-            "set yourself up for lighting the space",
-            "mind your head", 
-            "do you know how to listen carefully?",
-            "do you know how to follow well? are you a considerate person?"
-        ];
-        
-        const itemsNextToMirror = document.querySelectorAll('.overlay-svg.items-next-to-mirror');
-        
-        if (itemsNextToMirror.length > 0) {
-            itemsNextToMirror.forEach((item, index) => {
-                const textIndex = index % mirrorItemTexts.length;
-                setupHoverInteraction([item], mirrorItemTexts[textIndex]);
-            });
-        }
-
-        // Mirror interaction
-        setupHoverInteraction(['.mirror', '#mirror-svg-overlay'], "sorry, your reflection is not renderable");
-
-        // Universal element finder - tries multiple selectors
-        const findElementsByKeywords = (keywords, text, type = 'hover') => {
-            const selectors = [];
+            // ДОБАВЛЯЕМ PASSIVE LISTENERS - НЕ блокируют click events!
+            element.addEventListener('mouseenter', onMouseEnter, { passive: true });
+            element.addEventListener('mouseleave', onMouseLeave, { passive: true });
             
-            keywords.forEach(keyword => {
-                // Add various selector patterns
-                selectors.push(
-                    `#${keyword}`,
-                    `.${keyword}`,
-                    `[id*="${keyword}"]`,
-                    `[class*="${keyword}"]`,
-                    `[data-item="${keyword}"]`,
-                    `.overlay-svg .${keyword}`,
-                    `.overlay-svg #${keyword}`,
-                    `#${keyword}-in-room`,
-                    `#${keyword}-overlay`,
-                    `.${keyword}-img`,
-                    `.${keyword}-button`
-                );
-            });
+            // Помечаем элемент как настроенный
+            element.setAttribute('data-horse-hover-setup', 'true');
             
-            if (type === 'hover') {
-                setupHoverInteraction(selectors, text);
-            } else if (type === 'click') {
-                setupClickInteraction(selectors, text);
-            }
+            log('✅ Hover настроен для:', elementId);
+            });
         };
 
-        // Setup all missing interactions using keywords
-        const allInteractions = [
-            // Cave room
-            { keywords: ['cave', 'just-cave'], text: "do you feel your body temperature right now?" },
-            { keywords: ['helmet', 'safety-helmet', 'hard-hat'], text: "mind your head" },
-            { keywords: ['flashlight', 'torch', 'fly'], text: "set yourself up for lighting the space" },
-            { keywords: ['walkie', 'radio', 'walkiephone'], text: "do you know how to listen carefully?" },
-            { keywords: ['speaker', 'gbl-speaker'], text: "do you know how to follow well? are you a considerate person?" },
-            
-            // Table room  
-            { keywords: ['coffee-table'], text: "the ground knows so many steps…" },
-            { keywords: ['table-in-table-room', 'desk', 'work-table'], text: "I hope this table is adaptive enough for you" },
-            { keywords: ['laptop', 'tablet', 'computer'], text: "my heart is surrounded by bones. I am able to hear both the heart and the bones. What about you?" },
-            { keywords: ['iphone', 'phone', 'mobile'], text: "this phone doesn't have any secrets and is free for anyone to use" },
-            { keywords: ['camera', 'photo'], text: "the motives of this camera are not clear, the date and time are broken" },
-            { keywords: ['window-in-table-room', 'window-table'], text: "i hear the helicopters and planes behind the window but can't tell whether to expect explosions?" },
-            { keywords: ['hard-disk', 'hard-drive', 'hdd'], text: "don't rush to leave, it's a fine day" },
-            
-            // Golden room
-            { keywords: ['door', 'golden-door'], text: "what do you prefer - closed/open doors or closed/open locks?" },
-            { keywords: ['rats', 'mice', 'mouse'], text: "oh no, i am sorry, the mice have escaped the lab!" },
-            
-            // Bedroom
-            { keywords: ['silhouette', 'shadow'], text: "have you ever been activated? please, check in with your soul. there are many other souls in the walls, it can get confusing." },
-            { keywords: ['outside-bedroom', 'bedroom-window'], text: "do you know the temperature of air outside someone's window?" }
-        ];
+    // ===============================================================================
+    // 🦴 SKELETON NAVIGATION SYSTEM: управление "limbs" текстом
+    // ===============================================================================
+    
+    const setupSkeletonInteractions = () => {
+        const skeletonButton = document.querySelector('.skeleton-button');
+        const skeletonHome = document.querySelector('.skeleton-home');
         
-        // Apply all interactions
-        allInteractions.forEach(interaction => {
-            findElementsByKeywords(interaction.keywords, interaction.text, 'hover');
-        });
-        
-        // Click interactions
-        const clickInteractions = [
-            { keywords: ['lock', 'golden-lock'], text: "do you know how to cipher?" },
-            { keywords: ['outside-in-bedroom-room', 'outside-bedroom'], text: "what is your favorite transmission tower? Though let me not distract you for long, I will hide away shortly." },
-            { keywords: ['window-view', 'window-click'], text: "please, do not leave. I will hide away shortly and you can scroll." },
-            { keywords: ['outside-golden', 'isolation'], text: "welcome to complete isolation" }
-        ];
-        
-        clickInteractions.forEach(interaction => {
-            findElementsByKeywords(interaction.keywords, interaction.text, 'click');
-        });
+        if (skeletonButton) {
+            // При клике на кнопку скелета - показываем "limbs" текст
+            skeletonButton.addEventListener('click', () => {
+                updateHorseText("please, select one of my limbs");
+                log('🦴 Скелет открыт - показан текст limbs');
+            });
+        }
 
-        // Добавляем специальный обработчик для 13 кликов по скелету в чердаке
-        let skeletonClickCount = 0;
-        const centralSkeletonSelector = '.overlay-svg .skeleton-attic, #skeleton-attic, .attic-skeleton, #attic-skeleton, .central-skeleton, #central-skeleton, .skeleton-in-attic, #skeleton-in-attic-room';
-        
-        document.addEventListener('click', (event) => {
-            if (event.target.matches(centralSkeletonSelector) || event.target.closest(centralSkeletonSelector)) {
-                skeletonClickCount++;
-                
-                if (skeletonClickCount === 13) {
-                    updateHorseText("the sounds have been stolen by somebody and the moving creatures have been isolated. if you click on the central skeleton in this room 13 times in a row there will be no sound theft and the creatures will synchronize their movements.", 8000);
-                    skeletonClickCount = 0; // Сброс счетчика
-                } else if (skeletonClickCount < 13) {
-                    updateHorseText(`${skeletonClickCount}/13 clicks`, 2000);
-                }
-            } else {
-                // Сброс счетчика если кликнули не по скелету
-                skeletonClickCount = 0;
-            }
-        });
+        if (skeletonHome) {
+            // Наблюдаем за закрытием скелета для сброса текста
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach(mutation => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        const hasShow = skeletonHome.classList.contains('show');
+                        if (!hasShow) {
+                            // Скелет закрыт - возвращаем дефолтный текст
+                            updateHorseText(DEFAULT_TEXT);
+                            log('🚪 Скелет закрыт - сброшен текст к дефолтному');
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(skeletonHome, { attributes: true, attributeFilter: ['class'] });
+        }
+    };
 
-        // Door interactions
+    // ===============================================================================
+    // 🏠 BEDROOM INTERACTIONS: точные селекторы из [local]bedroom.php
+    // ===============================================================================
+    
+    const setupBedroomInteractions = () => {
+        log('🏠 Настройка BEDROOM interactions...');
+        
+        // Рюкзак - ТОЛЬКО hover text (без капчи!)
+        setupHoverInteraction([
+            '#bag-in-bedroom',
+            '#backpack-in-bedroom', 
+            '#backpack-in-bedroom-room',
+            '.bag-in-bedroom',
+            '.backpack'
+        ], "watch out! Is something or someone behind you? are objects also subjects?");
+
+        // Чемодан - ТОЛЬКО hover text (без капчи!)  
+        setupHoverInteraction([
+            '#suitcase-in-bedroom-room',
+            '.suitcase',
+            '.suitcase-in-bedroom-room'
+        ], "watch out! Is something or someone behind you? are objects also subjects?");
+
+        // Силуэт в окне
+        setupHoverInteraction([
+            '#silhouette',
+            '.silhouette'
+        ], "have you ever been activated? please, check in with your soul. there are many other souls in the walls, it can get confusing.");
+
+        // Окно наружу
+        setupHoverInteraction([
+            '#outside-bedroom',
+            '.outside-bedroom'
+        ], "do you know the temperature of air outside someone's window?");
+    };
+
+    // ===============================================================================
+    // 🗻 CAVE INTERACTIONS: точные селекторы из [local]cave.php  
+    // ===============================================================================
+    
+    const setupCaveInteractions = () => {
+        log('🗻 Настройка CAVE interactions...');
+        
+        // Шлем безопасности  
+        setupHoverInteraction([
+            '.safety-helmet',
+            '.safety-helmet-f',
+            '#safety-helmet',
+            '#safety-helmet-f'
+        ], "mind your head");
+
+        // Колонка/Speaker
+        setupHoverInteraction([
+            '#gbl-speaker-in-items-room',
+            '.gbl-speaker',
+            '#speaker-to-mp3'
+        ], "do you know how to follow well? are you a considerate person?");
+
+        // Рация/Walkie
+        setupHoverInteraction([
+            '#walkie-phone-in-items-room',
+            '.walkiephone',
+            '.walkie'
+        ], "do you know how to listen carefully?");
+
+        // Зеркало
+        setupHoverInteraction([
+            '#mirror-svg-overlay',
+            '.mirror-svg-overlay',
+            '.items-next-to-mirror'
+        ], "sorry, your reflection is not renderable");
+    };
+
+    // ===============================================================================
+    // 🪑 TABLE INTERACTIONS: точные селекторы из [local]table.php
+    // ===============================================================================
+    
+    const setupTableInteractions = () => {
+        log('🪑 Настройка TABLE interactions...');
+        
+        // Стол
+        setupHoverInteraction([
+            '.table-in-table-room'
+        ], "I hope this table is adaptive enough for you");
+
+        // Ноутбук
+        setupHoverInteraction([
+            '#laptop-on-table'
+        ], "my heart is surrounded by bones. I am able to hear both the heart and the bones. What about you?");
+
+        // Камера  
+        setupHoverInteraction([
+            '.camera-in-table-room-'
+        ], "the motives of this camera are not clear, the date and time are broken");
+
+        // Жёсткий диск
+        setupHoverInteraction([
+            '#hard-disk-on-skeleton-chair'
+        ], "don't rush to leave, it's a fine day");
+
+        // ВАЖНО: iPhone НЕ добавляем в hover - у него своя логика капчи!
+        // ВАЖНО: Окна НЕ добавляем - у них своя handleWindowInteraction!
+        
+        // Рукописный текст в окне
+        setupHoverInteraction([
+            '.hand',
+            '.handwriting',
+            '[class*="hand"]'
+        ], "please, do not leave. I will hide away shortly and you can scroll.");
+    };
+
+    // ===============================================================================  
+    // 🏆 GOLD INTERACTIONS: точные селекторы из [local]gold.php
+    // ===============================================================================
+    
+    const setupGoldInteractions = () => {
+        log('🏆 Настройка GOLD interactions...');
+        
+        // Дверь
         setupHoverInteraction([
             '.overlay-svg[class*="door"]', 
-            '.door', 
-            '[id*="door"]'
+            '[class*="door"]'
         ], "what do you prefer - closed/open doors or closed/open locks?");
 
-        // Rat interactions
+        // Замок
+        setupHoverInteraction([
+            '#LockInLockOverlay',
+            '.lock', 
+            '[class*="lock"]'
+        ], "do you know how to cipher?");
+
+        // Крысы (hover разрешен - они всё равно не анимировались)
         setupHoverInteraction([
             '.golden-room-door-rats', 
             '.rats', 
-            '[class*="rats"]'
+            '[class*="rat"]'
         ], "oh no, i am sorry, the mice have escaped the lab!");
+    };
 
-        // Lock interactions
-        setupClickInteraction([
-            '.overlay-svg[class*="lock"]', 
-            '.lock', 
-            '[id*="lock"]', 
-            '[class*="Lock"]'
-        ], "do you know how to cipher?");
-
-        // Outside room click interactions
-        setupClickInteraction([
-            '.overlay-svg[class*="outside"]', 
-            '#outside-in-bedroom-room'
-        ], "welcome to complete isolation", 5000);
-
-        // Bedroom room interactions
-        const setupBedroomInteractions = () => {
-            // Bag and Backpack interactions
-            const bagItems = [
-                { selector: '#bag-in-bedroom, #suitcase-in-bedroom-room', text: "watch out! Is something or someone behind you? are objects also subjects?" },
-                { selector: '#backpack-in-bedroom, #backpack-in-bedroom-room', text: "watch out! Is something or someone behind you? are objects also subjects?" }
-            ];
-            
-            bagItems.forEach(item => {
-                // Hover interaction
-                setupHoverInteraction(item.selector, item.text);
-                
-                // Click interaction
-                setupClickInteraction(item.selector, "press to secure/save/survive");
-                
-                // Check for associated room
-                const roomId = item.selector.split(',')[0].trim().replace('-in-bedroom', '-in-bedroom-room');
-                const bagRoom = document.getElementById(roomId.replace('#', ''));
-                
-                if (bagRoom) {
-                    // Add visibility observer only if not already added
-                    if (!bagRoom.hasAttribute('data-horse-observed')) {
-                        const observer = new MutationObserver((mutations) => {
-                            mutations.forEach((mutation) => {
-                                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                                    const isActive = bagRoom.style.display !== 'none';
-                                    updateHorseText(isActive ? "press to secure/save/survive" : DEFAULT_TEXT);
-                                }
-                            });
-                        });
-                        
-                        observer.observe(bagRoom, { 
-                            attributes: true, 
-                            attributeFilter: ['style'] 
-                        });
-                        
-                        bagRoom.setAttribute('data-horse-observed', 'true');
-                    }
-                }
-            });
-            
-            // Additional bedroom interactions
-            setupHoverInteraction('#mirror-svg-overlay', "sorry, your reflection is not renderable");
-            setupHoverInteraction('#arrow-right-button', "the numbers on your way are a chance to establish contact with them");
-            
-            // Silhouette interaction
-            setupHoverInteraction('#silhouette', "have you ever been activated? please, check in with your soul. there are many other souls in the walls, it can get confusing.");
-            
-            // Window interactions
-            setupHoverInteraction('#outside-bedroom', "do you know the temperature of air outside someone's window?");
-            
-            // Outside view interaction
-            setupClickInteraction('#outside-in-bedroom-room', "what is your favorite transmission tower? Though let me not distract you for long, I will hide away shortly.");
-
-            // Backpack interaction
-            const backpackInBedroom = document.getElementById('backpack-in-bedroom');
-            const backpackInBedroomRoom = document.getElementById('backpack-in-bedroom-room');
-            
-            if (backpackInBedroom && backpackInBedroomRoom) {
-                backpackInBedroom.addEventListener('click', () => {
-                    updateHorseText("press to secure/save/survive");
-                });
-
-                // Optional: Reset text when leaving the backpack room
-                const arrowLeftBackpackBedroom = document.getElementById('arrow-left-backpack-bedroom');
-                if (arrowLeftBackpackBedroom) {
-                    arrowLeftBackpackBedroom.addEventListener('click', () => {
-                        updateHorseText("please, select one of my limbs");
-                    });
-                }
-            }
-
-            // Suitcase interaction
-            const suitcaseInBedroom = document.getElementById('bag-in-bedroom');
-            const suitcaseInBedroomRoom = document.getElementById('suitcase-in-bedroom-room');
-            
-            if (suitcaseInBedroom && suitcaseInBedroomRoom) {
-                suitcaseInBedroom.addEventListener('click', () => {
-                    updateHorseText("press to secure/save/survive");
-                });
-
-                // Optional: Reset text when leaving the suitcase room
-                const arrowLeftSuitcaseBedroom = document.getElementById('arrow-left-suitcase-bedroom');
-                if (arrowLeftSuitcaseBedroom) {
-                    arrowLeftSuitcaseBedroom.addEventListener('click', () => {
-                        updateHorseText("please, select one of my limbs");
-                    });
-                }
-            }
-
-            // Skeleton button interaction
-            const skeletonButton = document.getElementById('skeleton-button');
-            const skeletonButtonWrapper = document.querySelector('.skeleton-button');
-            
-            if (skeletonButton && skeletonButtonWrapper) {
-                skeletonButton.addEventListener('click', () => {
-                    const clickText = skeletonButtonWrapper.getAttribute('data-horse-click');
-                    if (clickText) {
-                        updateHorseText(clickText);
-                    }
-                });
-            }
-        };
+    // ===============================================================================
+    // 🏠 MAIN PAGE INTERACTIONS: стикеры и элементы на главной странице
+    // ===============================================================================
+    
+    const setupMainPageInteractions = () => {
+        log('🏠 Настройка MAIN PAGE interactions...');
         
-        // Call the bedroom setup function
+        // Стикеры и A4 листы
+        setupHoverInteraction([
+            '.sticker',
+            '.paper',
+            '.note',
+            '[class*="sticker"]',
+            '[class*="note"]',
+            '.a4-sheet',
+            '[class*="sheet"]'
+        ], "sorry for being weird it's my first time being alive");
+        
+        // Стикер с отправкой на почту (с точным селектором)
+        setupHoverInteraction([
+            '.sticker-img.note8',
+            '#sticker-img-note8',
+            '.note8',
+            '#note8'
+        ], "you can leave a note or leave nothing");
+        
+        // Классики (hopscotch) в cave room
+        setupHoverInteraction([
+            '.hopscotch',
+            '.numbers',
+            '[class*="hopscotch"]',
+            '[class*="numbers"]'
+        ], "the numbers on your way are a chance to establish contact with them");
+    };
+
+    // ===============================================================================
+    // 🚀 MAIN INITIALIZATION: запуск всех систем
+    // ===============================================================================
+    
+    const initializeHorseTextHandler = () => {
+        log('🚀 Инициализация Horse Text Handler...');
+        
+        // Настройка базовых систем
+        setupSkeletonInteractions();
+        
+        // Настройка hover interactions для главной страницы и всех комнат
+        setupMainPageInteractions();
         setupBedroomInteractions();
+        setupCaveInteractions(); 
+        setupTableInteractions();
+        setupGoldInteractions();
+        
+        // Устанавливаем дефолтный текст
+        updateHorseText(DEFAULT_TEXT);
+        
+        log('✅ Horse Text Handler полностью инициализирован!');
+    };
 
-        // Additional specific interactions that need exact selectors
-        setupHoverInteraction('#arrow-right-button', "the numbers on your way are a chance to establish contact with them");
-        setupHoverInteraction(['.hopscotch', '.numbers', '[class*="number"]'], "the numbers on your way are a chance to establish contact with them");
+    // ===============================================================================
+    // 🔄 AUTO-START: запуск при загрузке DOM + реинициализация
+    // ===============================================================================
+    
+    // Функция реинициализации (для skeleton navigation)
+    window.reInitializeHorseInteractions = () => {
+        log('🔄 РЕИНИЦИАЛИЗАЦИЯ Horse Text Handler...');
         
-        // Golden room loading screen
-        setupHoverInteraction(['#loadingScreen', '#loadUpdate', '.loading'], "pixels are in a preparation process. wait for them please. I am sorry if you encounter any bugs.");
+        // Очищаем старые handlers (снимаем защиту от дублей)
+        document.querySelectorAll('[data-horse-hover-setup]').forEach(el => {
+            el.removeAttribute('data-horse-hover-setup');
+        });
         
-        // Golden room 3D interactions
-        const goldenRoom3D = document.getElementById('golden-room-3d');
-        if (goldenRoom3D && !goldenRoom3D.hasAttribute('data-horse-handled')) {
-            goldenRoom3D.addEventListener('mouseover', (event) => {
-                const target = event.target;
-                if (target.classList.contains('door') || target.id?.includes('door')) {
-                    updateHorseText("what do you prefer - closed/open doors or closed/open locks?");
-                } else if (target.classList.contains('rats') || target.classList.contains('mice')) {
-                    updateHorseText("oh no, i am sorry, the mice have escaped the lab!");
-                } else if (target.classList.contains('lock')) {
-                    updateHorseText("do you know how to cipher?");
+        // Перезапускаем все interactions
+        setTimeout(() => {
+            setupMainPageInteractions();
+            setupBedroomInteractions();
+            setupCaveInteractions();
+            setupTableInteractions(); 
+            setupGoldInteractions();
+            log('✅ Реинициализация завершена!');
+        }, 500);
+    };
+
+    // Автозапуск при загрузке страницы
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeHorseTextHandler);
+    } else {
+        // DOM уже загружен
+        setTimeout(initializeHorseTextHandler, 100);
+    }
+
+    // Реинициализация при Ajax-навигации (skeleton переходы)
+    let lastUrl = window.location.href;
+    new MutationObserver(() => {
+        if (lastUrl !== window.location.href) {
+            lastUrl = window.location.href;
+            log('🌐 URL изменился - запуск реинициализации...');
+            
+            setTimeout(() => {
+                if (window.reInitializeHorseInteractions) {
+                    window.reInitializeHorseInteractions();
                 }
-            });
-            
-            goldenRoom3D.addEventListener('mouseout', () => {
-                updateHorseText(DEFAULT_TEXT);
-            });
-            
-            goldenRoom3D.addEventListener('click', (event) => {
-                const target = event.target;
-                if (target.classList.contains('lock')) {
-                    updateHorseText("do you know how to cipher?", { duration: 5000 });
-                }
-            });
-            
-            goldenRoom3D.setAttribute('data-horse-handled', 'true');
+            }, 1000);
         }
+    }).observe(document.body, { childList: true, subtree: true });
 
-        // Set up a MutationObserver to detect new elements that might need interactions
-        const bodyObserver = new MutationObserver((mutations) => {
-            let shouldRefreshInteractions = false;
-            
-            mutations.forEach(mutation => {
-                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-                    // Check if any relevant elements were added
-                    for (const node of mutation.addedNodes) {
-                        if (node.nodeType === Node.ELEMENT_NODE) {
-                            if (
-                                node.classList?.contains('overlay-svg') ||
-                                node.id?.includes('room') ||
-                                node.querySelector?.('.overlay-svg')
-                            ) {
-                                shouldRefreshInteractions = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            });
-            
-            if (shouldRefreshInteractions) {
-                log('🔄 New interactive elements detected, refreshing interactions');
-                setupStickerInteractions();
-                setupBedroomInteractions();
-                // The universal findElementsByKeywords and clickInteractions are now called directly
-                // or via the setupStickerInteractions and setupBedroomInteractions functions.
-                // No need to call them here again unless they are called conditionally.
-            }
-        });
-        
-        // Observe the entire document for new elements
-        bodyObserver.observe(document.body, { 
-            childList: true, 
-            subtree: true 
-        });
-    });
+    log('🐴 Horse Text Handler модуль загружен!');
+
 })();
