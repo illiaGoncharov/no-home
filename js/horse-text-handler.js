@@ -381,7 +381,11 @@
             '.sticker-img.note8',
             '#sticker-img-note8',
             '.note8',
-            '#note8'
+            '#note8',
+            'img[src*="note8"]',
+            'img[data-sticker="en—//note_8"]',
+            '.sticker-img[data-sticker="en—//note_8"]',
+            '[data-sticker*="note_8"]'
         ], "you can leave a note or leave nothing");
         
         // Классики (hopscotch) в cave room
@@ -411,7 +415,7 @@
         setupGoldInteractions();
         
         // Устанавливаем дефолтный текст
-        updateHorseText(DEFAULT_TEXT);
+                    updateHorseText(DEFAULT_TEXT);
         
         log('✅ Horse Text Handler полностью инициализирован!');
     };

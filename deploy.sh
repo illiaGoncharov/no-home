@@ -98,7 +98,7 @@ function deploy_to_server() {
             echo -e "${GREEN}📤 Uploading $file${NC}"
             
             # Создаем директорию если нужно
-            DIR=$(dirname "$file")
+            DIR="${file%/*}"
             if [ "$DIR" != "." ]; then
                 $LFTP_CMD -c "
                 set ftp:ssl-allow no
