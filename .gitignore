@@ -16,6 +16,9 @@ Thumbs.db
 [local]*.php
 *[local]*
 
+# Исключения - разрешаем документацию
+!docs/
+
 # FTP credentials and deploy configs
 deploy-config.env
 ftp-credentials.txt
