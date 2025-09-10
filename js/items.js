@@ -49,25 +49,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Обработчик клика по кнопке items-button
   itemsButton.addEventListener("click", function () {
-    // Показываем mp3 и скрываем items-content
-    // mp3Element.style.display = "block";
-    iPhoneElement.style.display = "block";
-    itemsContent.style.display = "none";
-    // initializeMp3Script(); // Инициализируем MP3 скрипт
-    initializeIphoneScript();
+    // Открываем раздел iPhone безопасно (без ошибки из-за iPhoneElement)
+    itemsContent.style.display = "block";
+    loadContent("iphone-content");
   });
 });
 
 // Функция для загрузки контента
+let itemsLoadToken = 0; // Токен для предотвращения гонок загрузки
 function loadContent(contentId) {
+  const token = ++itemsLoadToken;
+
   fetch(`/wp-content/themes/blankslate/items/${contentId}.php`)
     .then((response) => response.text())
     .then((data) => {
+      // Если это не самый свежий запрос — игнорируем ответ
+      if (token !== itemsLoadToken) {
+        return;
+      }
+
       // Вставляем контент в HTML
       document.getElementById("items-content").innerHTML = data;
 
       // Показать items-content
       document.getElementById("items-content").style.display = "block"; // Убедитесь, что элемент показан
+
+      // Скрываем .mp3, если открываем не mp3-раздел (повторяем логику из кликов меню)
+      if (contentId !== "mp3-content") {
+        const mp3ElementLocal = document.querySelector(".mp3");
+        if (mp3ElementLocal) {
+          mp3ElementLocal.style.display = "none";
+        }
+      }
+
+      // Обновляем активный пункт меню, если он существует
+      const allLinks = document.querySelectorAll('.nav-items-link');
+      allLinks.forEach(l => l.classList.remove('nav-items-link-now'));
+      const activeLink = document.getElementById(contentId);
+      if (activeLink) {
+        activeLink.classList.add('nav-items-link-now');
+      }
 
       // Инициализация скриптов в зависимости от contentId
       switch (contentId) {
@@ -92,6 +113,8 @@ function loadContent(contentId) {
         default:
           console.warn("No initialization function for:", contentId);
       }
+
+      // ВАЖНО: не реинициализируем hover тут, чтобы не сбивать кастомный текст в пульте
     })
     .catch((error) => console.error("Error loading content:", error));
 }
@@ -149,6 +172,9 @@ jQuery(document).ready(function ($) {
       console.log(".about-page-wrapper не найден");
     }
   }
+  
+  // Делаем функцию глобальной для доступа из других скриптов
+  window.showElements = showElements;
 
   // Функция для закрытия капчи
   function hideCaptcha() {
@@ -335,36 +361,8 @@ function handleBackpackClick() {
       // Прямо вызываем функционал БЕЗ капчи
       // Вызываем showElements, чтобы применить стили и показать нужные элементы
       showElements();
-
-      // Добавляем класс nav-items-link-now к #backpack-content
-      document
-        .getElementById("backpack-content")
-        .classList.add("nav-items-link-now");
-
-      // Делаем #items-content видимым
-      const itemsContent = document.getElementById("items-content");
-      itemsContent.style.display = "block";
-
-      // Скрываем элемент с классом .mp3
-      const mp3Element = document.querySelector(".mp3");
-      if (mp3Element) {
-        mp3Element.style.display = "none";
-      }
-
-      // Загружаем контент для backpack-content
-      fetch(
-        "https://nohome.cloud/wp-content/themes/blankslate/items/backpack-content.php"
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          // Вставляем контент в #items-content
-          itemsContent.innerHTML = data;
-          // Инициализируем скрипты для backpack-content
-          initializeBackpackScript();
-        })
-        .catch((error) =>
-          console.error("Error loading backpack content:", error)
-        );
+      // Загружаем контент через общий безопасный загрузчик
+      loadContent("backpack-content");
     });
   }
 }
@@ -378,36 +376,8 @@ function handleSuitcaseClick() {
       // Прямо вызываем функционал БЕЗ капчи
       // Вызываем showElements, чтобы применить стили и показать нужные элементы
       showElements();
-
-      // Добавляем класс nav-items-link-now к #luggage-content
-      document
-        .getElementById("luggage-content")
-        .classList.add("nav-items-link-now");
-
-      // Делаем #items-content видимым
-      const itemsContent = document.getElementById("items-content");
-      itemsContent.style.display = "block";
-
-      // Скрываем элемент с классом .mp3
-      const mp3Element = document.querySelector(".mp3");
-      if (mp3Element) {
-        mp3Element.style.display = "none";
-      }
-
-      // Загружаем контент для luggage-content
-      fetch(
-        "https://nohome.cloud/wp-content/themes/blankslate/items/luggage-content.php"
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          // Вставляем контент в #items-content
-          itemsContent.innerHTML = data;
-          // Инициализируем скрипты для чемодана
-          initializeLuggageScript();
-        })
-        .catch((error) =>
-          console.error("Error loading luggage content:", error)
-        );
+      // Загружаем контент через общий безопасный загрузчик
+      loadContent("luggage-content");
     });
   }
 }
