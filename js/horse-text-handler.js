@@ -185,74 +185,55 @@
         };
 
     // ===============================================================================
-    // 🦴 SKELETON NAVIGATION SYSTEM: управление "limbs" текстом
+    // 🦴 SKELETON INTERACTIONS: управление текстом в пультике при работе со скелетом
     // ===============================================================================
     
     const setupSkeletonInteractions = () => {
-        const skeletonButton = document.querySelector('.skeleton-button');
-        const skeletonHome = document.querySelector('.skeleton-home');
+        log('🦴 Настройка SKELETON interactions (текст пульта)...');
         
+        // Находим нужные элементы
+        const skeletonButton = document.querySelector('.skeleton-button');
+        const skeletonButtonElement = document.getElementById('skeleton-button');
+        const skeletonHomeLink = document.getElementById('skeleton-home-link');
+        
+        // Текст для открытого скелета
+        const showSkeletonText = () => {
+            updateHorseText("please, select one of my limbs");
+            log('🦴 Показан текст про limbs');
+        };
+        
+        // Сброс текста на дефолтный
+        const resetToDefaultText = () => {
+            updateHorseText(DEFAULT_TEXT);
+            log('🔄 Сброс на дефолтный текст');
+        };
+        
+        // Добавляем обработчики только для обновления текста
         if (skeletonButton) {
-            // При клике на кнопку скелета - показываем "limbs" текст
-            skeletonButton.addEventListener('click', () => {
-                updateHorseText("please, select one of my limbs");
-                log('🦴 Скелет открыт - показан текст limbs');
-            });
+            skeletonButton.addEventListener('click', showSkeletonText);
+            log('✓ Обработчик для кнопки скелета настроен');
         }
-
-        if (skeletonHome) {
-            // Наблюдаем за закрытием скелета для сброса текста
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach(mutation => {
-                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                        const hasShow = skeletonHome.classList.contains('show');
-                        if (!hasShow) {
-                            // Скелет закрыт - возвращаем дефолтный текст
-                            updateHorseText(DEFAULT_TEXT);
-                            log('🚪 Скелет закрыт - сброшен текст к дефолтному');
-                        }
-                    }
-                });
-            });
-            
-            observer.observe(skeletonHome, { attributes: true, attributeFilter: ['class'] });
+        
+        if (skeletonButtonElement && skeletonButtonElement !== skeletonButton) {
+            skeletonButtonElement.addEventListener('click', showSkeletonText);
+            log('✓ Обработчик для элемента кнопки скелета настроен');
         }
+        
+        if (skeletonHomeLink) {
+            skeletonHomeLink.addEventListener('click', resetToDefaultText);
+            log('✓ Обработчик для ссылки home настроен');
+        }
+        
+        // Примечание: визуальное управление скелетом происходит в header.php
     };
 
     // ===============================================================================
-    // 🏠 BEDROOM INTERACTIONS: точные селекторы из [local]bedroom.php
+    // 🏠 BEDROOM INTERACTIONS: внешние ссылки для интеграции с [local]bedroom.php
     // ===============================================================================
     
+    // Код перемещен в [local]bedroom.php для удобства работы с ним
     const setupBedroomInteractions = () => {
-        log('🏠 Настройка BEDROOM interactions...');
-        
-        // Рюкзак - ТОЛЬКО hover text (без капчи!)
-        setupHoverInteraction([
-            '#bag-in-bedroom',
-            '#backpack-in-bedroom', 
-            '#backpack-in-bedroom-room',
-            '.bag-in-bedroom',
-            '.backpack'
-        ], "watch out! Is something or someone behind you? are objects also subjects?");
-
-        // Чемодан - ТОЛЬКО hover text (без капчи!)  
-        setupHoverInteraction([
-            '#suitcase-in-bedroom-room',
-            '.suitcase',
-            '.suitcase-in-bedroom-room'
-        ], "watch out! Is something or someone behind you? are objects also subjects?");
-
-        // Силуэт в окне
-        setupHoverInteraction([
-            '#silhouette',
-            '.silhouette'
-        ], "have you ever been activated? please, check in with your soul. there are many other souls in the walls, it can get confusing.");
-
-        // Окно наружу
-        setupHoverInteraction([
-            '#outside-bedroom',
-            '.outside-bedroom'
-        ], "do you know the temperature of air outside someone's window?");
+        log('🏠 BEDROOM interactions перенесены в [local]bedroom.php');
     };
 
     // ===============================================================================

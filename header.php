@@ -174,6 +174,124 @@ if (!is_page('5')) : ?-->
             document.addEventListener('mouseup', function() {
                 cursor.classList.remove('clicked');
             });
+            
+            // Обработка скелета и пульта
+            const setupSkeletonNav = () => {
+                const skeletonButton = document.getElementById('skeleton-button');
+                const skeletonHomeLink = document.getElementById('skeleton-home-link');
+                const skeletonHome = document.getElementById('skeleton-home');
+                
+                // Константы для текстов
+                const SKELETON_TEXT = "please, select one of my limbs";
+                const DEFAULT_TEXT = "you can move me and listen to me. you can close me by pressing the button at the top.";
+                
+                // Надежная функция обновления текста в пульте
+                const safeUpdateHorseText = (text) => {
+                    console.log('Обновляем текст в пульте:', text);
+                    
+                    // Попытка 1: Через глобальную функцию
+                    if (typeof window.updateHorseText === 'function') {
+                        try {
+                            window.updateHorseText(text, 0); // 0 = без автосброса
+                            return true;
+                        } catch (e) {
+                            console.error('Ошибка при вызове window.updateHorseText:', e);
+                        }
+                    }
+                    
+                    // Попытка 2: Прямое обновление DOM
+                    try {
+                        // Ищем элемент текста по разным селекторам
+                        const horseTextEl = document.getElementById('horse-text-original') || 
+                                           document.querySelector('.horse-indicator-text span') ||
+                                           document.querySelector('.horse-indicator-text');
+                        
+                        if (horseTextEl) {
+                            horseTextEl.textContent = text;
+                            return true;
+                        }
+                    } catch (e) {
+                        console.error('Ошибка при прямом обновлении DOM:', e);
+                    }
+                    
+                    return false;
+                };
+                
+                // Функция для отслеживания видимости скелета
+                const setupSkeletonObserver = () => {
+                    // Создаем наблюдатель за изменениями стилей
+                    const observer = new MutationObserver((mutations) => {
+                        mutations.forEach((mutation) => {
+                            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                                const isVisible = skeletonHome.style.display === 'flex' || 
+                                                skeletonHome.style.display === 'block';
+                                
+                                // Обновляем текст в зависимости от состояния
+                                if (isVisible) {
+                                    safeUpdateHorseText(SKELETON_TEXT);
+                                } else {
+                                    safeUpdateHorseText(DEFAULT_TEXT);
+                                }
+                            }
+                        });
+                    });
+                    
+                    // Запускаем наблюдение за изменениями стиля display
+                    observer.observe(skeletonHome, { 
+                        attributes: true, 
+                        attributeFilter: ['style'] 
+                    });
+                    
+                    return observer;
+                };
+                
+                if (skeletonButton && skeletonHomeLink && skeletonHome) {
+                    // Запускаем наблюдатель за скелетом
+                    const observer = setupSkeletonObserver();
+                    
+                    // Открыть скелет
+                    skeletonButton.addEventListener('click', () => {
+                        skeletonHome.style.display = 'flex';
+                        skeletonHomeLink.style.display = 'block';
+                        skeletonButton.style.display = 'none';
+                        
+                        // Обновляем текст напрямую (дублирование для надежности)
+                        safeUpdateHorseText(SKELETON_TEXT);
+                    });
+                    
+                    // Закрыть скелет
+                    skeletonHomeLink.addEventListener('click', () => {
+                        // Небольшая задержка для анимации
+                        setTimeout(() => {
+                            skeletonHome.style.display = 'none';
+                            skeletonHomeLink.style.display = 'none';
+                            skeletonButton.style.display = 'block';
+                            
+                            // Обновляем текст с небольшой задержкой для надежности
+                            setTimeout(() => {
+                                safeUpdateHorseText(DEFAULT_TEXT);
+                            }, 50);
+                        }, 100);
+                    });
+                    
+                    // При нажатии клавиши Escape закрываем скелет
+                    document.addEventListener('keydown', (e) => {
+                        if (e.key === 'Escape' && skeletonHome.style.display !== 'none') {
+                            skeletonHome.style.display = 'none';
+                            skeletonHomeLink.style.display = 'none';
+                            skeletonButton.style.display = 'block';
+                            
+                            // Обновляем текст с небольшой задержкой для надежности
+                            setTimeout(() => {
+                                safeUpdateHorseText(DEFAULT_TEXT);
+                            }, 50);
+                        }
+                    });
+                }
+            };
+            
+            // Запускаем настройку скелета
+            setupSkeletonNav();
         });
 
         document.addEventListener('DOMContentLoaded', function() {
