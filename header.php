@@ -141,11 +141,11 @@ if (!is_page('5')) : ?-->
     <div class="skeleton-home-wrapper">
          <!-- Ссылки на различные области -->
         <img src="/wp-content/themes/blankslate/files/nav/skeleton-full.png">
-		<a href="/0selectedarea4" class="skeleton-home-link mattic" data-id="1582"></a>
-		<a href="/0selectedarea3" class="skeleton-home-link mtable" data-id="1973"></a>
-		<a href="/0selectedarea2" class="skeleton-home-link mcave" data-id="95"></a>
-		<a href="/0selectedarea1" class="skeleton-home-link mbed" data-id="1891"></a>
-		<a href="/0selectedarea5" class="skeleton-home-link mgolden" data-id="1330"></a>
+		<a href="/0selectedarea4" class="skeleton-home-link ajax-page-link mattic" data-id="1582"></a>
+		<a href="/0selectedarea3" class="skeleton-home-link ajax-page-link mtable" data-id="1973"></a>
+		<a href="/0selectedarea2" class="skeleton-home-link ajax-page-link mcave" data-id="95"></a>
+		<a href="/0selectedarea1" class="skeleton-home-link ajax-page-link mbed" data-id="1891"></a>
+		<a href="/0selectedarea5" class="skeleton-home-link ajax-page-link mgolden" data-id="1330"></a>
     </div>
 </div>
 <!--?php endif; ?-->
@@ -255,6 +255,12 @@ if (!is_page('5')) : ?-->
                         skeletonHomeLink.style.display = 'block';
                         skeletonButton.style.display = 'none';
                         
+                        // Скрываем кнопку "i" когда открыт скелет (но не трогаем "x" на about)
+                        const aboutLink = document.getElementById('about-link');
+                        if (aboutLink && aboutLink.textContent.trim() === 'i') {
+                            aboutLink.style.display = 'none';
+                        }
+                        
                         // Обновляем текст напрямую (дублирование для надежности)
                         safeUpdateHorseText(SKELETON_TEXT);
                     });
@@ -266,6 +272,12 @@ if (!is_page('5')) : ?-->
                             skeletonHome.style.display = 'none';
                             skeletonHomeLink.style.display = 'none';
                             skeletonButton.style.display = 'block';
+                            
+                            // Показываем кнопку "i" ТОЛЬКО на главной странице
+                            const aboutLink = document.getElementById('about-link');
+                            if (aboutLink && aboutLink.textContent.trim() === 'i') {
+                                aboutLink.style.display = 'block';
+                            }
                             
                             // Обновляем текст с небольшой задержкой для надежности
                             setTimeout(() => {
@@ -280,6 +292,12 @@ if (!is_page('5')) : ?-->
                             skeletonHome.style.display = 'none';
                             skeletonHomeLink.style.display = 'none';
                             skeletonButton.style.display = 'block';
+                            
+                            // Показываем кнопку "i" ТОЛЬКО на главной странице
+                            const aboutLink = document.getElementById('about-link');
+                            if (aboutLink && aboutLink.textContent.trim() === 'i') {
+                                aboutLink.style.display = 'block';
+                            }
                             
                             // Обновляем текст с небольшой задержкой для надежности
                             setTimeout(() => {
@@ -311,6 +329,73 @@ if (!is_page('5')) : ?-->
                 link.href = '<?php echo get_permalink(get_page_by_path("about")); ?>';
                 link.setAttribute('data-text', 'x');
             }
+            
+            // Функция проверки и скрытия "i" на страницах комнат
+            function checkAndHideInfoButton() {
+                const link = document.getElementById('about-link');
+                const currentPath = window.location.pathname;
+                const isRoomPage = /\/0selectedarea\d+/.test(currentPath);
+                
+                if (link) {
+                    if (isRoomPage && link.textContent.trim() === 'i') {
+                        link.style.display = 'none';
+                        console.log('🚪 Скрыта кнопка "i" на странице комнаты:', currentPath);
+                    } else if (!isRoomPage && link.textContent.trim() === 'i') {
+                        // Показываем "i" только на главной странице
+                        const isHomePage = currentPath === '/' || currentPath === '';
+                        if (isHomePage) {
+                            link.style.display = 'block';
+                            console.log('🏠 Показана кнопка "i" на главной странице');
+                        }
+                    }
+                }
+            }
+            
+            // Проверяем при загрузке
+            checkAndHideInfoButton();
+            
+            // Отслеживаем изменения URL (для динамической навигации)
+            // Перехватываем pushState и replaceState
+            const originalPushState = history.pushState;
+            const originalReplaceState = history.replaceState;
+            
+            history.pushState = function() {
+                originalPushState.apply(this, arguments);
+                setTimeout(checkAndHideInfoButton, 100);
+            };
+            
+            history.replaceState = function() {
+                originalReplaceState.apply(this, arguments);
+                setTimeout(checkAndHideInfoButton, 100);
+            };
+            
+            // Отслеживаем событие popstate (кнопки назад/вперед)
+            window.addEventListener('popstate', function() {
+                setTimeout(checkAndHideInfoButton, 100);
+            });
+            
+            // Отслеживаем клики по ссылкам на комнаты
+            document.addEventListener('click', function(e) {
+                const target = e.target.closest('a');
+                if (target && target.href) {
+                    const href = target.getAttribute('href');
+                    if (href && /0selectedarea\d+/.test(href)) {
+                        console.log('🔗 Клик по ссылке на комнату:', href);
+                        setTimeout(checkAndHideInfoButton, 200);
+                    }
+                }
+            });
+            
+            // Дополнительно: периодическая проверка URL (на случай если другие методы не сработали)
+            let lastCheckedPath = window.location.pathname;
+            setInterval(function() {
+                const currentPath = window.location.pathname;
+                if (currentPath !== lastCheckedPath) {
+                    console.log('🔄 Обнаружено изменение URL:', lastCheckedPath, '→', currentPath);
+                    lastCheckedPath = currentPath;
+                    checkAndHideInfoButton();
+                }
+            }, 500);
         });
         
     </script>

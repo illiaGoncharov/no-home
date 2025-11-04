@@ -7,53 +7,60 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetCursor() {
         clickCount = 0;
         cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-        cursor.style.background ='black';
         cursor.style.background = 'radial-gradient(circle, #FF0000 0%, #FF0000 25%, rgba(0,0,0,0) 40%, #FF0000 60%, #FF0000 100%)';
     }
     
-        function resetCursorAfterClick() {
+    function resetCursorAfterFlash() {
         clickCount = 0;
         cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-        cursor.style.background ='black';
+        cursor.style.background = 'black';
         setTimeout(() => {
-        cursor.style.background = 'radial-gradient(circle, #FF0000 0%, #FF0000 25%, rgba(0,0,0,0) 40%, #FF0000 60%, #FF0000 100%)';
+            cursor.style.background = 'radial-gradient(circle, #FF0000 0%, #FF0000 25%, rgba(0,0,0,0) 40%, #FF0000 60%, #FF0000 100%)';
         }, 1200);
     }
 
     function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(resetCursor, 1000);
+        inactivityTimer = setTimeout(resetCursor, 5000); // Увеличил таймер до 5 сек
     }
 
     document.addEventListener('mouseup', function() {
         clickCount++;
+        console.log('🖱️ Клик #' + clickCount);
 
-        if (clickCount === 3) {
-            cursor.style.transform = 'translate(-50%, -50%) scale(3)';
+        // Плавное увеличение курсора на 5-10% с каждым кликом
+        if (clickCount <= 12) {
+            // Рандомное увеличение от 5% до 10%
+            const increment = 0.05 + Math.random() * 0.05; // от 0.05 до 0.10
+            const currentScale = 1 + (clickCount * increment);
+            cursor.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+            console.log('📏 Scale:', currentScale.toFixed(2));
+        } 
+        // 13-й клик - черная вспышка на весь экран + запуск видео
+        else if (clickCount === 13) {
+            console.log('⚡ 13-й КЛИК! Черная вспышка + видео');
+            
+            // Огромный черный курсор на весь экран
+            cursor.style.transform = 'translate(-50%, -50%) scale(500)';
             cursor.style.background = 'black';
-        } else if (clickCount > 3 && clickCount < 11) {
-            cursor.style.transform = `translate(-50%, -50%) scale(${2 + (clickCount - 3) * 9})`;
-        } else if (clickCount > 3 && clickCount === 11) {
-            cursor.style.transform = `translate(-50%, -50%) scale(99)`;
-        } else if (clickCount === 12) {
-            cursor.style.transform = 'translate(-50%, -50%) scale(135)';
-
-            const attic12Link = document.getElementById('attic-12-');
-            if (attic12Link) {
-                const clickEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window
-                });
-                attic12Link.dispatchEvent(clickEvent);
-                attic12Link.style.pointerEvents = 'none';
+            cursor.style.transition = 'all 0.3s ease-out';
+            
+            // Запускаем видео через небольшую задержку
+            setTimeout(() => {
+                const attic12Link = document.getElementById('attic-12-');
+                if (attic12Link) {
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    attic12Link.dispatchEvent(clickEvent);
+                    console.log('🎬 Видео attic-12- запущено');
+                }
                 
-                setTimeout(() => {
-                    attic12Link.style.pointerEvents = 'auto';
-                }, 3000);
-            }
-
-            resetCursorAfterClick();
+                // Сбрасываем курсор после вспышки
+                resetCursorAfterFlash();
+            }, 500);
         }
 
         resetInactivityTimer();

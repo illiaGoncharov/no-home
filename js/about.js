@@ -30,8 +30,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // Добавляем начальные параметры анимации
         zero.dataset.directionX = Math.random() > 0.5 ? 1 : -1;
         zero.dataset.directionY = Math.random() > 0.5 ? 1 : -1;
-        zero.dataset.speedX = (Math.random() * 0.4 + 0.2) / 100; // От 0.2% до 0.6% за кадр
-        zero.dataset.speedY = (Math.random() * 0.4 + 0.2) / 100;
+        zero.dataset.speedX = (Math.random() * 0.6 + 0.5) / 100; // От 0.5% до 1.1% за кадр - быстрее
+        zero.dataset.speedY = (Math.random() * 0.6 + 0.5) / 100;
+        
+        // Параметры для эффекта глитча (смена на А и 1)
+        zero.dataset.lastGlitch = Date.now();
+        zero.dataset.glitchInterval = Math.random() * 3000 + 2000; // От 2 до 5 секунд между глитчами
 
         zeros.push(zero);
         fragment.appendChild(zero);
@@ -82,6 +86,25 @@ document.addEventListener("DOMContentLoaded", function () {
         // Применяем новые координаты
         zero.style.left = `${currentX}%`;
         zero.style.top = `${currentY}%`;
+        
+        // Эффект глитча - изменение содержимого на А или 1
+        const now = Date.now();
+        const timeSinceLastGlitch = now - parseFloat(zero.dataset.lastGlitch);
+        const glitchInterval = parseFloat(zero.dataset.glitchInterval);
+        
+        if (timeSinceLastGlitch > glitchInterval) {
+          // Глитч - показываем А или 1 на короткое время (100-200ms)
+          const glitchChars = ['A', '1'];
+          const originalText = zero.textContent;
+          zero.textContent = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+          
+          setTimeout(() => {
+            zero.textContent = '0';
+          }, Math.random() * 100 + 100); // Возвращаем 0 через 100-200ms
+          
+          zero.dataset.lastGlitch = now;
+          zero.dataset.glitchInterval = Math.random() * 3000 + 2000; // Новый интервал
+        }
       });
 
       requestAnimationFrame(animateZeros);

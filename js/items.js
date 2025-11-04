@@ -144,6 +144,12 @@ jQuery(document).ready(function ($) {
     } else {
       // console.log(".about-page-wrapper не найден");
     }
+    
+    // Показываем кнопку "i" ТОЛЬКО на главной странице
+    const aboutLink = $("#about-link");
+    if (aboutLink.length && aboutLink.text().trim() === "i") {
+      aboutLink.show();
+    }
   }
 
   // Функция для показа элементов и добавления стилей
@@ -170,6 +176,12 @@ jQuery(document).ready(function ($) {
       console.log(".about-page-wrapper скрыт");
     } else {
       console.log(".about-page-wrapper не найден");
+    }
+    
+    // Скрываем кнопку "i" когда открыты items (но не трогаем "x" на about)
+    const aboutLink = $("#about-link");
+    if (aboutLink.length && aboutLink.text().trim() === "i") {
+      aboutLink.hide();
     }
   }
   

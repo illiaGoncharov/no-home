@@ -241,36 +241,8 @@
     // ===============================================================================
     
     const setupCaveInteractions = () => {
-        log('🗻 Настройка CAVE interactions...');
-        
-        // Шлем безопасности  
-        setupHoverInteraction([
-            '.safety-helmet',
-            '.safety-helmet-f',
-            '#safety-helmet',
-            '#safety-helmet-f'
-        ], "mind your head");
-
-        // Колонка/Speaker
-        setupHoverInteraction([
-            '#gbl-speaker-in-items-room',
-            '.gbl-speaker',
-            '#speaker-to-mp3'
-        ], "do you know how to follow well? are you a considerate person?");
-
-        // Рация/Walkie
-        setupHoverInteraction([
-            '#walkie-phone-in-items-room',
-            '.walkiephone',
-            '.walkie'
-        ], "do you know how to listen carefully?");
-
-        // Зеркало
-        setupHoverInteraction([
-            '#mirror-svg-overlay',
-            '.mirror-svg-overlay',
-            '.items-next-to-mirror'
-        ], "sorry, your reflection is not renderable");
+        // Логика для пещеры перенесена в local/[local]cave.php, чтобы избежать дублей и гонок
+        log('🗻 CAVE interactions перенесены в [local]cave.php');
     };
 
     // ===============================================================================

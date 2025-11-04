@@ -15,7 +15,7 @@ get_header();?>
                 <ul class="about-page-list list-1">
                     <li class="about-page-block-list-item" data-text="YOU CAN'T KNOW MY (?) ">YOU CAN'T KNOW MY (?) STORY. </li>
                     <li class="about-page-block-list-item" data-text="YOU CAN'T KNOW MY (?) HOME.">YOU CAN'T KNOW MY (?) HOME. </li>
-                    <li class="about-page-block-list-item" data-text="YOU CAN'T KNOW MY (?)  LANGUAGE.">YOU CAN'T KNOW MY (?)  LANGUAGE. </li>
+                    <li class="about-page-block-list-item" data-text="YOU CAN'T KNOW MY (?) LANGUAGE.">YOU CAN'T KNOW MY (?) LANGUAGE. </li>
                     <li class="about-page-block-list-item" data-text="SOMEONE (?) IS WAITING FOR US (?).">SOMEONE (?) IS WAITING FOR US (?). </li>
                     <li class="about-page-block-list-item" data-text="IS THIS CRINGE?">IS THIS CRINGE? </li>
                     <li class="about-page-block-list-item" data-text="WE'RE (?) ALL (?) IN DANGER.">WE'RE (?) ALL (?) IN DANGER. </li>

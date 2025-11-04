@@ -130,13 +130,85 @@ window.initializeTable = function () {
 };
 
 window.initializeAttic = function () {
-  const someEventListener = () => {
-    // Event handling
-  };
-  document.addEventListener("someEvent", someEventListener);
+  console.log('🏠 Инициализация комнаты ЧЕРДАК (через nav-tools.js)');
+  
+  // Проверяем наличие курсора
+  const cursor = document.querySelector('.custom-cursor');
+  if (!cursor) {
+    console.warn('❌ Курсор .custom-cursor не найден на странице чердака');
+    return function() {}; // Пустая функция деактивации
+  }
+  
+  let clickCount = 0;
+  let inactivityTimer;
 
+  function resetCursor() {
+    clickCount = 0;
+    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    cursor.style.background = 'radial-gradient(circle, #FF0000 0%, #FF0000 25%, rgba(0,0,0,0) 40%, #FF0000 60%, #FF0000 100%)';
+    console.log('🔄 Курсор сброшен');
+  }
+  
+  function resetCursorAfterFlash() {
+    clickCount = 0;
+    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+    cursor.style.background = 'black';
+    setTimeout(() => {
+      cursor.style.background = 'radial-gradient(circle, #FF0000 0%, #FF0000 25%, rgba(0,0,0,0) 40%, #FF0000 60%, #FF0000 100%)';
+    }, 1200);
+  }
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(resetCursor, 5000);
+  }
+
+  function handleClick() {
+    clickCount++;
+    console.log('🖱️ Клик #' + clickCount + ' на чердаке');
+
+    // Плавное увеличение курсора на 5-10% с каждым кликом (клики 1-12)
+    if (clickCount <= 12) {
+      const increment = 0.05 + Math.random() * 0.05; // от 5% до 10%
+      const currentScale = 1 + (clickCount * increment);
+      cursor.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+      console.log('📏 Scale:', currentScale.toFixed(2));
+    } 
+    // 13-й клик - черная вспышка на весь экран + запуск видео
+    else if (clickCount === 13) {
+      console.log('⚡ 13-Й КЛИК! Черная вспышка + видео');
+      
+      cursor.style.transform = 'translate(-50%, -50%) scale(500)';
+      cursor.style.background = 'black';
+      cursor.style.transition = 'all 0.3s ease-out';
+      
+      setTimeout(() => {
+        const attic12Link = document.getElementById('attic-12');
+        if (attic12Link) {
+          attic12Link.click();
+          console.log('🎬 Видео attic-12 запущено');
+        } else {
+          console.warn('⚠️ Элемент #attic-12 не найден');
+        }
+        resetCursorAfterFlash();
+      }, 500);
+    }
+
+    resetInactivityTimer();
+  }
+
+  // Добавляем обработчик кликов
+  document.addEventListener('mouseup', handleClick);
+  resetInactivityTimer();
+  
+  console.log('✅ Логика кликов чердака инициализирована (глобальные клики)');
+
+  // Возвращаем функцию деактивации
   return function deactivate() {
-    document.removeEventListener("someEvent", someEventListener);
+    console.log('❌ Деактивация комнаты ЧЕРДАК');
+    document.removeEventListener('mouseup', handleClick);
+    clearTimeout(inactivityTimer);
+    resetCursor();
   };
 };
 
