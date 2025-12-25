@@ -136,7 +136,54 @@ function initializeGolden() {
         let lastLoggedPercentage = 0;
         const totalSizeInMB = 79.5;
         const hiUpdate = document.getElementById("hi-update");
-        const originalText = hiUpdate.textContent;
+        
+        // Скрываем коня при загрузке
+        const horseGif = document.querySelector('.horse-indicator-gif, .horse-gif, [class*="horse-gif"]');
+        if (horseGif) {
+          horseGif.style.display = 'none';
+        }
+        
+        // Локальная функция для обновления текста с прокруткой (для загрузки)
+        let loadingAnimationInterval = null;
+        function updateLoadingText(text) {
+          if (typeof window.updateHorseText === 'function') {
+            window.updateHorseText(text, 0);
+          } else if (hiUpdate) {
+            // Fallback: создаём прокручивающийся текст вручную
+            let scrollTextEl = hiUpdate.querySelector('#horse-text-original');
+            if (!scrollTextEl) {
+              scrollTextEl = document.createElement('div');
+              scrollTextEl.id = 'horse-text-original';
+              hiUpdate.innerHTML = '';
+              hiUpdate.appendChild(scrollTextEl);
+            }
+            scrollTextEl.textContent = text;
+            
+            // Запускаем анимацию прокрутки если ещё не запущена
+            if (!loadingAnimationInterval) {
+              let position = 20;
+              loadingAnimationInterval = setInterval(() => {
+                position -= 1;
+                scrollTextEl.style.transform = `translateX(${position}px)`;
+                if (position < -scrollTextEl.offsetWidth - 50) {
+                  position = hiUpdate.offsetWidth + 20;
+                }
+              }, 16);
+            }
+          }
+        }
+        
+        // Функция остановки анимации загрузки
+        function stopLoadingAnimation() {
+          if (loadingAnimationInterval) {
+            clearInterval(loadingAnimationInterval);
+            loadingAnimationInterval = null;
+          }
+          // Показываем коня обратно
+          if (horseGif) {
+            horseGif.style.display = '';
+          }
+        }
 
         // Оптимизация загрузки модели
         loader.load(
@@ -169,16 +216,17 @@ function initializeGolden() {
                 goldenRoom3D.appendChild(renderer.domElement);
                 document.getElementById("loadingScreen").style.display = "none";
                 
-                // Обновляем текст в пультике
+                // Останавливаем анимацию загрузки и показываем финальный текст
+                stopLoadingAnimation();
+                
                 const loadUpdate = document.getElementById("loadUpdate");
+                if (loadUpdate) {
+                  loadUpdate.textContent = "100%";
+                }
                 
                 if (typeof window.updateHorseText === 'function') {
                   window.updateHorseText("pixels are in a preparation process. wait for please. I am sorry if you encounter any bugs.", 0);
-                } else {
-                  hiUpdate.textContent = "pixels are in a preparation process. wait for please. I am sorry if you encounter any bugs.";
-                  hiUpdate.classList.add("horse-indicator-text-active");
                 }
-                loadUpdate.textContent = "100%";
 
                 // Инициализируем обработку событий после загрузки
                 initializeInteractions();
@@ -193,8 +241,7 @@ function initializeGolden() {
 
             if (percentage > lastLoggedPercentage) {
               requestAnimationFrame(() => {
-                hiUpdate.textContent = `Preparing the room for you. Loaded: ${percentage}%`;
-                hiUpdate.classList.add("horse-indicator-text-active");
+                updateLoadingText(`Preparing the room for you. Loaded: ${percentage}%`);
                 lastLoggedPercentage = percentage;
               });
             }
@@ -289,6 +336,52 @@ function initializeGolden() {
     return [];
   }
 
+  // Текст для наведения на 3D объекты в золотой комнате
+  const HOVER_TEXTS = {
+    door: "what do you prefer - closed/open doors or closed/open locks?",
+    lock: "do you know how to cipher?",
+    rat: "oh no, i am sorry, the mice have escaped the lab!",
+    outside: "welcome to complete isolation",
+    default: "you can move me and listen to me. you can close me by pressing the button at the top."
+  };
+
+  // Отслеживаем предыдущий тип объекта для оптимизации обновлений
+  let lastHoveredType = null;
+
+  // Функция определения типа объекта (проверяет объект и его родителей)
+  function getObjectType(object) {
+    // Проверяем сам объект
+    if (Doors.some(name => object.name.includes(name) || object.name === name)) {
+      return 'door';
+    }
+    if (Rats.some(name => object.name === name)) {
+      return 'rat';
+    }
+    // Проверяем замки (плоские массивы внутри Locks)
+    for (let lockGroup of Locks) {
+      if (lockGroup.includes(object.name)) {
+        return 'lock';
+      }
+    }
+    
+    // Проверяем родителей
+    let parent = object.parent;
+    while (parent) {
+      if (Doors.some(name => parent.name && (parent.name.includes(name) || parent.name === name))) {
+        return 'door';
+      }
+      if (parent.name && parent.name.includes('Rat')) {
+        return 'rat';
+      }
+      if (parent.name && (parent.name.includes('Lock') || parent.name.includes('lock'))) {
+        return 'lock';
+      }
+      parent = parent.parent;
+    }
+    
+    return null;
+  }
+
   const onMouseMoveDebounced = debounce((event) => {
     event.preventDefault();
     const rect = renderer.domElement.getBoundingClientRect();
@@ -305,14 +398,49 @@ function initializeGolden() {
           outlinePass.selectedObjects = findRelatedObjects(firstIntersected);
         }
 
-        if (Rats.includes(firstIntersected.name)) {
+        // Определяем тип объекта
+        const currentType = getObjectType(firstIntersected);
+        
+        // Управляем ASCII артом
+        if (currentType === 'rat') {
           showAsciiArt(event);
         } else {
           hideAsciiArt();
         }
+
+        // Обновляем текст только если тип изменился (оптимизация)
+        if (currentType && currentType !== lastHoveredType) {
+          lastHoveredType = currentType;
+          if (typeof window.updateHorseText === 'function') {
+            window.updateHorseText(HOVER_TEXTS[currentType], 0);
+          }
+        } else if (!currentType && lastHoveredType !== null) {
+          // Если тип не определён, но был предыдущий — сбрасываем
+          lastHoveredType = null;
+          if (typeof window.updateHorseText === 'function') {
+            window.updateHorseText(HOVER_TEXTS.default, 0);
+          }
+        }
       } else {
         clearSelection();
         hideAsciiArt();
+        
+        // Проверяем, вылетела ли камера за пределы комнаты
+        const cameraDistance = camera.position.length();
+        const isOutside = cameraDistance > 4; // Если камера далеко от центра
+        
+        if (isOutside && lastHoveredType !== 'outside') {
+          lastHoveredType = 'outside';
+          if (typeof window.updateHorseText === 'function') {
+            window.updateHorseText(HOVER_TEXTS.outside, 0);
+          }
+        } else if (!isOutside && lastHoveredType !== null) {
+          // Возвращаем дефолтный текст при уходе с объекта (внутри комнаты)
+          lastHoveredType = null;
+          if (typeof window.updateHorseText === 'function') {
+            window.updateHorseText(HOVER_TEXTS.default, 0);
+          }
+        }
       }
     }
   }, 16); // ~60fps
@@ -363,24 +491,36 @@ function initializeGolden() {
       return;
     }
 
-    if (Doors.includes(object.name)) {
+    // Используем getObjectType для надёжного определения типа
+    const objectType = getObjectType(object);
+    
+    if (objectType === 'door') {
       console.log("Door clicked");
       playSound(sounds.doorSound);
       setTimeout(() => {
         toggleVisibility(elements.goldenRoomMain, elements.goldenRoomDoor);
         pauseRendering();
       }, 750);
-    } else if (Rats.includes(object.name)) {
-      console.log("Mouse clicked");
+    } else if (objectType === 'rat') {
+      console.log("Rat clicked");
       playSound(sounds.ratSound);
-    } else {
-      for (let lockGroup of Locks) {
-        if (lockGroup.includes(object.name)) {
-          console.log("Lock clicked");
-          playSound(sounds.doorLockSound);
-          break;
-        }
+      
+      // Обновляем текст в пультике при переходе на экран крыс
+      if (typeof window.updateHorseText === 'function') {
+        window.updateHorseText(HOVER_TEXTS.rat, 0);
       }
+      
+      // Переход на экран крыс
+      setTimeout(() => {
+        const ratsScreen = document.getElementById('golden-room-door-rats');
+        if (ratsScreen && elements.goldenRoomMain) {
+          toggleVisibility(elements.goldenRoomMain, ratsScreen);
+          pauseRendering();
+        }
+      }, 750);
+    } else if (objectType === 'lock') {
+      console.log("Lock clicked");
+      playSound(sounds.doorLockSound);
     }
   }
 
@@ -435,6 +575,30 @@ function initializeGolden() {
   const fps = 60;
   const interval = 1000 / fps;
 
+  // Отслеживаем состояние камеры: null, 'inside', 'outside'
+  let lastCameraState = null;
+  
+  // Функция проверки, вылетела ли камера за пределы комнаты
+  function checkCameraOutside() {
+    if (!camera) return;
+    
+    const cameraDistance = camera.position.length();
+    const currentState = cameraDistance > 4 ? 'outside' : 'inside';
+    
+    // Обновляем текст только при изменении состояния
+    if (currentState !== lastCameraState) {
+      lastCameraState = currentState;
+      
+      if (typeof window.updateHorseText === 'function') {
+        if (currentState === 'outside') {
+          window.updateHorseText(HOVER_TEXTS.outside, 0);
+        } else {
+          window.updateHorseText(HOVER_TEXTS.default, 0);
+        }
+      }
+    }
+  }
+
   function animate(currentTime) {
     if (isRendering) {
       requestAnimationFrame(animate);
@@ -443,6 +607,8 @@ function initializeGolden() {
 
       if (controls && controls.enabled) {
         controls.update();
+        // Проверяем позицию камеры при каждом обновлении
+        checkCameraOutside();
       }
 
       if (composer) {
@@ -479,14 +645,18 @@ function initializeGolden() {
       });
     });
 
-    document.querySelectorAll(".golden-room-door-rats").forEach((element) => {
+    // Обработчики для 2D SVG оверлеев крыс (звук + переключение картинки)
+    // Hover text обрабатывается в [local]gold.php
+    document.querySelectorAll(".overlay-svg.golden-room-door-rats").forEach((element) => {
       element.addEventListener("click", () => {
         playSound(sounds.ratSoundR);
         showNextRatImage();
       });
     });
 
-    document.querySelectorAll(".golden-room-door-lock").forEach((element) => {
+    // Обработчики для 2D SVG оверлеев замков (звук)
+    // Hover text обрабатывается в [local]gold.php
+    document.querySelectorAll(".overlay-svg.golden-room-door-lock").forEach((element) => {
       element.addEventListener("click", () => {
         playSound(sounds.lockSoundR);
       });
@@ -755,16 +925,16 @@ function initializeGolden() {
     }
   }
 
-  // Новая функция для инициализации взаимодействий
+  // Инициализация взаимодействий для золотой комнаты
   function initializeInteractions() {
-    // Добавляем обработчики для элементов сцены в 3D модели
-    if (room) {
-      // Обработчики для 3D объектов устанавливаются через ray casting
-      // и уже реализованы в других функциях
-      
-      // Не добавляем никаких дополнительных обработчиков,
-      // так как все необходимые взаимодействия уже установлены
-      // в horse-text-handler.js
+    // Обработчики для 3D объектов устанавливаются через ray casting
+    // и уже реализованы в onMouseMoveDebounced
+    
+    // Реинициализируем hover handlers для 2D элементов (крысы, замок, дверь)
+    // которые загрузились вместе со страницей золотой комнаты
+    if (typeof window.reInitializeHorseInteractions === 'function') {
+      console.log('🔄 [Golden] Реинициализация hover handlers для 2D элементов...');
+      window.reInitializeHorseInteractions();
     }
   }
 

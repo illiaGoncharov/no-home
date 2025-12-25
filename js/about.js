@@ -93,14 +93,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const glitchInterval = parseFloat(zero.dataset.glitchInterval);
         
         if (timeSinceLastGlitch > glitchInterval) {
-          // Глитч - показываем А или 1 на короткое время (100-200ms)
+          // Глитч - показываем А или 1 на более длительное время
           const glitchChars = ['A', '1'];
           const originalText = zero.textContent;
           zero.textContent = glitchChars[Math.floor(Math.random() * glitchChars.length)];
           
           setTimeout(() => {
             zero.textContent = '0';
-          }, Math.random() * 100 + 100); // Возвращаем 0 через 100-200ms
+          }, Math.random() * 300 + 400); // Возвращаем 0 через 400-700ms (было 100-200ms)
           
           zero.dataset.lastGlitch = now;
           zero.dataset.glitchInterval = Math.random() * 3000 + 2000; // Новый интервал

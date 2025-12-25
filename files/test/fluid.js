@@ -445,6 +445,12 @@ function initSunraysFramebuffers () {
 }
 
 function createFBO (w, h, internalFormat, format, type, param) {
+    // Проверяем что размеры больше 0 (иначе GL_INVALID_FRAMEBUFFER_OPERATION)
+    if (w <= 0 || h <= 0) {
+        w = Math.max(1, w);
+        h = Math.max(1, h);
+    }
+    
     gl.activeTexture(gl.TEXTURE0);
     var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -458,7 +464,12 @@ function createFBO (w, h, internalFormat, format, type, param) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
     gl.viewport(0, 0, w, h);
-    gl.clear(gl.COLOR_BUFFER_BIT);
+    
+    // Проверяем статус framebuffer перед очисткой
+    var status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    if (status === gl.FRAMEBUFFER_COMPLETE) {
+        gl.clear(gl.COLOR_BUFFER_BIT);
+    }
 
     var texelSizeX = 1.0 / w;
     var texelSizeY = 1.0 / h;
@@ -891,6 +902,7 @@ window.addEventListener('mouseup', function () {
     updatePointerUpData(pointers[0]);
 });
 
+// Используем { passive: false } потому что вызываем e.preventDefault()
 canvas.addEventListener('touchstart', function (e) {
     e.preventDefault();
     var touches = e.targetTouches;
@@ -901,7 +913,7 @@ canvas.addEventListener('touchstart', function (e) {
         var posY = scaleByPixelRatio(touches[i].pageY);
         updatePointerDownData(pointers[i + 1], touches[i].identifier, posX, posY);
     }
-});
+}, { passive: false });
 
 canvas.addEventListener('touchmove', function (e) {
     e.preventDefault();
@@ -913,7 +925,7 @@ canvas.addEventListener('touchmove', function (e) {
         var posY = scaleByPixelRatio(touches[i].pageY);
         updatePointerMoveData(pointer, posX, posY);
     }
-}, false);
+}, { passive: false });
 
 window.addEventListener('touchend', function (e) {
     var touches = e.changedTouches;

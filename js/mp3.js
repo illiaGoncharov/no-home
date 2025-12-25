@@ -1,11 +1,20 @@
-// Глобальные переменные
-let currentSide = 1;
-let currentTrack = null;
-let isPlaying = false;
-let isRandom = false;
-let originalOrder = [];
-let repeatSong = false;
-let isFirstPlay = true;
+// Глобальные переменные (window для доступа из других скриптов)
+var currentSide = 1;
+var currentTrack = null;
+var isPlaying = false;
+var isRandom = false;
+var originalOrder = [];
+var repeatSong = false;
+var isFirstPlay = true;
+
+// Синхронизация с window для доступа из items.js
+window.mp3State = {
+  get currentSide() { return currentSide; },
+  get currentTrack() { return currentTrack; },
+  get isPlaying() { return isPlaying; },
+  get isRandom() { return isRandom; },
+  get repeatSong() { return repeatSong; }
+};
 
 // Функция для рандомного перемешивания
 function shufflePlaylist() {
@@ -216,6 +225,67 @@ function toggleAnimations(play) {
     }
 }
 
+// Функция для обновления пультика (horse indicator) с информацией о текущем треке
+function updateHorseIndicator() {
+    const displayNormal = document.querySelector('.display-normal');
+    const displayPlayer = document.querySelector('.display-player');
+    const horseIndicatorSide = document.querySelector('.horse-indicator-side');
+    const horseIndicatorSongNow = document.querySelector('.horse-indicator-song-now');
+    const horseIndicatorSongTime = document.querySelector('.horse-indicator-song-time');
+    const horseIndicatorSongHashtag = document.querySelector('.horse-indicator-song-hashtag');
+
+    if (isPlaying && currentTrack) {
+        // Показываем режим плеера
+        if (displayNormal) displayNormal.style.display = 'none';
+        if (displayPlayer) displayPlayer.style.display = 'block';
+        
+        // Обновляем информацию о треке
+        if (horseIndicatorSide) horseIndicatorSide.textContent = `SIDE ${currentSide === 1 ? 'I' : 'II'}`;
+        if (horseIndicatorSongNow) horseIndicatorSongNow.textContent = currentTrack.dataset.songName || 'Unknown';
+        
+        // Показываем текущее время воспроизведения (не оставшееся)
+        if (horseIndicatorSongTime) {
+            const currentTime = currentTrack.currentTime || 0;
+            horseIndicatorSongTime.textContent = formatTime(currentTime);
+        }
+        
+        if (horseIndicatorSongHashtag) horseIndicatorSongHashtag.textContent = currentTrack.dataset.songHashtag || '#MUSIC';
+    } else {
+        // Показываем обычный режим
+        if (displayNormal) displayNormal.style.display = 'block';
+        if (displayPlayer) displayPlayer.style.display = 'none';
+    }
+}
+
+// Глобальная функция для переключения пульта в режим плеера (для использования из других комнат)
+window.showPlayerMode = function(show) {
+    const displayNormal = document.querySelector('.display-normal');
+    const displayPlayer = document.querySelector('.display-player');
+    
+    if (displayNormal && displayPlayer) {
+        if (show) {
+            displayNormal.style.display = 'none';
+            displayPlayer.style.display = 'block';
+        } else {
+            displayNormal.style.display = 'block';
+            displayPlayer.style.display = 'none';
+        }
+    }
+};
+
+// Глобальная функция для обновления информации в пульте плеера
+window.updatePlayerInfo = function(songName, hashtag) {
+    const horseIndicatorSongNow = document.querySelector('.horse-indicator-song-now');
+    const horseIndicatorSongHashtag = document.querySelector('.horse-indicator-song-hashtag');
+    
+    if (horseIndicatorSongNow && songName) {
+        horseIndicatorSongNow.textContent = songName;
+    }
+    if (horseIndicatorSongHashtag && hashtag) {
+        horseIndicatorSongHashtag.textContent = hashtag;
+    }
+};
+
 function togglePlayStop() {
     const playStopButton = document.querySelector('.play-stop');
     
@@ -236,6 +306,7 @@ function togglePlayStop() {
     isPlaying = !isPlaying;
     updatePlaylistDisplay();
     updateTimeChanger();
+    updateHorseIndicator(); // Обновляем пультик
 }
 
 let isHovering = false;
@@ -293,8 +364,9 @@ function playNextTrack() {
             currentTrack.play();
             isPlaying = true;
             document.querySelector('.play-stop').textContent = 'stop';
-            updatePlaylistDisplay(true);  // Передаем флаг, указывающий на смену трека
-            checkOverflow();  // Проверяем переполнение текста после смены трека
+            updatePlaylistDisplay(true);
+            checkOverflow();
+            updateHorseIndicator(); // Обновляем пультик
         }
     }
 }
@@ -311,8 +383,9 @@ function playPreviousTrack() {
             currentTrack.play();
             isPlaying = true;
             document.querySelector('.play-stop').textContent = 'stop';
-            updatePlaylistDisplay(true);  // Передаем флаг, указывающий на смену трека
-            checkOverflow();  // Проверяем переполнение текста после смены трека
+            updatePlaylistDisplay(true);
+            checkOverflow();
+            updateHorseIndicator(); // Обновляем пультик
         }
     }
 }
@@ -348,9 +421,10 @@ function playTrack(order) {
         isPlaying = true;
         document.querySelector('.play-stop').textContent = 'stop';
         toggleAnimations(true);
-        updatePlaylistDisplay(true);  // Передаем флаг, указывающий на смену трека
+        updatePlaylistDisplay(true);
         updateTimeChanger();
-        checkOverflow();  // Проверяем переполнение текста после смены трека
+        checkOverflow();
+        updateHorseIndicator(); // Обновляем пультик
     }
 }
 
@@ -392,6 +466,7 @@ document.querySelectorAll('audio').forEach(audio => {
     audio.addEventListener('timeupdate', () => {
         updatePlaylistDisplay();
         updateTimeChanger();
+        updateHorseIndicator(); // Обновляем время в пультике
     });
     audio.addEventListener('loadedmetadata', () => {
         updatePlaylistDisplay();
@@ -441,6 +516,21 @@ document.addEventListener('DOMContentLoaded', () => {
     updatePlaylistDisplay();
     updateTimeChanger();
     checkOverflow();
+    
+    // Привязываем кнопки пультика к функциям плеера
+    const playerRandom = document.querySelector('.player-random');
+    const playerPrevious = document.querySelector('.player-previous');
+    const playerStopPlay = document.querySelector('.player-stop-play');
+    const playerNext = document.querySelector('.player-next');
+    const playerRepeat = document.querySelector('.player-repeat');
+    
+    if (playerRandom) playerRandom.addEventListener('click', shufflePlaylist);
+    if (playerPrevious) playerPrevious.addEventListener('click', playPreviousTrack);
+    if (playerStopPlay) playerStopPlay.addEventListener('click', togglePlayStop);
+    if (playerNext) playerNext.addEventListener('click', playNextTrack);
+    if (playerRepeat) playerRepeat.addEventListener('click', toggleRepeatSong);
+    
+    console.log('🎵 Кнопки пультика привязаны к плееру');
 });
 
 // Проверяем при изменении размера окна

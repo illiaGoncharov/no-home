@@ -368,12 +368,30 @@ function initializeBedroomInteractions() {
         sounds.backpackSound.play();
         // Обновляем текст в пультике при клике на рюкзак
         bedroomUpdateText(BACKPACK_CLICK_TEXT);
+        
+        // Открываем backpack (items панель)
+        if (typeof window.showElements === 'function') {
+            window.showElements();
+        }
+        if (typeof loadContent === 'function') {
+            loadContent('backpack-content');
+        }
+        console.log('📦 Рюкзак открыт из спальни');
     });
 
     elements.suitcaseCloseOverlay.addEventListener('click', () => {
         sounds.suitcaseSound.play();
         // Обновляем текст в пультике при клике на чемодан
         bedroomUpdateText(SUITCASE_CLICK_TEXT);
+        
+        // Открываем luggage (items панель)
+        if (typeof window.showElements === 'function') {
+            window.showElements();
+        }
+        if (typeof loadContent === 'function') {
+            loadContent('luggage-content');
+        }
+        console.log('🧳 Чемодан открыт из спальни');
     });
 
         // Кнопки возврата - сбрасываем состояние детального просмотра

@@ -11,6 +11,80 @@
     const DEFAULT_TEXT = "you can move me and listen to me. you can close me by pressing the button at the top.";
 
     // ===============================================================================
+    // 🧹 СИСТЕМА ОЧИСТКИ: сброс состояния при переходе между комнатами
+    // ===============================================================================
+    
+    window.cleanupRoomState = () => {
+        log('🧹 Очистка состояния комнат...');
+        
+        // 1. Сбрасываем состояние чердака
+        if (window.atticState) {
+            window.atticState.clickCount = 0;
+            window.atticState.initialized = false; // Сбрасываем флаг для повторной инициализации
+            if (window.atticState.cursor) {
+                window.atticState.cursor.remove();
+                window.atticState.cursor = null;
+            }
+            clearTimeout(window.atticState.inactivityTimer);
+            log('🧹 Состояние чердака сброшено');
+        }
+        
+        // 2. Удаляем лишние курсоры чердака
+        document.querySelectorAll('.attic-cursor').forEach(el => el.remove());
+        
+        // 3. Сбрасываем состояние спальни
+        if (window.bedroomState) {
+            window.bedroomState.inDetailView = false;
+        }
+        
+        // 4. Сбрасываем текст пульта на дефолт
+        if (typeof window.updateHorseText === 'function') {
+            window.updateHorseText(DEFAULT_TEXT, 0);
+        }
+        
+        // 5. Отправляем событие очистки для кастомных обработчиков
+        document.dispatchEvent(new CustomEvent('roomCleanup'));
+        
+        log('🧹 ✅ Очистка завершена');
+    };
+    
+    // Автоматическая очистка при загрузке страницы (для bfcache)
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            log('🔄 Страница восстановлена из кэша, очищаем состояние...');
+            window.cleanupRoomState();
+        }
+    });
+    
+    // Очистка при обычной загрузке
+    document.addEventListener('DOMContentLoaded', () => {
+        log('📄 DOM загружен, инициализируем чистое состояние');
+        // Небольшая задержка чтобы скрипты комнат успели инициализироваться
+        setTimeout(() => {
+            // Удаляем старые курсоры если остались
+            document.querySelectorAll('.attic-cursor').forEach(el => el.remove());
+        }, 100);
+    });
+    
+    // Очистка при уходе со страницы
+    window.addEventListener('beforeunload', () => {
+        log('🚪 Уход со страницы, очищаем состояние');
+        window.cleanupRoomState();
+    });
+    
+    // Очистка при клике на навигационные ссылки
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('a[href]');
+        if (link) {
+            const href = link.getAttribute('href') || '';
+            if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+                log('🔗 Клик по ссылке, очищаем состояние');
+                window.cleanupRoomState();
+            }
+        }
+    });
+
+    // ===============================================================================
     // 🎯 CORE SYSTEM: Поиск элемента пульта и обновление текста
     // ===============================================================================
     
@@ -107,8 +181,82 @@
 
     // 🌍 ГЛОБАЛЬНАЯ ФУНКЦИЯ для других скриптов (items.js, golden.js, etc.)
     window.updateHorseText = (text, duration = 5000) => {
+        // Блокировка обновлений во время загрузки
+        if (window.horseTextBlocked) {
+            log('🚫 Обновление заблокировано');
+            return;
+        }
         log('🌐 Внешний вызов updateHorseText:', text);
         updateHorseText(text, { duration });
+    };
+    
+    // Глобальные функции для блокировки/разблокировки обновлений
+    window.blockHorseText = () => { window.horseTextBlocked = true; };
+    window.unblockHorseText = () => { window.horseTextBlocked = false; };
+    
+    // ===============================================================================
+    // 🎵 ГЛОБАЛЬНЫЕ ФУНКЦИИ УПРАВЛЕНИЯ МУЗЫКОЙ И ПУЛЬТОМ
+    // ===============================================================================
+    
+    // Переключение режима пульта (обычный ↔ плеер)
+    window.switchRemoteToPlayerMode = (showPlayer) => {
+        const displayNormal = document.querySelector('.display-normal');
+        const displayPlayer = document.querySelector('.display-player');
+        
+        if (displayNormal && displayPlayer) {
+            if (showPlayer) {
+                displayNormal.style.display = 'none';
+                displayPlayer.style.display = 'block';
+                log('🎛️ Пульт переключён в режим плеера');
+            } else {
+                displayNormal.style.display = 'block';
+                displayPlayer.style.display = 'none';
+                log('🎛️ Пульт переключён в обычный режим');
+            }
+        }
+    };
+    
+    // Запуск музыки (если не играет)
+    window.startMusicIfNotPlaying = (source = 'unknown') => {
+        log('🎵 startMusicIfNotPlaying из:', source);
+        
+        const playButton = document.querySelector('.play-stop');
+        if (playButton) {
+            const buttonText = playButton.textContent.trim().toLowerCase();
+            
+            if (buttonText === 'play' || buttonText === '' || !buttonText.includes('stop')) {
+                playButton.click();
+                log('🎵 ✅ Музыка запущена из:', source);
+                setTimeout(() => window.switchRemoteToPlayerMode(true), 100);
+                return true;
+            } else {
+                log('🎵 Музыка уже играет');
+                return false;
+            }
+        }
+        log('⚠️ Кнопка плеера не найдена');
+        return false;
+    };
+    
+    // Остановка музыки (если играет)
+    window.stopMusicIfPlaying = (source = 'unknown') => {
+        log('🔇 stopMusicIfPlaying из:', source);
+        
+        const playButton = document.querySelector('.play-stop');
+        if (playButton) {
+            const buttonText = playButton.textContent.trim().toLowerCase();
+            
+            if (buttonText === 'stop' || buttonText.includes('stop')) {
+                playButton.click();
+                log('🔇 ✅ Музыка остановлена из:', source);
+                setTimeout(() => window.switchRemoteToPlayerMode(false), 100);
+                return true;
+            } else {
+                log('🔇 Музыка уже не играет');
+                return false;
+            }
+        }
+        return false;
     };
     
     // ===============================================================================

@@ -365,35 +365,31 @@ document.addEventListener("click", function (event) {
   }
 });
 
-// Обработчик для рюкзака - БЕЗ КАПЧИ!
-function handleBackpackClick() {
-  const backpackOverlay = document.querySelector(".backpack-close-overlay");
-  if (backpackOverlay) {
-    backpackOverlay.addEventListener("click", function () {
-      // Прямо вызываем функционал БЕЗ капчи
-      // Вызываем showElements, чтобы применить стили и показать нужные элементы
+// Обработчик для рюкзака и чемодана - используем делегирование событий
+// чтобы работало даже когда элементы появляются динамически
+document.addEventListener("click", function(event) {
+  // Проверяем клик по рюкзаку (backpack-close-overlay)
+  if (event.target.closest(".backpack-close-overlay")) {
+    // Прямо вызываем функционал БЕЗ капчи
+    if (typeof showElements === 'function') {
       showElements();
-      // Загружаем контент через общий безопасный загрузчик
-      loadContent("backpack-content");
-    });
+    }
+    // Загружаем контент через общий безопасный загрузчик
+    loadContent("backpack-content");
+    console.log('📦 Рюкзак открыт из меню');
   }
-}
-handleBackpackClick();
-
-// Обработчик для чемодана - БЕЗ КАПЧИ!
-function handleSuitcaseClick() {
-  const suitcaseOverlay = document.querySelector(".suitcase-close-overlay");
-  if (suitcaseOverlay) {
-    suitcaseOverlay.addEventListener("click", function () {
-      // Прямо вызываем функционал БЕЗ капчи
-      // Вызываем showElements, чтобы применить стили и показать нужные элементы
+  
+  // Проверяем клик по чемодану (suitcase-close-overlay)
+  if (event.target.closest(".suitcase-close-overlay")) {
+    // Прямо вызываем функционал БЕЗ капчи
+    if (typeof showElements === 'function') {
       showElements();
-      // Загружаем контент через общий безопасный загрузчик
-      loadContent("luggage-content");
-    });
+    }
+    // Загружаем контент через общий безопасный загрузчик
+    loadContent("luggage-content");
+    console.log('🧳 Чемодан открыт из меню');
   }
-}
-handleSuitcaseClick();
+});
 
 // Обработчик для динамика
 function handleSpeakerClick() {

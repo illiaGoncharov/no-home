@@ -10,6 +10,9 @@ function my_enqueue_scripts() {
     
     // Скрипт для пульта - ЗАГРУЖАЕМ ПЕРЕД ЛОКАЛИЗАЦИЕЙ
     wp_enqueue_script('horse-text-handler', get_template_directory_uri() . '/js/horse-text-handler.js', array('jquery'), null, true); // Зависит от jQuery
+    
+    // Скрипт для чердака (attic)
+    wp_enqueue_script('attic', get_template_directory_uri() . '/js/attic.js', array('jquery'), filemtime(get_template_directory() . '/js/attic.js'), true);
 
     // Передаем ДАННЫЕ ДЛЯ ОТПРАВКИ ПИСЬМА в horse-text-handler.js
     wp_localize_script(

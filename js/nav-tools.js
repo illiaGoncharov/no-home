@@ -332,8 +332,9 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("mousemove", drag);
   document.addEventListener("mouseup", stopDragging);
 
-  horseIndicator.addEventListener("touchstart", startDragging);
-  document.addEventListener("touchmove", drag);
+  // Используем { passive: false } потому что вызываем e.preventDefault() в startDragging и drag
+  horseIndicator.addEventListener("touchstart", startDragging, { passive: false });
+  document.addEventListener("touchmove", drag, { passive: false });
   document.addEventListener("touchend", stopDragging);
 
   function startDragging(e) {
