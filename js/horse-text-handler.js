@@ -14,8 +14,23 @@
     // 🧹 СИСТЕМА ОЧИСТКИ: сброс состояния при переходе между комнатами
     // ===============================================================================
     
+    // Ссылка на текущий marquee для очистки (будет заполнена позже)
+    let cleanupMarqueeRef = null;
+    
+    // Функция для установки ссылки на marquee (вызывается из updateHorseText)
+    window.setMarqueeRef = (marquee) => {
+        cleanupMarqueeRef = marquee;
+    };
+    
     window.cleanupRoomState = () => {
         log('🧹 Очистка состояния комнат...');
+        
+        // 0. Останавливаем marquee анимацию текста пульта
+        if (cleanupMarqueeRef && cleanupMarqueeRef.stop) {
+            cleanupMarqueeRef.stop();
+            cleanupMarqueeRef = null;
+            log('🧹 Marquee остановлен');
+        }
         
         // 1. Сбрасываем состояние чердака
         if (window.atticState) {
@@ -106,6 +121,9 @@
         return null;
     };
 
+    // Глобальная ссылка на текущий marquee для управления
+    let currentMarquee = null;
+
     // 🔄 СИСТЕМА ОБНОВЛЕНИЯ ТЕКСТА: стабильная анимация + принудительная видимость
     const updateHorseText = (text, options = {}) => {
         const { duration = 0, force = true } = options;
@@ -126,25 +144,57 @@
             
             scrollTextEl.textContent = textToSet;
             
-            // 🎬 СТАБИЛЬНАЯ АНИМАЦИЯ: начинаем справа от контейнера
-            let position = 20; 
-            scrollTextEl.style.transform = `translateX(${position}px)`;
-            
-            // Очищаем предыдущую анимацию
-            if (scrollTextEl.animationInterval) {
-                clearInterval(scrollTextEl.animationInterval);
+            // 🎬 ОПТИМИЗИРОВАННАЯ АНИМАЦИЯ через rAF (вместо setInterval)
+            // Останавливаем предыдущую анимацию
+            if (currentMarquee) {
+                currentMarquee.stop();
+                currentMarquee = null;
             }
             
-            // Запускаем плавную анимацию прокрутки
-            scrollTextEl.animationInterval = setInterval(() => {
-                position -= 1;
-                scrollTextEl.style.transform = `translateX(${position}px)`;
+            // Используем AnimationManager если доступен
+            if (typeof AnimationManager !== 'undefined' && AnimationManager.createMarquee) {
+                currentMarquee = AnimationManager.createMarquee(
+                    scrollTextEl,
+                    horseTextEl,
+                    { speed: 1, gap: 50 }
+                );
+                currentMarquee.start();
+                log('🎬 Marquee через AnimationManager запущен');
+            } else {
+                // Fallback: простая rAF-based анимация без AnimationManager
+                let position = 20;
+                let rafId = null;
                 
-                // Сброс когда текст ушел за левый край
-                if (position < -scrollTextEl.offsetWidth - 50) {
-                    position = horseTextEl.offsetWidth + 20;
-                }
-            }, 16);
+                const tick = () => {
+                    position -= 1;
+                    scrollTextEl.style.transform = `translateX(${position}px)`;
+                    
+                    // Сброс когда текст ушел за левый край
+                    if (position < -scrollTextEl.offsetWidth - 50) {
+                        position = horseTextEl.offsetWidth + 20;
+                    }
+                    
+                    rafId = requestAnimationFrame(tick);
+                };
+                
+                rafId = requestAnimationFrame(tick);
+                
+                // Создаём объект для управления
+                currentMarquee = {
+                    stop: () => {
+                        if (rafId) {
+                            cancelAnimationFrame(rafId);
+                            rafId = null;
+                        }
+                    }
+                };
+                log('🎬 Fallback rAF marquee запущен');
+            }
+            
+            // Сохраняем ссылку для очистки при смене комнаты
+            if (typeof window.setMarqueeRef === 'function') {
+                window.setMarqueeRef(currentMarquee);
+            }
             
             log('🎬 Анимация запущена для текста:', textToSet);
 
