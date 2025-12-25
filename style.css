@@ -18,6 +18,62 @@ BlankSlate is distributed under the terms of the GNU GPL
 */
 
 /* ==============================
+   0. Animation Variables (NOHOME Design System)
+   Единые timing и easing для всех анимаций
+============================== */
+
+:root {
+  /* === TIMING (длительности) === */
+  
+  /* Микро-взаимодействия: hover, click feedback, курсор */
+  --timing-micro: 150ms;
+  
+  /* UI переходы: панели, модальные окна, меню */
+  --timing-ui: 300ms;
+  
+  /* Контентные переходы: смена комнат, видео, большие блоки */
+  --timing-content: 500ms;
+  
+  /* Длинные анимации: загрузка, сложные переходы */
+  --timing-long: 750ms;
+  
+  /* Очень длинные: специальные эффекты (вспышка курсора) */
+  --timing-extra-long: 1200ms;
+
+  /* === EASING (функции плавности) === */
+  
+  /* Стандартный ease-out для появления элементов */
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  
+  /* Ease-in для исчезновения */
+  --ease-in: cubic-bezier(0.32, 0, 0.67, 0);
+  
+  /* Ease-in-out для переходов между состояниями */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  
+  /* Более выраженный ease-out (для UI элементов) */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  
+  /* С отскоком (для интерактивных элементов) */
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Линейный (для бесконечных анимаций) */
+  --ease-linear: linear;
+
+  /* === ПРОЗРАЧНОСТИ === */
+  --opacity-hover: 0.8;
+  --opacity-disabled: 0.5;
+  --opacity-overlay: 0.6;
+
+  /* === Z-INDEX СЛОИ === */
+  --z-cursor: 99999;
+  --z-modal: 9999;
+  --z-overlay: 999;
+  --z-nav: 100;
+  --z-content: 1;
+}
+
+/* ==============================
    1. Font Declarations
 ============================== */
 
@@ -438,8 +494,9 @@ html {
   height: 25px;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  z-index: 99999;
-  transition: transform 0.1s ease;
+  z-index: var(--z-cursor);
+  /* Используем micro timing для отзывчивости курсора */
+  transition: transform var(--timing-micro) var(--ease-out);
   background: radial-gradient(
     circle,
     #ff0000 0%,
@@ -452,6 +509,8 @@ html {
   background-position: center;
   border-radius: 50%;
   filter: blur(2px);
+  /* Оптимизация: подсказка браузеру для GPU-ускорения */
+  will-change: transform;
 }
 
 .custom-cursor.pulse {
@@ -468,6 +527,31 @@ html {
     rgba(0, 0, 0, 0) 100%
   );
   filter: blur(2px);
+}
+
+/* Курсор чердака с плавными переходами */
+.attic-cursor {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: var(--z-cursor);
+  transform: translate(-50%, -50%) scale(1);
+  background: radial-gradient(
+    circle,
+    #FF0000 0%,
+    #FF0000 30%,
+    transparent 50%,
+    #FF0000 70%,
+    #FF0000 100%
+  );
+  /* Плавные переходы для scale и background */
+  transition: 
+    transform var(--timing-ui) var(--ease-out-quart),
+    background var(--timing-ui) var(--ease-out);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  will-change: transform, background;
 }
 
 @keyframes pulse {
@@ -902,7 +986,7 @@ html {
 }
 
 /*.horse-indicator-song-now {
-	width: 80%;
+    width: 80%;
 }*/
 
 .horse-indicator-song-time {
@@ -1989,4 +2073,111 @@ html {
   filter: blur(10px); /* Размытие призрака */
   opacity: 0.5; /* Прозрачность */
   z-index: 0; /* Уводим призрак под текст */
+}
+
+/* ==============================
+   GPU-ускорение для анимируемых элементов
+   Использует CSS variables из :root
+============================== */
+
+/* Скелет-навигация с плавными переходами */
+.skeleton-home {
+  will-change: opacity, transform;
+  transition: opacity var(--timing-ui) var(--ease-out);
+}
+
+.skeleton-home.show {
+  opacity: 1;
+}
+
+.skeleton-home:not(.show) {
+  opacity: 0;
+}
+
+/* Кнопка скелета */
+.skeleton-button {
+  transition: opacity var(--timing-ui) var(--ease-out);
+}
+
+.skeleton-button.hidden {
+  opacity: 0;
+}
+
+/* Элементы iPhone с плавными переходами */
+.lockscreen,
+.pass-screen,
+.apps-screen {
+  will-change: opacity;
+  transition: opacity var(--timing-content) var(--ease-in-out);
+}
+
+/* MP3 плеер - оптимизация вращающихся элементов */
+.cd,
+.ice {
+  will-change: transform;
+}
+
+.mp3-background-img {
+  will-change: opacity;
+  transition: opacity var(--timing-long) var(--ease-in-out);
+}
+
+/* Модальные окна items */
+.items-wrapper {
+  will-change: opacity;
+  transition: opacity var(--timing-ui) var(--ease-out);
+}
+
+/* Hover состояния с плавными переходами */
+.nav-items-link,
+.skeleton-home-link,
+.ajax-page-link {
+  transition: opacity var(--timing-micro) var(--ease-out);
+}
+
+.nav-items-link:hover,
+.skeleton-home-link:hover {
+  opacity: var(--opacity-hover);
+}
+
+/* Blur анимации для плейлиста */
+.transition-blur {
+  transition: filter var(--timing-content) var(--ease-in-out);
+}
+
+.transition-blur.blurred {
+  filter: blur(10px);
+}
+
+/* Прокрутка текста в пульте */
+#horse-text-original {
+  will-change: transform;
+  /* Отключаем transition чтобы не мешать rAF анимации */
+  transition: none;
+}
+
+/* Пульт управления */
+.horse-indicator {
+  will-change: left, top;
+  transition: none; /* Drag не должен иметь transition */
+}
+
+/* Увеличенные изображения в рюкзаке/чемодане */
+.enlarged-img {
+  will-change: opacity, filter;
+  transition: 
+    opacity var(--timing-content) var(--ease-out),
+    filter var(--timing-content) var(--ease-out);
+}
+
+/* Видео чердака */
+video.attic-video {
+  will-change: opacity;
+  transition: opacity var(--timing-long) var(--ease-in-out);
+}
+
+/* Оверлей затемнения скелетов */
+.darken-skeletons {
+  will-change: opacity;
+  transition: opacity var(--timing-long) var(--ease-in-out);
 }

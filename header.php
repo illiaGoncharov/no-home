@@ -10,11 +10,11 @@
 <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
-	
+    
 <!-- Основные элементы интерфейса -->
 <div class="interface-elements">
     <!-- Верхняя навигация -->
-	<div class="nav-top">
+    <div class="nav-top">
         <div class="container-fluid">
             <div class="row nav-top-content">
                 <div class="d-block col-xxl-9 col-xl-9 col-lg-8 col-md-8 col-sm-7">
@@ -49,7 +49,7 @@
                                         you can move me and listen to me. 
                                         you can close me by pressing the button at the top
                                     </span>
-                                </div>				
+                                </div>                
                             </div>
                         </div>
                     </div>
@@ -74,8 +74,8 @@
                             </div>
                             <div class="horse-indicator-song-hashtag">
                                 #WEB_SURFING
-                            </div>		
-                        </div>				
+                            </div>        
+                        </div>                
                     </div>
                         
                     <!-- Кнопки управления плеером -->
@@ -134,7 +134,7 @@ if (!is_page('5')) : ?-->
     </button>
     <a id="skeleton-home-link" href="/" style="display: none;">
         <img src="/wp-content/themes/blankslate/files/nav/skeleton-home-rooms.png" alt="To home">
-		<p>nohome</p>
+        <p>nohome</p>
     </a>
 </div>
 
@@ -143,25 +143,47 @@ if (!is_page('5')) : ?-->
     <div class="skeleton-home-wrapper">
          <!-- Ссылки на различные области -->
         <img src="/wp-content/themes/blankslate/files/nav/skeleton-full.png">
-		<a href="/0selectedarea4" class="skeleton-home-link ajax-page-link mattic" data-id="1582"></a>
-		<a href="/0selectedarea3" class="skeleton-home-link ajax-page-link mtable" data-id="1973"></a>
-		<a href="/0selectedarea2" class="skeleton-home-link ajax-page-link mcave" data-id="95"></a>
-		<a href="/0selectedarea1" class="skeleton-home-link ajax-page-link mbed" data-id="1891"></a>
-		<a href="/0selectedarea5" class="skeleton-home-link ajax-page-link mgolden" data-id="1330"></a>
+        <a href="/0selectedarea4" class="skeleton-home-link ajax-page-link mattic" data-id="1582"></a>
+        <a href="/0selectedarea3" class="skeleton-home-link ajax-page-link mtable" data-id="1973"></a>
+        <a href="/0selectedarea2" class="skeleton-home-link ajax-page-link mcave" data-id="95"></a>
+        <a href="/0selectedarea1" class="skeleton-home-link ajax-page-link mbed" data-id="1891"></a>
+        <a href="/0selectedarea5" class="skeleton-home-link ajax-page-link mgolden" data-id="1330"></a>
     </div>
 </div>
 <!--?php endif; ?-->
-				
+                
 <main id="content" role="main">
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.body.insertAdjacentHTML('beforeend', '<div class="custom-cursor"></div>');
             const cursor = document.querySelector('.custom-cursor');
             
-            document.addEventListener('mousemove', function(e) {
+            // Функция обновления позиции курсора
+            const updateCursorPosition = (e) => {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
-            });
+            };
+            
+            // Throttle через rAF: обновляем позицию не чаще 1 раза за кадр (~60fps)
+            // Это значительно снижает нагрузку на CPU при быстрых движениях мыши
+            let rafId = null;
+            let lastEvent = null;
+            
+            const throttledCursorUpdate = (e) => {
+                lastEvent = e;
+                
+                if (rafId === null) {
+                    rafId = requestAnimationFrame(() => {
+                        if (lastEvent) {
+                            updateCursorPosition(lastEvent);
+                        }
+                        rafId = null;
+                    });
+                }
+            };
+            
+            // Используем passive: true для оптимизации (не вызываем preventDefault)
+            document.addEventListener('mousemove', throttledCursorUpdate, { passive: true });
             
             const clickableElements = document.querySelectorAll('a, button, [role="button"], .clickable, .overlay-svg');
             clickableElements.forEach(elem => {
