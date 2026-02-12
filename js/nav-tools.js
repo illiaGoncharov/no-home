@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let isDragging = false;
   let startX, startY, startLeft, startTop;
 
-  // Загрузка сохраненных данных
+  // Загрузка сохраненных данных. По умолчанию: пульт открыт, кнопка display скрыта.
   function loadSavedState() {
     const savedState = JSON.parse(localStorage.getItem("horseIndicatorState"));
     if (savedState) {
@@ -300,6 +300,9 @@ document.addEventListener("DOMContentLoaded", function () {
       horseIndicator.style.display = savedState.horseIndicatorDisplay;
       displayButtonWrapper.style.display =
         savedState.displayButtonWrapperDisplay;
+    } else {
+      horseIndicator.style.display = "block";
+      displayButtonWrapper.style.display = "none";
     }
   }
 

@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width">
 <!-- Пустой favicon чтобы избежать 404 ошибки -->
 <link rel="icon" href="data:,">
-<style src="https://nohome.cloud/wp-content/themes/blankslate/style.css"></style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <?php wp_head(); ?>
 </head>
@@ -31,7 +30,7 @@
                 <!-- Кнопка отображения -->
                 <div class="display-button-wrapper">
                     <button id="display-button">
-                        <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/horse.png" alt="Display"><p>display</p>
+                        <img src="<?php echo get_template_directory_uri(); ?>/files/nav/horse.png" alt="Display"><p>display</p>
                     </button>
                 </div>
                 
@@ -39,7 +38,7 @@
                 <div id="horseIndicator" class="horse-indicator col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-5">
                     <!-- Нормальный режим отображения -->
                     <div class="display-normal">
-                        <img src="/wp-content/themes/blankslate/files/remote-control/remote-default.png" alt="Display">
+                        <img src="/wp-content/themes/blankslate/files/remote-control/пультик-плеер.png" alt="Display">
                         <button id="close-hi"></button>
                         <div class="horse-indicator-wrapper">
                             <div class="horse-indicator-text-wrapper">
@@ -56,7 +55,7 @@
                     
                     <!-- Режим плеера -->
                     <div class="display-player" style="display:none;">
-                        <img src="/wp-content/themes/blankslate/files/remote-control/remote-player.png" alt="Display">
+                        <img src="/wp-content/themes/blankslate/files/remote-control/пультик-плеер.png" alt="Display">
                         <button id="close-hi"></button>
                         <!-- Информация о воспроизведении -->
                         <div class="horse-indicator-player">
@@ -93,12 +92,12 @@
     <div class="nav-bottom">
         <!-- Кнопка управления громкостью -->
     <button id="volume-button">
-            <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/volume.png" alt="Volume"><p>volume</p>
+            <img src="<?php echo get_template_directory_uri(); ?>/files/nav/volume.png" alt="Volume"><p>volume</p>
         </button>
 
         <!-- Экран управления громкостью -->
         <div id="volume-screen">
-            <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/volume-screen.png">
+            <img src="<?php echo get_template_directory_uri(); ?>/files/nav/volume-screen.png">
             <div class="drop-wrapper">
                 <div class="slider-container">
                     <input type="range" min="1" max="100" value="80" class="drop-range" id="volume-range">
@@ -113,13 +112,13 @@
         <!-- Группа кнопок навигации -->
         <div class="button-group">
             <button id="translate-button">
-                <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/trnsltr.png" alt="Translate"><p>trnsltr</p>
+                <img src="<?php echo get_template_directory_uri(); ?>/files/nav/trnsltr.png" alt="Translate"><p>trnsltr</p>
             </button>
             <button id="x-ray-button">
-                <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/x-ray.png" alt="X-ray Vision"><p>x-ray</p>
+                <img src="<?php echo get_template_directory_uri(); ?>/files/nav/x-ray.png" alt="X-ray Vision"><p>x-ray</p>
             </button>
             <button id="items-button">
-                <img src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/items.png" alt="Items"><p>items</p>
+                <img src="<?php echo get_template_directory_uri(); ?>/files/nav/items.png" alt="Items"><p>items</p>
             </button>
         </div>
     </div>
