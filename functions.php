@@ -6,13 +6,24 @@
  */
 function my_enqueue_scripts() {
     wp_enqueue_script('jquery'); // Загружаем jQuery
-    wp_enqueue_script('nav-tools', get_template_directory_uri() . '/js/nav-tools.js', array('jquery'), null, true);
     
-    // Скрипт для пульта - ЗАГРУЖАЕМ ПЕРЕД ЛОКАЛИЗАЦИЕЙ
-    wp_enqueue_script('horse-text-handler', get_template_directory_uri() . '/js/horse-text-handler.js', array('jquery'), null, true); // Зависит от jQuery
+    // Animation Manager - унифицированная система анимаций
+    // Загружаем ПЕРВЫМ в head, чтобы был доступен остальным скриптам
+    wp_enqueue_script(
+        'animation-manager', 
+        get_template_directory_uri() . '/js/animation-manager.js', 
+        array(), // без зависимостей
+        '1.0.0', 
+        false // в head
+    );
     
-    // Скрипт для чердака (attic)
-    wp_enqueue_script('attic', get_template_directory_uri() . '/js/attic.js', array('jquery'), filemtime(get_template_directory() . '/js/attic.js'), true);
+    wp_enqueue_script('nav-tools', get_template_directory_uri() . '/js/nav-tools.js', array('jquery', 'animation-manager'), null, true);
+    
+    // Скрипт для пульта - зависит от animation-manager
+    wp_enqueue_script('horse-text-handler', get_template_directory_uri() . '/js/horse-text-handler.js', array('jquery', 'animation-manager'), null, true);
+    
+    // Скрипт для чердака (attic) - зависит от animation-manager
+    wp_enqueue_script('attic', get_template_directory_uri() . '/js/attic.js', array('jquery', 'animation-manager'), filemtime(get_template_directory() . '/js/attic.js'), true);
 
     // Передаем ДАННЫЕ ДЛЯ ОТПРАВКИ ПИСЬМА в horse-text-handler.js
     wp_localize_script(
