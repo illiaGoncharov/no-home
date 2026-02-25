@@ -169,8 +169,7 @@ window.initializeAttic = function () {
 
     // Плавное увеличение курсора на 5-10% с каждым кликом (клики 1-12)
     if (clickCount <= 12) {
-      const increment = 0.05 + Math.random() * 0.05; // от 5% до 10%
-      const currentScale = 1 + (clickCount * increment);
+      const currentScale = 1 + (clickCount * clickCount * 0.04);
       cursor.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
       console.log('📏 Scale:', currentScale.toFixed(2));
     } 
@@ -605,6 +604,18 @@ function setVolume(volume) {
 
 volumeButton.addEventListener("mouseenter", showVolumeScreen);
 
+// Переключение экрана громкости по клику: открыть/закрыть
+volumeButton.addEventListener("click", () => {
+  const isVisible =
+    volumeScreen.style.display === "block" &&
+    volumeScreen.style.opacity === "1";
+  if (isVisible) {
+    hideVolumeScreen();
+  } else {
+    showVolumeScreen();
+  }
+});
+
 volumeScreen.addEventListener("mouseenter", () => {
   clearTimeout(hideTimeout);
 });
@@ -636,7 +647,7 @@ volumeRange.addEventListener("input", () => {
 setVolume(getSavedVolume());
 
 function showVolumeScreen() {
-  volumeButton.classList.add("volume-hidden");
+  volumeButton.classList.add("volume-hidden", "volume-button-over");
   volumeScreen.style.display = "block";
   setTimeout(() => {
     volumeScreen.style.opacity = "1";
@@ -650,7 +661,7 @@ function hideVolumeScreen() {
   volumeScreen.style.filter = "blur(10px)";
   setTimeout(() => {
     volumeScreen.style.display = "none";
-    volumeButton.classList.remove("volume-hidden");
+    volumeButton.classList.remove("volume-hidden", "volume-button-over");
   }, 300);
 }
 

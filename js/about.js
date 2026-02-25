@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <ul class="about-page-list list-2">
           <li class="about-page-block-list-item" data-text="XRISTINA IDX / ART DIRECTOR / ARTIST / AI IMAGE GENERATOR…&">XRISTINA IDX / ART DIRECTOR / ARTIST / AI IMAGE GENERATOR…&</li>
           <li class="about-page-block-list-item" data-text="AMIL_NITRRITE / 3D ARTIST / AI IMAGE GENERATOR…&">AMIL_NITRRITE / 3D ARTIST / AI IMAGE GENERATOR…&</li>
-          <li class="about-page-block-list-item" data-text="*ACU__238 + / SOUND ARTIST…&">*ACU__238 + / SOUND ARTIST…&</li>
+          <li class="about-page-block-list-item" data-text="。.:*dj soundhoe / SOUND ARTIST…&">。.:*dj soundhoe / SOUND ARTIST…&</li>
           <li class="about-page-block-list-item" data-text="ANDREY LOPATIN / WEB DESIGNER / GRAPHIC DESIGNER…&">ANDREY LOPATIN / WEB DESIGNER / GRAPHIC DESIGNER…&</li>
           <li class="about-page-block-list-item" data-text="SEMIK ZLO / MOBILE DESIGNER / GRAPHIC DESIGNER…&">SEMIK ZLO / MOBILE DESIGNER / GRAPHIC DESIGNER…&</li>
           <li class="about-page-block-list-item" data-text="O0000000J / ILLUSTRATOR…&">O0000000J / ILLUSTRATOR…&</li>

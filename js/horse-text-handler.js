@@ -108,6 +108,7 @@
 
     // 🔄 СИСТЕМА ОБНОВЛЕНИЯ ТЕКСТА: стабильная анимация + принудительная видимость
     const updateHorseText = (text, options = {}) => {
+        if (window.horseTextBlocked) return;
         const { duration = 0, force = true } = options;
         const horseTextEl = findHorseTextElement();
         if (!horseTextEl) return;

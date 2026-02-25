@@ -1005,6 +1005,7 @@ html {
   text-decoration: none;
   color: white;
   pointer-events: all;
+  margin-top: -20px;
 }
 
 /* ==============================
@@ -1310,10 +1311,15 @@ html {
   transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-/* Скрытый элемент громкости */
+/* Скрытый элемент громкости (кнопка остаётся кликабельной для закрытия по клику) */
 .volume-hidden {
   opacity: 0 !important;
-  pointer-events: none; /* Предотвращает взаимодействие со скрытым элементом */
+}
+
+/* Кнопка поверх экрана громкости, чтобы клик по «уху» закрывал экран */
+#volume-button.volume-button-over {
+  position: relative;
+  z-index: 1002;
 }
 
 /* Изображение на экране громкости */

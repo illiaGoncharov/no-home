@@ -1,5 +1,11 @@
 'use strict';
 const canvas = document.querySelector('.fluid, #fluid');
+
+// Если canvas не найден на странице — не запускаем WebGL
+if (!canvas) {
+    console.log('[Fluid] Canvas не найден, скрипт не запущен');
+} else {
+
 resizeCanvas();
 
 let config = {
@@ -1072,3 +1078,5 @@ window.addEventListener('load', function() {
     // Небольшая задержка, чтобы убедиться, что все инициализировано
     setTimeout(simulateInitialClick, 100);
 });
+
+} // Конец блока if (canvas)

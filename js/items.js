@@ -14,12 +14,12 @@ document.addEventListener("DOMContentLoaded", function () {
   // Добавляем класс активной ссылки к iPhone
   iphoneLink.classList.add("nav-items-link-now");
 
-  // Скрываем элемент .mp3 и показываем #items-content
+  // Скрываем элемент .mp3 и items-content до открытия
   mp3Element.style.display = "none";
-  itemsContent.style.display = "block";
+  itemsContent.style.display = "none"; // Скрыт по умолчанию
 
-  // Загружаем контент iPhone по умолчанию
-  loadContent("iphone-content");
+  // НЕ загружаем контент iPhone автоматически - только по клику на items
+  // loadContent("iphone-content");
 
   navLinks.forEach((link) => {
     link.addEventListener("click", function (event) {
@@ -152,10 +152,22 @@ jQuery(document).ready(function ($) {
     }
   }
 
+  // Флаг для отложенной загрузки контента
+  let itemsContentLoaded = false;
+
   // Функция для показа элементов и добавления стилей
   function showElements() {
     // Показываем элемент с классом .items-wrapper
     $(".items-wrapper").show();
+    
+    // Показываем items-content
+    $("#items-content").show();
+    
+    // Загружаем контент iPhone при первом открытии
+    if (!itemsContentLoaded) {
+      loadContent("iphone-content");
+      itemsContentLoaded = true;
+    }
 
     // Скрываем элемент с классом .nav-top и с классом .skeleton-button
     $(".nav-top").hide();
@@ -226,7 +238,7 @@ jQuery(document).ready(function ($) {
 
       // Загружаем контент для iphone-content
       fetch(
-        "https://nohome.cloud/wp-content/themes/blankslate/items/iphone-content.php"
+        "/wp-content/themes/blankslate/items/iphone-content.php"
       )
         .then((response) => response.text())
         .then((data) => {
@@ -345,7 +357,7 @@ function handleIphoneZoomClick() {
 
     // Загружаем контент для iphone-content
     fetch(
-      "https://nohome.cloud/wp-content/themes/blankslate/items/iphone-content.php"
+      "/wp-content/themes/blankslate/items/iphone-content.php"
     )
       .then((response) => response.text())
       .then((data) => {
@@ -470,7 +482,7 @@ function initializeBackpackScript() {
     const image = document.createElement("div");
     image.className = "image";
     const imageName = imageNames[index].replace(/ /g, "%20");
-    image.style.backgroundImage = `url(https://nohome.cloud/wp-content/themes/blankslate/files/items/backback/pieces/${imageName}.png)`;
+    image.style.backgroundImage = `url(/wp-content/themes/blankslate/files/items/backback/pieces/${imageName}.png)`;
     container.appendChild(image);
 
     const angle = Math.random() * Math.PI * 2;
@@ -695,7 +707,7 @@ function initializeLuggageScript() {
       const formData = new FormData();
       formData.append("file", file);
 
-      fetch("https://nohome.cloud/wp-content/themes/blankslate/upload.php", {
+      fetch("/wp-content/themes/blankslate/upload.php", {
         method: "POST",
         body: formData,
       })
@@ -899,7 +911,7 @@ function initializeIphoneScript() {
 
   emojiRange.addEventListener("input", function () {
     const value = parseInt(emojiRange.value) + 1;
-    emojiImg.src = `https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/emoji/${value}.png`;
+    emojiImg.src = `/wp-content/themes/blankslate/files/items/iphone/emoji/${value}.png`;
   });
 
   const passScreenEmergency = document.getElementById("pass-screen-emergency");
@@ -1068,7 +1080,7 @@ function initializeCameraScript() {
     for (let i = startIndex; i <= endIndex; i++) {
       const formattedNumber = formatImageNumber(i);
       const img = new Image();
-      img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+      img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
       preloadedImages[formattedNumber] = img;
     }
   }
@@ -1151,7 +1163,7 @@ function initializeCameraScript() {
         delete preloadedImages[formattedNumber];
       } else {
         img = new Image();
-        img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+        img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
       }
 
       img.alt = `Image ${formattedNumber}`;
@@ -1243,7 +1255,7 @@ function initializeCameraScript() {
   function createSideImage(index, className) {
     const img = document.createElement("img");
     const formattedNumber = formatImageNumber(index + 1);
-    img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+    img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
     img.alt = `Image ${formattedNumber}`;
     img.dataset.itemName = `${formattedNumber}.jpg`;
     img.dataset.index = index;
@@ -1254,7 +1266,7 @@ function initializeCameraScript() {
   function createMainImage(index) {
     const img = document.createElement("img");
     const formattedNumber = formatImageNumber(index + 1);
-    img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+    img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
     img.alt = `Image ${formattedNumber}`;
     img.dataset.itemName = `${formattedNumber}.jpg`;
     img.dataset.index = index;

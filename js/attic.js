@@ -57,7 +57,7 @@
     console.log('[Attic] Click #' + count);
 
     if (count <= 12 && window.atticState.cursor) {
-      var currentScale = 1 + (count * 0.2);
+      var currentScale = 1 + (count * count * 0.04);
       window.atticState.cursor.style.transform = 'translate(-50%, -50%) scale(' + currentScale + ')';
     } 
     else if (count === 13) {
@@ -70,17 +70,6 @@
         window.atticState.cursor.style.transform = 'translate(-50%, -50%) scale(500)';
         window.atticState.cursor.style.background = 'black';
         window.atticState.cursor.style.transition = 'all 0.3s ease-out';
-      }
-      
-      if (typeof window.showPlayerMode === 'function') {
-        window.showPlayerMode(true);
-      }
-      var playButton = document.querySelector('.play-stop');
-            if (playButton) {
-        var buttonText = playButton.textContent.trim().toLowerCase();
-        if (buttonText === 'play' || !buttonText.includes('stop')) {
-                playButton.click();
-        }
       }
       
       setTimeout(function() {

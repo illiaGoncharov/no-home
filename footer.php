@@ -9,7 +9,7 @@
 <!--script src="https://nohome.cloud/wp-content/themes/blankslate/js/nav-tools.js"></script-->
 <script src="/wp-content/themes/blankslate/js/about.js"></script>
 <script src="/wp-content/themes/blankslate/js/items.js"></script>
-<script src="https://nohome.cloud/wp-content/themes/blankslate/js/mp3.js"></script>
-<script  src="https://nohome.cloud/wp-content/themes/blankslate/files/test/fluid.js"></script>
+<script src="/wp-content/themes/blankslate/js/mp3.js"></script>
+<script src="/wp-content/themes/blankslate/files/test/fluid.js"></script>
 </body>
 </html>
