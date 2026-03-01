@@ -865,15 +865,15 @@ function initializeGolden() {
 
     const soundUrls = {
       doorSound:
-        "https://nohome.cloud/wp-content/themes/blankslate/files/golden-room/door.wav",
+        "/wp-content/themes/blankslate/files/golden-room/door.wav",
       ratSound:
-        "https://nohome.cloud/wp-content/themes/blankslate/files/golden-room/rat.wav",
+        "/wp-content/themes/blankslate/files/golden-room/rat.wav",
       doorLockSound:
-        "https://nohome.cloud/wp-content/themes/blankslate/files/golden-room/lock.wav",
+        "/wp-content/themes/blankslate/files/golden-room/lock.wav",
       ratSoundR:
-        "https://nohome.cloud/wp-content/themes/blankslate/files/golden-room/rat.wav",
+        "/wp-content/themes/blankslate/files/golden-room/rat.wav",
       lockSoundR:
-        "https://nohome.cloud/wp-content/themes/blankslate/files/golden-room/lock.wav",
+        "/wp-content/themes/blankslate/files/golden-room/lock.wav",
     };
 
     // Загружаем звуки только после взаимодействия

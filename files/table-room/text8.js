@@ -192,14 +192,31 @@ Thirst for clean water`
 
     function init() {
         poemElement = document.getElementById('currentPoem');
-        poemElement.addEventListener('click', changePoem);
+
+        // Смена стиха по скроллу колесиком (вниз) на всём экране окна
+        let scrollCooldown = false;
+        const windowRoom = document.getElementById('window-in-table-room');
+        if (windowRoom) {
+            windowRoom.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                if (e.deltaY > 0 && !scrollCooldown) {
+                    scrollCooldown = true;
+                    changePoem();
+                    setTimeout(() => { scrollCooldown = false; }, 800);
+                }
+            }, { passive: false });
+        }
 
         initSmoke();
 
         startAnimation();
     }
 
-    window.addEventListener('load', init);
+    if (document.readyState === 'complete') {
+        init();
+    } else {
+        window.addEventListener('load', init);
+    }
 
     window.addEventListener('resize', () => {
     if (camera) { // Check if the camera is defined
@@ -209,6 +226,3 @@ Thirst for clean water`
     }
     });
 }
-
-// Call the initializePoem function to start the animation
-initializePoem();

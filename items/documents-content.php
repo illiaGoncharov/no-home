@@ -78,9 +78,11 @@
 
     .mouse-spiral {
         position: absolute;
-        width: 16%;
-        top: 3%;
-        left: 24%;
+        width: 150%;
+        height: 150%;
+        top: -25%;
+        left: -25%;
+        object-fit: cover;
         animation: rotate 10s linear infinite;
     }
 
@@ -93,12 +95,18 @@
         }
     }
     .mouse-mask { 
-        -webkit-mask-image: url(https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/mouse/mask.png);
-        mask-image: url(https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/mouse/mask.png);
-        mask-size: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        -webkit-mask-image: url(/wp-content/themes/blankslate/files/items/diary/mouse/mask.png);
+        mask-image: url(/wp-content/themes/blankslate/files/items/diary/mouse/mask.png);
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
         width: 100%;
         height: 100%;
+        overflow: hidden;
     }
     .ice-square {
         height: 19.8%;
@@ -238,7 +246,7 @@
 </style>
 
 <div class="diary-wrapper">
-    <img class="diary-mask-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/diary-mask.png">
+    <img class="diary-mask-img" src="/wp-content/themes/blankslate/files/items/diary/diary-mask.png">
 
     <div class="diary-page-wrapper">
         <svg class="diary-mask-svg">
@@ -247,41 +255,41 @@
         </clipPath>
         </svg>
         <div class="mouse-wrapper diary-page">
-            <img class="diary-cover" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/mouse/background.png">
-            <img class="diary-cover" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/mouse/border.png">
-            <div class="mouse-mask"><img class="mouse-spiral" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/mouse/spiral.jpg"></div>
-            <img class="diary-cover" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/mouse/girl.png">
+            <img class="diary-cover" src="/wp-content/themes/blankslate/files/items/diary/mouse/background.png">
+            <img class="diary-cover" src="/wp-content/themes/blankslate/files/items/diary/mouse/border.png">
+            <div class="mouse-mask"><img class="mouse-spiral" src="/wp-content/themes/blankslate/files/items/diary/mouse/spiral.jpg"></div>
+            <img class="diary-cover" src="/wp-content/themes/blankslate/files/items/diary/mouse/girl.png">
         </div>
         <div class="peeps-wrapper diary-page" style="display:none;">
-        <video class="diary-cover" autoplay muted loop controlsList="nodownload noremote noduration noplaybackrate" preload="auto">
-            <source src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/peeps/00_%D0%92%D0%98%D0%94%D0%95%D0%9E.mp4" type="video/mp4">
+        <video class="diary-cover" muted loop controlsList="nodownload noremote noduration noplaybackrate" preload="none">
+            <source data-src="/wp-content/themes/blankslate/files/items/diary/peeps/00_%D0%92%D0%98%D0%94%D0%95%D0%9E.mp4" type="video/mp4">
                 Ваш браузер не поддерживает воспроизведение видео.
             </video>
         </div>
         <div class="desktop-wrapper diary-page" style="display:none;">
-            <img class="diary-cover desktop-main" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/000.jpg">
-            <img class="diary-cover desktop-pieces dp-1" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/1.png">
-            <img class="diary-cover desktop-pieces dp-2" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/2.png">
-            <img class="diary-cover desktop-pieces dp-3" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/3.png">
-            <img class="diary-cover desktop-pieces dp-4" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/4.png">
-            <img class="diary-cover desktop-pieces dp-5" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/5.png">
-            <img class="diary-cover desktop-pieces dp-6" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/6.png">
-            <img class="diary-cover" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/girls.png">
-            <img class="diary-cover sims" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/desktop/sims.png">
-        <img class="diary-cover desktop-square" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/iceberg/square.png">
+            <img class="diary-cover desktop-main" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/000.jpg">
+            <img class="diary-cover desktop-pieces dp-1" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/1.png">
+            <img class="diary-cover desktop-pieces dp-2" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/2.png">
+            <img class="diary-cover desktop-pieces dp-3" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/3.png">
+            <img class="diary-cover desktop-pieces dp-4" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/4.png">
+            <img class="diary-cover desktop-pieces dp-5" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/5.png">
+            <img class="diary-cover desktop-pieces dp-6" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/6.png">
+            <img class="diary-cover" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/girls.png">
+            <img class="diary-cover sims" data-src="/wp-content/themes/blankslate/files/items/diary/desktop/sims.png">
+        <img class="diary-cover desktop-square" data-src="/wp-content/themes/blankslate/files/items/diary/iceberg/square.png">
         </div>
         <div class="iceberg-wrapper diary-page" style="display:none;">
-        <img class="diary-cover" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/iceberg/iceberg-cover.png">
-        <img class="diary-cover ice-square" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/iceberg/square.png">
-        <img class="diary-cover ice-directions" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/iceberg/iceberg-directions.png">
-        <img class="diary-cover ice-items" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/iceberg/ice.png">
+        <img class="diary-cover" data-src="/wp-content/themes/blankslate/files/items/diary/iceberg/iceberg-cover.png">
+        <img class="diary-cover ice-square" data-src="/wp-content/themes/blankslate/files/items/diary/iceberg/square.png">
+        <img class="diary-cover ice-directions" data-src="/wp-content/themes/blankslate/files/items/diary/iceberg/iceberg-directions.png">
+        <img class="diary-cover ice-items" data-src="/wp-content/themes/blankslate/files/items/diary/iceberg/ice.png">
         </div>
         <div class="twins-wrapper diary-page" style="display:none;">
-            <video class="diary-cover" autoplay muted loop controlsList="nodownload noremote noduration noplaybackrate" preload="auto">
-            <source src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/twins/00_%D0%92%D0%98%D0%94%D0%95%D0%9E.mp4" type="video/mp4">
+            <video class="diary-cover" muted loop controlsList="nodownload noremote noduration noplaybackrate" preload="none">
+            <source data-src="/wp-content/themes/blankslate/files/items/diary/twins/00_%D0%92%D0%98%D0%94%D0%95%D0%9E.mp4" type="video/mp4">
             </video>
         </div>
-        <span class="middle-diary"><img class="clips" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/diary/clips.png"></span>
+        <span class="middle-diary"><img class="clips" src="/wp-content/themes/blankslate/files/items/diary/clips.png"></span>
         <button class="diary-page-prev"></button>
         <button class="diary-page-next"></button>
     </div>

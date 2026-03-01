@@ -14,7 +14,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background-image: url(https://nohome.cloud/wp-content/themes/blankslate/files/test/rain.png);
+    background-image: url(/wp-content/themes/blankslate/files/test/rain.png);
     animation: rain 0.9s linear infinite;
     pointer-events: none;
     mix-blend-mode: screen;
@@ -36,17 +36,17 @@
 </style>
 
 
-    <audio id="backpackSound" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/backpack.ogg"></audio>
-    <audio id="suitcaseSound" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/suitcase.ogg"></audio>
-    <audio id="outsideSound" loop src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/outside.ogg"></audio>
-    <audio id="lullabySound" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/lullaby.ogg"></audio>
+    <audio id="backpackSound" src="/wp-content/themes/blankslate/files/bedroom/backpack.ogg"></audio>
+    <audio id="suitcaseSound" src="/wp-content/themes/blankslate/files/bedroom/suitcase.ogg"></audio>
+    <audio id="outsideSound" loop src="/wp-content/themes/blankslate/files/bedroom/outside.ogg"></audio>
+    <audio id="lullabySound" src="/wp-content/themes/blankslate/files/bedroom/lullaby.ogg"></audio>
 
 <!-- ////////////// BEDROOM-MAIN ////////////////// -->
 
 <div id="bedroom-main" class="room-wrapper animated-display">
-    <img class="room-background-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/Room_1_4k_12-standard-width-3840px.jpg" alt="Room with a cave">
-    <img class="room-background-img darken-bedroom" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/bedroom-darken.jpg" alt="Room with a cave" style="opacity: 0;">
-    <img class="room-background-img silhouette" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/silhouette.jpg" alt="Room with a cave" style="opacity: 0;">
+    <img class="room-background-img" src="/wp-content/themes/blankslate/files/bedroom/Room_1_4k_12-standard-width-3840px.jpg" alt="Room with a cave">
+    <img class="room-background-img darken-bedroom" src="/wp-content/themes/blankslate/files/bedroom/bedroom-darken.jpg" alt="Room with a cave" style="opacity: 0;">
+    <img class="room-background-img silhouette" src="/wp-content/themes/blankslate/files/bedroom/silhouette.jpg" alt="Room with a cave" style="opacity: 0;">
 
     <svg class="object-overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 3840 2160" preserveAspectRatio="xMidYMid slice">
   <defs>
@@ -72,7 +72,7 @@
 <!-- ////////////// BACKPACK IN BEDROOM MAIN ////////////////// -->
 
 <div id="backpack-in-bedroom-room" class="room-wrapper animated-display" style="display: none;">
-    <img class="room-background-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/Room_1_4k_bag2-standard-width-3840px.jpg" alt="Backpack on a mattress in bedroom">
+    <img class="room-background-img" src="/wp-content/themes/blankslate/files/bedroom/Room_1_4k_bag2-standard-width-3840px.jpg" alt="Backpack on a mattress in bedroom">
 
     <svg class="object-overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 3840 2160" preserveAspectRatio="xMidYMid slice">
             <path class="overlay-svg backpack-close-overlay" d="M1993.25 507.893C2013.28 506.841 2029.45 507.306 2048.06 512.262C2084.71 522.021 2106.87 540.877 2123.59 560.843C2129.98 568.476 2135.9 576.911 2145.36 583.555C2171.96 602.248 2203.44 591.223 2226.92 627.208C2242.35 650.857 2248.41 677.927 2255.25 702.736C2267.09 745.622 2276.03 788.739 2287.64 831.64C2302.74 887.455 2328.49 942.928 2339.36 998.981C2346.35 1035.03 2344.48 1071.15 2342.99 1107.32C2340.8 1160.42 2334.01 1212.89 2324.21 1265.69C2317 1304.53 2308.9 1343.17 2294.55 1381.42C2277.84 1425.98 2255.56 1470.12 2234.26 1514.05C2224.42 1534.35 2211.24 1555.61 2205.34 1576.31C2201.54 1589.67 2204.91 1604.63 2204.75 1618.19C2204.25 1663.46 2204.25 1724.11 2170.02 1765.77C2149.16 1791.16 2114.3 1805.87 2068.19 1815.25C1993.34 1830.48 1829.64 1815.77 1759.56 1797.23C1739.34 1792.72 1722.74 1785.85 1703.66 1780.25C1677.86 1772.68 1650.8 1766.52 1625.38 1758.53C1595.69 1749.18 1573.13 1736.51 1546 1725.47C1533.43 1720.34 1518.56 1717.11 1505.97 1711.9C1445.77 1687.02 1408.37 1648.24 1388.55 1608.45C1369.03 1569.29 1369.71 1525.9 1371.85 1485.53C1374.27 1440.04 1382.29 1394.88 1389.44 1349.57C1396.16 1306.99 1401.94 1264.25 1410.88 1221.79C1414.22 1205.97 1422.17 1190.48 1425.22 1174.72L1455.98 1016.59C1462.54 979.828 1466.18 942.472 1477.01 906.026C1482.26 888.377 1489.32 866.85 1504.35 850.91C1516.57 837.946 1539.83 829.925 1553.99 817.555C1575.41 798.839 1592.22 778.713 1611.25 759.245C1621.73 748.534 1634.06 738.519 1645.72 728.22C1668.26 708.314 1689.86 688.306 1718.08 670.707C1731.52 662.329 1746.41 654.376 1763.1 648.063C1789.72 637.999 1822.27 630.964 1842.55 616.401C1857.31 605.796 1865.56 592.638 1877.39 580.994C1897.57 561.124 1927.63 527.93 1960.83 515.317C1970.88 511.498 1981.69 509.633 1993.25 507.893ZM2235.79 937.544C2231.45 954.35 2230.36 971.604 2228.19 988.555Q2222.49 1032.52 2217.69 1076.51Q2206.83 1174.59 2203.02 1272.84Q2199.22 1371.09 2202.47 1469.34L2209.16 1455.5C2226.98 1413.7 2246.97 1371.51 2255.34 1328.71C2266.18 1273.3 2259.51 1215.98 2257.82 1160.33C2255.46 1082.67 2261.58 1014.83 2235.79 937.544ZM2013.96 551.274C1993.11 560.267 1955.57 582.595 1952.28 597.783C1951.67 600.602 1952.55 601.724 1955.38 603.978C1965.19 603.539 1974.69 602.191 1984.27 600.989L1987.34 600.576C2007.53 597.937 2028.99 598.755 2048.7 595.837C2052.37 591.122 2047.99 584.802 2044.82 580.263C2038.13 570.679 2027.87 559.545 2016 551.756L2013.96 551.274Z"/>
@@ -84,7 +84,7 @@
     <div class="row">
       <div class="col-12">
         <button id="arrow-left-backpack-bedroom" class="arrow-button arrow-left-button">
-            <img class="arrow arrow-left arrow-white" src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/arrow-right.png" alt="Left arrow">
+            <img class="arrow arrow-left arrow-white" src="/wp-content/themes/blankslate/files/nav/arrow-right.png" alt="Left arrow">
         </button>
       </div>
     </div>
@@ -95,7 +95,7 @@
 <!-- ////////////// SUITCASE IN BEDROOM ////////////////// -->
 
 <div id="suitcase-in-bedroom-room" class="room-wrapper animated-display" style="display: none;">
-    <img class="room-background-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/Room_1_4k_suitcase2-standard-width-3840px.jpg" alt="Suitcase in bedroom">
+    <img class="room-background-img" src="/wp-content/themes/blankslate/files/bedroom/Room_1_4k_suitcase2-standard-width-3840px.jpg" alt="Suitcase in bedroom">
 
     <svg class="object-overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 3840 2160" preserveAspectRatio="xMidYMid slice">
 <defs>
@@ -118,7 +118,7 @@
     <div class="row">
       <div class="col-12">
         <button id="arrow-left-suitcase-bedroom" class="arrow-button arrow-left-button">
-            <img class="arrow arrow-left arrow-white" src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/arrow-right.png" alt="Left arrow">
+            <img class="arrow arrow-left arrow-white" src="/wp-content/themes/blankslate/files/nav/arrow-right.png" alt="Left arrow">
         </button>
       </div>
     </div>
@@ -128,7 +128,7 @@
 <!-- ////////////// OUTSIDE  ////////////////// -->
 
 <div id="outside-in-bedroom-room" class="room-wrapper animated-display hide-elements" style="display: none;">
-    <img class="room-background-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/bedroom/Room_1_4k_Window_2_.jpg" alt="The outside">
+    <img class="room-background-img" src="/wp-content/themes/blankslate/files/bedroom/Room_1_4k_Window_2_.jpg" alt="The outside">
 <div class="rain"></div>
 
 
@@ -137,7 +137,7 @@
     <div class="row">
       <div class="col-12">
         <button id="arrow-left-outside-bedroom" class="arrow-button arrow-left-button">
-            <img class="arrow arrow-left arrow-white" src="https://nohome.cloud/wp-content/themes/blankslate/files/nav/arrow-right.png" alt="Left arrow">
+            <img class="arrow arrow-left arrow-white" src="/wp-content/themes/blankslate/files/nav/arrow-right.png" alt="Left arrow">
         </button>
       </div>
     </div>
@@ -222,6 +222,7 @@ function bedroomUpdateText(text) {
         console.error('Ошибка при обновлении текста:', e);
     }
 }
+window.bedroomUpdateText = bedroomUpdateText;
 
 // Вспомогательная функция для поиска элементов по нескольким селекторам
 function findElement(selectors) {
@@ -274,6 +275,7 @@ function initializeBedroomInteractions() {
     let isAnimating = false;
 
     function toggleVisibility(hide, show) {
+        if (!hide || !show) return;
         if (isAnimating) return;
         isAnimating = true;
 
@@ -295,48 +297,27 @@ function initializeBedroomInteractions() {
 
     // Обработчики hover-эффектов для текста в пультике
     
-    // Рюкзак - hover и click эффекты
+    // Приближение (клик по рюкзаку/чемодану) обрабатывается в items.js через делегирование на document.
+
+    // Hover по рюкзаку и чемодану (если элементы уже в DOM при инициализации)
     if (elements.backpackOverlay) {
-        // Hover
         elements.backpackOverlay.addEventListener('mouseenter', function() {
             bedroomUpdateText(BACKPACK_HOVER_TEXT);
         });
-        
         elements.backpackOverlay.addEventListener('mouseleave', function() {
-            // Не сбрасываем текст, если вошли в детальный режим
             if (!(window.bedroomState && window.bedroomState.inDetailView)) {
                 bedroomUpdateText(DEFAULT_TEXT);
             }
         });
-        
-        // Click
-        elements.backpackOverlay.addEventListener('click', function() {
-            // Входим в детальный режим — фиксируем, чтобы hover не сбивал текст
-            if (window.bedroomState) window.bedroomState.inDetailView = true;
-            toggleVisibility(elements.bedroomMain, elements.backpackInBedroomRoom);
-            bedroomUpdateText(BACKPACK_CLICK_TEXT);
-        });
     }
-    
-    // Чемодан - hover и click эффекты
     if (elements.suitcaseOverlay) {
-        // Hover
         elements.suitcaseOverlay.addEventListener('mouseenter', function() {
             bedroomUpdateText(SUITCASE_HOVER_TEXT);
         });
-        
         elements.suitcaseOverlay.addEventListener('mouseleave', function() {
-            // Не сбрасываем текст, если вошли в детальный режим
             if (!(window.bedroomState && window.bedroomState.inDetailView)) {
                 bedroomUpdateText(DEFAULT_TEXT);
             }
-        });
-        
-        // Click
-        elements.suitcaseOverlay.addEventListener('click', function() {
-            if (window.bedroomState) window.bedroomState.inDetailView = true;
-            toggleVisibility(elements.bedroomMain, elements.suitcaseInBedroomRoom);
-            bedroomUpdateText(SUITCASE_CLICK_TEXT);
         });
     }
     
@@ -364,35 +345,22 @@ function initializeBedroomInteractions() {
         });
     }
 
-    elements.backpackCloseOverlay.addEventListener('click', () => {
-        sounds.backpackSound.play();
-        // Обновляем текст в пультике при клике на рюкзак
-        bedroomUpdateText(BACKPACK_CLICK_TEXT);
-        
-        // Открываем backpack (items панель)
-        if (typeof window.showElements === 'function') {
-            window.showElements();
-        }
-        if (typeof loadContent === 'function') {
-            loadContent('backpack-content');
-        }
-        console.log('📦 Рюкзак открыт из спальни');
-    });
+    // Открытие items с капчей обрабатывается в items.js (делегирование на document)
+    if (elements.backpackCloseOverlay) {
+        elements.backpackCloseOverlay.addEventListener('click', () => {
+            if (sounds.backpackSound) sounds.backpackSound.play();
+            bedroomUpdateText(BACKPACK_CLICK_TEXT);
+            console.log('📦 Рюкзак открыт из спальни');
+        });
+    }
 
-    elements.suitcaseCloseOverlay.addEventListener('click', () => {
-        sounds.suitcaseSound.play();
-        // Обновляем текст в пультике при клике на чемодан
-        bedroomUpdateText(SUITCASE_CLICK_TEXT);
-        
-        // Открываем luggage (items панель)
-        if (typeof window.showElements === 'function') {
-            window.showElements();
-        }
-        if (typeof loadContent === 'function') {
-            loadContent('luggage-content');
-        }
-        console.log('🧳 Чемодан открыт из спальни');
-    });
+    if (elements.suitcaseCloseOverlay) {
+        elements.suitcaseCloseOverlay.addEventListener('click', () => {
+            if (sounds.suitcaseSound) sounds.suitcaseSound.play();
+            bedroomUpdateText(SUITCASE_CLICK_TEXT);
+            console.log('🧳 Чемодан открыт из спальни');
+        });
+    }
 
         // Кнопки возврата - сбрасываем состояние детального просмотра
     if (buttons.arrowLeftBackpackBedroom) {
@@ -635,6 +603,7 @@ function loadHorseTextHandler() {
 */
 
 // Обычная инициализация при загрузке DOM
+window.initializeBedroomInteractions = initializeBedroomInteractions;
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM загружен, инициализируем bedroom interactions');
     initializeBedroomInteractions();
@@ -644,5 +613,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-<script src="https://nohome.cloud/wp-content/themes/blankslate/files/captcha/captcha.js"></script>
 <!-- /wp:html -->

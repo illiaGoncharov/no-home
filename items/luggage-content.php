@@ -195,14 +195,14 @@
     }
 
     .upload-mb {
-        color: #9f9f9f;
-        filter: blur(1px);
+        color: #c0c0c0;
+        filter: blur(0.5px);
     }
     
     .upload-text {
         font-size: 2.5rem;
-        color: #7a7a7a;
-        filter: blur(1px);
+        color: #d0d0d0;
+        filter: blur(0.5px);
     }
     
     /* НОВЫЕ СТИЛИ для знаков вопроса - заменяют предыдущие */
@@ -326,24 +326,24 @@
     </div>
     </div>
     <div class="luggage-container left">
-        <div class="cell"><img data-item-name="-sleeping bag-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object8.png" alt="Image 1"></div>
-        <div class="cell"><img data-item-name="-camping mat-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object10.png" alt="Image 2"></div>
-        <div class="cell"><img data-item-name="-quadrobiс set-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object7.png" alt="Image 3"></div>
-        <div class="cell"><img data-item-name="-emergency bandage-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object3.png" alt="Image 4"></div>
-        <div class="cell"><img data-item-name="-shoes-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object9.png" alt="Image 5"></div>
-        <div class="cell"><img data-item-name="-outdoor folding chair-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object13.png" alt="Image 6"></div>
-        <div class="cell"><img data-item-name="-waterproof pillow-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object11.png" alt="Image 7"></div>
-        <div class="cell"><img data-item-name="-trail flip-flops-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object14.png" alt="Image 8"></div>
+        <div class="cell"><img data-item-name="-sleeping bag-" src="/wp-content/themes/blankslate/files/items/luggage/object8.png" alt="Image 1"></div>
+        <div class="cell"><img data-item-name="-camping mat-" src="/wp-content/themes/blankslate/files/items/luggage/object10.png" alt="Image 2"></div>
+        <div class="cell"><img data-item-name="-quadrobiс set-" src="/wp-content/themes/blankslate/files/items/luggage/object7.png" alt="Image 3"></div>
+        <div class="cell"><img data-item-name="-emergency bandage-" src="/wp-content/themes/blankslate/files/items/luggage/object3.png" alt="Image 4"></div>
+        <div class="cell"><img data-item-name="-shoes-" src="/wp-content/themes/blankslate/files/items/luggage/object9.png" alt="Image 5"></div>
+        <div class="cell"><img data-item-name="-outdoor folding chair-" src="/wp-content/themes/blankslate/files/items/luggage/object13.png" alt="Image 6"></div>
+        <div class="cell"><img data-item-name="-waterproof pillow-" src="/wp-content/themes/blankslate/files/items/luggage/object11.png" alt="Image 7"></div>
+        <div class="cell"><img data-item-name="-trail flip-flops-" src="/wp-content/themes/blankslate/files/items/luggage/object14.png" alt="Image 8"></div>
     </div>
 
     <div class="luggage-container right">
-        <div class="cell"><img data-item-name="-sleep mask-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object2.png" alt="Image 1"></div>
-        <div class="cell"><img data-item-name="-thermal underwear-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object4.png" alt="Image 2"></div>
-        <div class="cell"><img data-item-name="-t-shirt-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object5.png" alt="Image 3"></div>
-        <div class="cell"><img data-item-name="-thermal sweatshirt-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object12.png" alt="Image 4"></div>
-        <div class="cell"><img data-item-name="-microfibre towel-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object6.png" alt="Image 5"></div>
-        <div class="cell"><img data-item-name="-socks set-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object15.png" alt="Image 6"></div>
-        <div class="cell"><img data-item-name="-panty shorts-" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/luggage/object1.png" alt="Image 7"></div>
+        <div class="cell"><img data-item-name="-sleep mask-" src="/wp-content/themes/blankslate/files/items/luggage/object2.png" alt="Image 1"></div>
+        <div class="cell"><img data-item-name="-thermal underwear-" src="/wp-content/themes/blankslate/files/items/luggage/object4.png" alt="Image 2"></div>
+        <div class="cell"><img data-item-name="-t-shirt-" src="/wp-content/themes/blankslate/files/items/luggage/object5.png" alt="Image 3"></div>
+        <div class="cell"><img data-item-name="-thermal sweatshirt-" src="/wp-content/themes/blankslate/files/items/luggage/object12.png" alt="Image 4"></div>
+        <div class="cell"><img data-item-name="-microfibre towel-" src="/wp-content/themes/blankslate/files/items/luggage/object6.png" alt="Image 5"></div>
+        <div class="cell"><img data-item-name="-socks set-" src="/wp-content/themes/blankslate/files/items/luggage/object15.png" alt="Image 6"></div>
+        <div class="cell"><img data-item-name="-panty shorts-" src="/wp-content/themes/blankslate/files/items/luggage/object1.png" alt="Image 7"></div>
 		<div class="upload-button">
 			<button id="upload-button">
                <!-- <img id="uploaded-img" src="/wp-content/themes/blankslate/files/items/luggage/upload.png" alt="Image 8"> -->

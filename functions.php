@@ -77,7 +77,7 @@ add_action('wp_ajax_nopriv_load_page_content', 'load_page_content');
  */
 function load_items_content() {
     $content = sanitize_text_field($_POST['content']);
-    $file_path = get_template_directory() . "https://nohome.cloud/wp-content/themes/blankslate/items/{$content}-content.php";
+    $file_path = get_template_directory() . "/items/{$content}-content.php";
     
     if (file_exists($file_path)) {
         include($file_path);

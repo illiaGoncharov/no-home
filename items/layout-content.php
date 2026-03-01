@@ -1,7 +1,7 @@
 <div class="items-wrapper">
     <div class="items-background">
-        <img class="noise-blik" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/blik.png">
-        <img class="noise-blik" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/noise.png">
+        <img class="noise-blik" src="/wp-content/themes/blankslate/files/items/blik.png">
+        <img class="noise-blik" src="/wp-content/themes/blankslate/files/items/noise.png">
     </div>
 
     <!-- Навигация по разделам -->
@@ -17,7 +17,7 @@
 	  <a id="exit" href="#">-exit-</a>
 
     <div class="items-hi">
-        <img src="https://nohome.cloud/wp-content/themes/blankslate/files/items/items-hi.png" alt="Horse Indicator">
+        <img src="/wp-content/themes/blankslate/files/items/items-hi.png" alt="Horse Indicator">
         <div class="items-hi-wrapper">
             <div class="items-hi-text">My dirty stuff</div>
         </div>
@@ -58,7 +58,7 @@
           background-color: #000;
           display: flex;
           flex-wrap: nowrap;
-          background-image: url('https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/tileable_pattern.jpg'); /* Add the path to your pattern */
+          background-image: url('/wp-content/themes/blankslate/files/items/mp3/tileable_pattern.jpg'); /* Add the path to your pattern */
           background-repeat: repeat;
           background-size: auto;
           animation: shake 0.01s ease-in-out infinite;
@@ -485,7 +485,7 @@
           background-color: #000;
           display: flex;
           flex-wrap: nowrap;
-          background-image: url('https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/tileable_pattern.jpg');
+          background-image: url('/wp-content/themes/blankslate/files/items/mp3/tileable_pattern.jpg');
           background-repeat: repeat;
           background-size: auto;
           animation: shake 0.01s ease-in-out infinite;
@@ -874,8 +874,8 @@
         data-side="1"
         data-order="1"
         data-song-hashtag="#web_surfing"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/into%20the%20night.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%201/floating-into-the-night.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/into%20the%20night.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%201/floating-into-the-night.ogg">
       </audio>
 
       <audio
@@ -885,8 +885,8 @@
         data-side="1"
         data-order="2"
         data-song-hashtag="#doorbell_invasion"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/youareyes.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%201/youareyes.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/youareyes.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%201/youareyes.ogg">
       </audio>
 
       <audio
@@ -896,8 +896,8 @@
         data-side="1"
         data-order="3"
         data-song-hashtag="#12345678_omg"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/yourerror.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%201/yourerror.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/yourerror.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%201/yourerror.ogg">
       </audio>
 
       <audio
@@ -907,8 +907,8 @@
         data-side="1"
         data-order="4"
         data-song-hashtag="#without_mouth"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/a%20creepy%20storm.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%201/a-creepy-storm.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/a%20creepy%20storm.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%201/a-creepy-storm.ogg">
       </audio>
 
       <audio
@@ -918,8 +918,8 @@
         data-side="1"
         data-order="5"
         data-song-hashtag="#trauma_zone"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/%20cross%20talk%20with%20notmytrauma.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%201/cross-talk-with-notmytrauma.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/%20cross%20talk%20with%20notmytrauma.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%201/cross-talk-with-notmytrauma.ogg">
       </audio>
 
       <!----------------------- SONGS SIDE 2 ---------------------------->
@@ -931,8 +931,8 @@
         data-side="2"
         data-order="1"
         data-song-hashtag="#am_i_asleep"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/lullaby.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%202/lullaby.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/lullaby.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%202/lullaby.ogg">
       </audio>
 
       <audio
@@ -942,8 +942,8 @@
         data-side="2"
         data-order="2"
         data-song-hashtag="#hold_ to_record"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/i%20looked%20up.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%202/i-looked-up.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/i%20looked%20up.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%202/i-looked-up.ogg">
       </audio>
 
       <audio
@@ -953,8 +953,8 @@
         data-side="2"
         data-order="3"
         data-song-hashtag="#scrrrrr***olllll"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/it_s%20a%20fine%20day.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%202/it_s-a-fine-day.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/it_s%20a%20fine%20day.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%202/it_s-a-fine-day.ogg">
       </audio>
 
       <audio
@@ -964,8 +964,8 @@
         data-side="2"
         data-order="4"
         data-song-hashtag="#and_and_and"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/thirst%20for%20clean%20water.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%202/thirst-for-clean-water-.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/thirst%20for%20clean%20water.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%202/thirst-for-clean-water-.ogg">
       </audio>
 
       <audio
@@ -975,15 +975,15 @@
         data-side="2"
         data-order="5"
         data-song-hashtag="#your_grid"
-        data-mp3-background-img="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/backgrounds/-.jpg"
-        src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/side%202/i-try-to-hear-an-explosion-both-here-and-there-.ogg">
+        data-mp3-background-img="/wp-content/themes/blankslate/files/items/mp3/backgrounds/-.jpg"
+        src="/wp-content/themes/blankslate/files/items/mp3/side%202/i-try-to-hear-an-explosion-both-here-and-there-.ogg">
       </audio>
 
       <div class="mp3-wrapper">
         <div class="mp3-vhs-wrapper"></div>
 
         <div class="mp3-background-wrapper">
-            <img class="mp3-background-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/empty.png" alt="MP3 Background">
+            <img class="mp3-background-img" src="/wp-content/themes/blankslate/files/items/mp3/empty.png" alt="MP3 Background">
         </div>
 
         <div class="mp3-controls">
@@ -1006,8 +1006,8 @@
             <div class="progress-circle"></div>
           </div>
           <div class="disk-wrapper">
-            <img class="cd" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/cd.png">
-            <img class="ice" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/mp3/ice.png">
+            <img class="cd" src="/wp-content/themes/blankslate/files/items/mp3/cd.png">
+            <img class="ice" src="/wp-content/themes/blankslate/files/items/mp3/ice.png">
           </div>
           <div class="block-side-1">
             <div class="now-playing side-1">

@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
         for (let i = startIndex; i <= endIndex; i++) {
             const formattedNumber = formatImageNumber(i);
             const img = new Image();
-            img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+            img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
             preloadedImages[formattedNumber] = img;
         }
     }
@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 delete preloadedImages[formattedNumber];
             } else {
                 img = new Image();
-                img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+                img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
             }
 
             img.alt = `Image ${formattedNumber}`;
@@ -447,7 +447,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function createSideImage(index, className) {
         const img = document.createElement('img');
         const formattedNumber = formatImageNumber(index + 1);
-        img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+        img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
         img.alt = `Image ${formattedNumber}`;
         img.dataset.itemName = `${formattedNumber}.jpg`;
         img.dataset.index = index;
@@ -458,7 +458,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function createMainImage(index) {
         const img = document.createElement('img');
         const formattedNumber = formatImageNumber(index + 1);
-        img.src = `https://nohome.cloud/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
+        img.src = `/wp-content/themes/blankslate/files/table-room/camera/${formattedNumber}.jpg`;
         img.alt = `Image ${formattedNumber}`;
         img.dataset.itemName = `${formattedNumber}.jpg`;
         img.dataset.index = index;

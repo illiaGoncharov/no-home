@@ -26,7 +26,7 @@ document.querySelectorAll('a').forEach(function(link) {
       });
       if (!videoToPlay.querySelector('source')) {
         var source = document.createElement('source');
-        source.src = 'https://nohome.cloud/wp-content/themes/blankslate/files/attic/' + id.replace(/-/g, '_') + '.mp4';
+        source.src = '/wp-content/themes/blankslate/files/attic/' + id.replace(/-/g, '_') + '.mp4';
         source.type = 'video/mp4';
         videoToPlay.appendChild(source);
         player.load();

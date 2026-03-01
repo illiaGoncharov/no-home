@@ -133,22 +133,24 @@ document.addEventListener("DOMContentLoaded", function () {
         </ul>
       `;
 
-      // Оптимизация обработки клика
-      const debouncedToggle = debounce(() => {
-        try {
-          if (
-            secondListItem.innerHTML === secondListItem.dataset.originalText
-          ) {
-            secondListItem.innerHTML = newText;
-          } else {
-            secondListItem.innerHTML = secondListItem.dataset.originalText;
-          }
-        } catch (error) {
-          console.error("Error toggling x-ray content:", error);
+      // Синхронизация списка с фактическим состоянием X-Ray в DOM
+      function syncWithXray() {
+        const xrayWrapper = document.querySelector('.x-ray-wrapper');
+        const isXrayOn = xrayWrapper && xrayWrapper.classList.contains('xray-active');
+        if (isXrayOn) {
+          secondListItem.innerHTML = newText;
+        } else {
+          secondListItem.innerHTML = secondListItem.dataset.originalText;
         }
-      }, 100);
+      }
 
-      xrayButton.addEventListener("click", debouncedToggle, { passive: true });
+      // При загрузке: ждём пока nav-tools.js выставит класс xray-active
+      setTimeout(syncWithXray, 200);
+
+      // При клике: ждём пока nav-tools.js переключит класс, потом синхронизируемся
+      xrayButton.addEventListener("click", () => {
+        setTimeout(syncWithXray, 200);
+      }, { passive: true });
     }
   } catch (error) {
     console.error("Error in about.js initialization:", error);

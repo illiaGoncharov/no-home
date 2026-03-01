@@ -95,7 +95,7 @@
 </style>
 
 <div class="backpack-wrapper">
-    <img class="youwillbeokay" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/backback/youwillbeokay.png">
+    <img class="youwillbeokay" src="/wp-content/themes/blankslate/files/items/backback/youwillbeokay.png">
     <div id="backpack-container"></div>
 </div>
 <div class="backpack-items-name"></div>

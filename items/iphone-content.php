@@ -1,5 +1,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/2.1.3/parallax.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/parallax-emoji.css">
+<link rel="stylesheet" type="text/css" href="/wp-content/themes/blankslate/files/items/iphone/parallax-emoji.css">
 <style>
     .cables {
         opacity: 1;
@@ -409,32 +409,32 @@
 </style>
 
 <div class="iphone-background">
-    <img class="noise-blik cables" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/cables.png">
+    <img class="noise-blik cables" src="/wp-content/themes/blankslate/files/items/cables.png">
 </div>
 
 <div class="sticker-info-i">
     <span class="sticker-data-i">ϲ๏𝙧єarea:\𝓷ѻℍѻოⲉ\survival𖥻៹guides.pdf"</span>
     <span class="sticker-info-exit-i">-exit-</span>
-    <img class="sticker-info-img-1" src="https://nohome.cloud/wp-content/themes/blankslate/files/main-page/survival%20guides.jpg">
-    <img class="sticker-info-img-2" src="https://nohome.cloud/wp-content/themes/blankslate/files/main-page/survivalguides2.jpg">
-    <a class="sticker-info-link-i" href="https://nohome.cloud/wp-content/themes/blankslate/files/main-page/survival_guide_pdf.pdf" target="_blank">download</a>
+    <img class="sticker-info-img-1" src="/wp-content/themes/blankslate/files/main-page/survival%20guides.jpg">
+    <img class="sticker-info-img-2" src="/wp-content/themes/blankslate/files/main-page/survivalguides2.jpg">
+    <a class="sticker-info-link-i" href="/wp-content/themes/blankslate/files/main-page/survival_guide_pdf.pdf" target="_blank">download</a>
     <button class="sticker-info-next-i">></button>
     <button class="sticker-info-prev-i"><</button>
 </div>
 
 <div class="iphone-container">
-    <audio id="notification-sound" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/iphone.ogg" preload="auto"></audio>
+    <audio id="notification-sound" src="/wp-content/themes/blankslate/files/items/iphone/iphone.ogg" preload="auto"></audio>
     <div class="lockscreen">
-        <img class="lockscreen-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/lockscreen-img.png">
+        <img class="lockscreen-img" src="/wp-content/themes/blankslate/files/items/iphone/lockscreen-img.png">
         <button id="notification">
-            <img class="iphone-notification" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/notification.png">
+            <img class="iphone-notification" src="/wp-content/themes/blankslate/files/items/iphone/notification.png">
         </button>
         <div id="date"></div>
         <div id="time"></div>
         <button id="lockscreen-left"></button>
         <button id="lockscreen-right"></button>
         <div class="right-emoji">
-            <img class="emoji" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/emoji/1.png" id="emoji-img">
+            <img class="emoji" src="/wp-content/themes/blankslate/files/items/iphone/emoji/1.png" id="emoji-img">
             <input type="range" min="0" max="4" step="1" id="emoji-range">
         </div>
         <div class="left-emoji">
@@ -459,7 +459,7 @@
     </div>
 
     <div class="pass-screen" style="display:none;">
-        <img class="pass-screen-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/pass-screen.png">
+        <img class="pass-screen-img" src="/wp-content/themes/blankslate/files/items/iphone/pass-screen.png">
         <svg class="pass-numbers" viewBox="0 0 412 822" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g class="stars" filter="url(#filter2_b_4282_6482)">
             <path d="M108 218.968L109.967 222.227L110.068 222.396L110.258 222.45L113.817 223.463L111.476 226.547L111.366 226.692L111.375 226.874L111.575 230.803L108.191 229.403L108 229.324L107.809 229.403L104.425 230.803L104.625 226.874L104.634 226.692L104.524 226.547L102.183 223.463L105.742 222.45L105.932 222.396L106.033 222.227L108 218.968Z" stroke="#E7E7E7" stroke-opacity="0.6"/>
@@ -486,7 +486,7 @@
 
     <div class="apps-screen" style="display:none;">
 
-   <img class="apps-screen-img" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/apps-screen.png">
+   <img class="apps-screen-img" src="/wp-content/themes/blankslate/files/items/iphone/apps-screen.png">
 
 
     <div class="iphone-links">
@@ -503,22 +503,22 @@
     <div class="image-container">
         <div class="clock-widget">
             <video loop muted playsinline>
-                <source src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/clock-widget.mp4" type="video/mp4">
+                <source src="/wp-content/themes/blankslate/files/items/iphone/clock-widget.mp4" type="video/mp4">
             </video>
         </div>
         <div class="touch-id">
             <video loop muted playsinline>
-                <source src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/touch-id.mp4" type="video/mp4">
+                <source src="/wp-content/themes/blankslate/files/items/iphone/touch-id.mp4" type="video/mp4">
             </video>
         </div>
         <div class="apps-bar">
             <video loop muted playsinline>
-                <source src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/apps-bar.mp4" type="video/mp4">
+                <source src="/wp-content/themes/blankslate/files/items/iphone/apps-bar.mp4" type="video/mp4">
             </video>
         </div>
         <div class="eye-widget">
             <video loop muted playsinline>
-                <source src="https://nohome.cloud/wp-content/themes/blankslate/files/items/iphone/eye-widget.mp4" type="video/mp4">
+                <source src="/wp-content/themes/blankslate/files/items/iphone/eye-widget.mp4" type="video/mp4">
             </video>
         </div>
     </div>

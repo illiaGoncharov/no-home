@@ -157,6 +157,10 @@ jQuery(document).ready(function ($) {
 
   // Функция для показа элементов и добавления стилей
   function showElements() {
+    // Закрываем капчу при открытии items
+    if (typeof window.hideCaptcha === 'function') {
+      window.hideCaptcha();
+    }
     // Показываем элемент с классом .items-wrapper
     $(".items-wrapper").show();
     
@@ -284,36 +288,158 @@ window.hideCaptcha = function () {
   }
 };
 
+// Закрытие капчи по Escape
+document.addEventListener("keydown", function (e) {
+  if (e.key !== "Escape") return;
+  var captchaEl = document.getElementById("captcha");
+  if (captchaEl && captchaEl.style.display !== "none" && captchaEl.style.display !== "") window.hideCaptcha();
+});
+
+// Капча: загрузка данных из JSON и логика валидации
+(function () {
+  var captchaData = null;
+  var successTimeout = null;
+
+  // Нормализация URL к pathname для сравнения (JSON с относительными путями, img.src — полный URL)
+  function captchaPath(url) {
+    if (!url) return "";
+    try {
+      return url.indexOf("http") === 0 ? new URL(url).pathname : url;
+    } catch (e) {
+      return url;
+    }
+  }
+
+  window.initializeCaptcha = function () {
+    if (!captchaData) {
+      fetch('/wp-content/themes/blankslate/files/captcha/captcha.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          captchaData = data;
+          setupCaptchaRound(data);
+        })
+        .catch(function (err) {
+          console.error('Captcha JSON load error:', err);
+        });
+    } else {
+      setupCaptchaRound(captchaData);
+    }
+  };
+
+  function setupCaptchaRound(data) {
+    if (successTimeout) {
+      clearTimeout(successTimeout);
+      successTimeout = null;
+    }
+    var captchaPics = document.querySelectorAll('.captcha-pic');
+    var skipButton = document.getElementById('skip-captcha');
+    var selectedImages = new Set();
+    var incorrectSelections = 0;
+    var currentCaptcha = data[Math.floor(Math.random() * data.length)];
+
+    var redEl = document.querySelector('.captcha-choose .captcha-red');
+    var descEl = document.querySelector('.captcha-description');
+    var textEl = document.querySelector('.captcha-text');
+    if (redEl) redEl.textContent = currentCaptcha.question;
+    if (descEl) descEl.textContent = currentCaptcha.description;
+    if (textEl) textEl.textContent = currentCaptcha.text;
+
+    captchaPics.forEach(function (pic, index) {
+      var img = pic.querySelector('img');
+      if (img && currentCaptcha.images[index]) img.src = currentCaptcha.images[index];
+      pic.classList.remove('correct', 'incorrect');
+
+      // Клонируем, чтобы сбросить старые обработчики
+      var newPic = pic.cloneNode(true);
+      pic.parentNode.replaceChild(newPic, pic);
+      captchaPics[index] = newPic;
+
+      newPic.addEventListener('click', function () {
+        var imgSrc = newPic.querySelector('img').src;
+        var imgPath = captchaPath(imgSrc);
+        var isCorrect = false;
+
+        if (currentCaptcha.correct_answer === 'any') {
+          isCorrect = true;
+        } else if (currentCaptcha.correct_answer === 'none') {
+          isCorrect = false;
+        } else if (Array.isArray(currentCaptcha.correct_answer)) {
+          isCorrect = currentCaptcha.correct_answer.some(function (a) { return captchaPath(a) === imgPath; });
+        } else {
+          isCorrect = captchaPath(currentCaptcha.correct_answer) === imgPath;
+        }
+
+        if (isCorrect) {
+          newPic.classList.add('correct');
+          selectedImages.add(index);
+        } else {
+          newPic.classList.add('incorrect');
+          incorrectSelections++;
+          if (successTimeout) {
+            clearTimeout(successTimeout);
+            successTimeout = null;
+          }
+          setTimeout(function () { setupCaptchaRound(data); }, 1000);
+          return;
+        }
+
+        // «none» — все картинки неправильные, нужно было нажать skip
+        if (currentCaptcha.correct_answer === 'none' && incorrectSelections === 4) {
+          setTimeout(function () { setupCaptchaRound(data); }, 1000);
+          return;
+        }
+
+        // Проверяем, все ли правильные выбраны
+        var allCorrect = false;
+        if (currentCaptcha.correct_answer === 'any') {
+          allCorrect = true;
+        } else         if (currentCaptcha.correct_answer !== 'none') {
+          var correctArr = Array.isArray(currentCaptcha.correct_answer)
+            ? currentCaptcha.correct_answer
+            : [currentCaptcha.correct_answer];
+          var selectedPaths = Array.from(selectedImages).map(function (i) {
+            return captchaPath(captchaPics[i].querySelector('img').src);
+          });
+          allCorrect = correctArr.every(function (a) { return selectedPaths.indexOf(captchaPath(a)) !== -1; });
+        }
+
+        if (allCorrect) {
+          successTimeout = setTimeout(function () {
+            successTimeout = null;
+            if (typeof window.onCaptchaSuccess === 'function') {
+              window.onCaptchaSuccess();
+            }
+          }, 1000);
+        }
+      });
+    });
+
+    // Skip — при «none» это правильный ответ, иначе показываем новый раунд
+    if (skipButton) {
+      var newSkip = skipButton.cloneNode(true);
+      skipButton.parentNode.replaceChild(newSkip, skipButton);
+      newSkip.addEventListener('click', function () {
+        if (currentCaptcha.correct_answer === 'none') {
+          if (typeof window.onCaptchaSuccess === 'function') {
+            window.onCaptchaSuccess();
+          }
+        } else {
+          setupCaptchaRound(data);
+        }
+      });
+    }
+  }
+})();
+
 window.showCaptcha = function (successCallback) {
   const captchaElement = document.getElementById("captcha");
   if (captchaElement) {
     captchaElement.style.display = "flex";
-    // Сохраняем callback для использования после успешного прохождения капчи
     window.currentCaptchaAction = successCallback;
-    // Вызываем функцию инициализации капчи
     if (typeof initializeCaptcha === 'function') {
       initializeCaptcha();
     } else {
-      // ПРОСТАЯ заглушка если функция не найдена
-      console.log('🎯 Captcha initialized (simple mode)');
-      
-      // Добавляем базовую логику кликов на картинки
-      const captchaPics = document.querySelectorAll('.captcha-pic');
-      captchaPics.forEach(pic => {
-        pic.addEventListener('click', function() {
-          pic.classList.toggle('correct');
-        });
-      });
-      
-      // Кнопка skip
-      const skipButton = document.getElementById('skip-captcha');
-      if (skipButton) {
-        skipButton.addEventListener('click', function() {
-          if (window.onCaptchaSuccess) {
-            window.onCaptchaSuccess();
-          }
-        });
-      }
+      console.error("initializeCaptcha not found");
     }
   } else {
     console.error("Captcha element not found");
@@ -377,43 +503,118 @@ document.addEventListener("click", function (event) {
   }
 });
 
-// Обработчик для рюкзака и чемодана - используем делегирование событий
-// чтобы работало даже когда элементы появляются динамически
-document.addEventListener("click", function(event) {
-  // Проверяем клик по рюкзаку (backpack-close-overlay)
-  if (event.target.closest(".backpack-close-overlay")) {
-    // Прямо вызываем функционал БЕЗ капчи
-    if (typeof showElements === 'function') {
-      showElements();
-    }
-    // Загружаем контент через общий безопасный загрузчик
-    loadContent("backpack-content");
-    console.log('📦 Рюкзак открыт из меню');
-  }
-  
-  // Проверяем клик по чемодану (suitcase-close-overlay)
-  if (event.target.closest(".suitcase-close-overlay")) {
-    // Прямо вызываем функционал БЕЗ капчи
-    if (typeof showElements === 'function') {
-      showElements();
-    }
-    // Загружаем контент через общий безопасный загрузчик
-    loadContent("luggage-content");
-    console.log('🧳 Чемодан открыт из меню');
+// Приближение (zoom) рюкзака и чемодана в спальне — делегирование на document,
+// чтобы работало и при подгрузке контента через AJAX (аналогично колонке в пещере)
+document.addEventListener("click", function(e) {
+  var t = e.target;
+  var isBackpack = t.id === "backpack-in-bedroom" || (t.closest && t.closest("#backpack-in-bedroom"));
+  var isSuitcase = t.id === "bag-in-bedroom" || (t.closest && t.closest("#bag-in-bedroom"));
+  if (!isBackpack && !isSuitcase) return;
+
+  var bedroomMain = document.getElementById("bedroom-main");
+  if (!bedroomMain) return;
+
+  if (isBackpack) {
+    var backpackRoom = document.getElementById("backpack-in-bedroom-room");
+    if (!backpackRoom) return;
+    e.preventDefault();
+    if (window.bedroomState) window.bedroomState.inDetailView = true;
+    bedroomMain.style.display = "none";
+    backpackRoom.style.display = "block";
+    if (typeof window.bedroomUpdateText === "function") window.bedroomUpdateText("press to secure/save/survive");
+  } else if (isSuitcase) {
+    var suitcaseRoom = document.getElementById("suitcase-in-bedroom-room");
+    if (!suitcaseRoom) return;
+    e.preventDefault();
+    if (window.bedroomState) window.bedroomState.inDetailView = true;
+    bedroomMain.style.display = "none";
+    suitcaseRoom.style.display = "block";
+    if (typeof window.bedroomUpdateText === "function") window.bedroomUpdateText("press to secure/save/survive");
   }
 });
 
-// Обработчик для динамика
-function handleSpeakerClick() {
-  const speakerElement = document.getElementById("speaker-to-mp3");
-  if (speakerElement) {
-    speakerElement.addEventListener("click", function () {
-      // Показываем капчу и передаем только showElements как callback
+// Обработчик для рюкзака и чемодана - используем делегирование событий
+// чтобы работало даже когда элементы появляются динамически
+document.addEventListener("click", function(event) {
+  // Проверяем клик по рюкзаку (backpack-close-overlay) — сначала капча
+  if (event.target.closest(".backpack-close-overlay")) {
+    if (typeof window.showCaptcha === 'function') {
       window.showCaptcha(function () {
-        showElements();
+        if (typeof showElements === 'function') showElements();
+        loadContent("backpack-content");
+        console.log('📦 Рюкзак открыт из меню');
       });
-    });
+    } else {
+      if (typeof showElements === 'function') showElements();
+      loadContent("backpack-content");
+    }
   }
+
+  // Проверяем клик по чемодану (suitcase-close-overlay) — сначала капча
+  if (event.target.closest(".suitcase-close-overlay")) {
+    if (typeof window.showCaptcha === 'function') {
+      window.showCaptcha(function () {
+        if (typeof showElements === 'function') showElements();
+        loadContent("luggage-content");
+        console.log('🧳 Чемодан открыт из меню');
+      });
+    } else {
+      if (typeof showElements === 'function') showElements();
+      loadContent("luggage-content");
+    }
+  }
+});
+
+// Обработчик для колонки (cave: gbl-speaker-room) — при клике открывает раздел mp3 в items.
+// Делегирование на document, чтобы работало и когда элемент #speaker-to-mp3 подгружен по AJAX (cave).
+function handleSpeakerClick() {
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (target.id !== "speaker-to-mp3" && !(target.closest && target.closest("#speaker-to-mp3"))) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    window.showCaptcha(function () {
+      // Показываем items-wrapper (без загрузки iPhone — иначе AJAX перезапишет mp3)
+      var wrapper = document.querySelector(".items-wrapper");
+      if (wrapper) wrapper.style.display = "block";
+
+      var navTop = document.querySelector(".nav-top");
+      if (navTop) navTop.style.display = "none";
+
+      var skelBtn = document.querySelector(".skeleton-button");
+      if (skelBtn) skelBtn.style.display = "none";
+
+      document.querySelectorAll("#content-to-blur > div, .main-page > div").forEach(function (el) {
+        if (getComputedStyle(el).display === "block") {
+          el.style.filter = "blur(15px) brightness(60%)";
+        }
+      });
+
+      var aboutPage = document.querySelector(".about-page-wrapper");
+      if (aboutPage) aboutPage.style.display = "none";
+
+      var aboutLink = document.getElementById("about-link");
+      if (aboutLink && aboutLink.textContent.trim() === "i") aboutLink.style.display = "none";
+
+      // Сразу показываем mp3, скрываем items-content
+      var mp3El = document.querySelector(".mp3");
+      var itemsCont = document.getElementById("items-content");
+      if (mp3El) mp3El.style.display = "block";
+      if (itemsCont) itemsCont.style.display = "none";
+
+      // Обновляем активную ссылку в навигации
+      var navLinks = document.querySelectorAll(".nav-items-link");
+      navLinks.forEach(function (l) { l.classList.remove("nav-items-link-now"); });
+      var mp3Link = document.getElementById("mp3-content");
+      if (mp3Link) mp3Link.classList.add("nav-items-link-now");
+
+      if (typeof initializeMp3Script === "function") {
+        initializeMp3Script();
+      }
+    });
+  }, true);
 }
 handleSpeakerClick();
 
@@ -838,8 +1039,10 @@ function initializeIphoneScript() {
     };
     const timeString = now.toLocaleTimeString("en-GB", timeOptions);
 
-    document.getElementById("date").innerHTML = dateString;
-    document.getElementById("time").innerHTML = timeString;
+    const dateEl = document.getElementById("date");
+    const timeEl = document.getElementById("time");
+    if (dateEl) dateEl.innerHTML = dateString;
+    if (timeEl) timeEl.innerHTML = timeString;
   }
 
   setInterval(updateDateTime, 30000);
@@ -899,11 +1102,10 @@ function initializeIphoneScript() {
     let notification = document.querySelector(".iphone-notification");
     if (notification) {
       notification.style.display = "block";
+      setTimeout(function () {
+        notification.classList.add("notification");
+      }, 10);
     }
-
-    setTimeout(function () {
-      notification.classList.add("notification");
-    }, 10);
   }, 2500);
 
   const emojiImg = document.getElementById("emoji-img");
@@ -1001,29 +1203,70 @@ function initializeDocumentsScript() {
   const prevButtons = document.querySelectorAll(".page-prev, .diary-page-prev");
   const nextButtons = document.querySelectorAll(".page-next, .diary-page-next");
   let currentPage = 0;
+  let isTransitioning = false;
+  let hideTimeouts = [];
 
-  function showPage(index) {
-    pages.forEach((page, i) => {
-      if (i === index) {
-        page.style.display = "block";
-        setTimeout(() => {
-          page.style.opacity = "1";
-        }, 50);
-      } else {
-        page.style.opacity = "0";
-        setTimeout(() => {
-          page.style.display = "none";
-        }, 500);
+  function lazyLoadPage(page) {
+    page.querySelectorAll("img[data-src]").forEach((img) => {
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+    });
+    page.querySelectorAll("source[data-src]").forEach((source) => {
+      source.src = source.dataset.src;
+      delete source.dataset.src;
+      const video = source.closest("video");
+      if (video) {
+        video.load();
+        video.play().catch(() => {});
       }
     });
   }
 
+  function showPage(index) {
+    // Отменяем все предыдущие таймауты скрытия
+    hideTimeouts.forEach((t) => clearTimeout(t));
+    hideTimeouts = [];
+
+    // Сначала мгновенно скрываем все неактивные страницы
+    pages.forEach((page, i) => {
+      if (i !== index) {
+        page.style.opacity = "0";
+        page.querySelectorAll("video").forEach((v) => v.pause());
+      }
+    });
+
+    // Показываем нужную страницу
+    const targetPage = pages[index];
+    if (targetPage) {
+      lazyLoadPage(targetPage);
+      targetPage.style.display = "block";
+      setTimeout(() => {
+        targetPage.style.opacity = "1";
+      }, 50);
+    }
+
+    // Скрываем остальные с задержкой на fade-out
+    const tid = setTimeout(() => {
+      pages.forEach((page, i) => {
+        if (i !== index) {
+          page.style.display = "none";
+        }
+      });
+      isTransitioning = false;
+    }, 500);
+    hideTimeouts.push(tid);
+
+    isTransitioning = true;
+  }
+
   function nextPage() {
+    if (isTransitioning) return;
     currentPage = (currentPage + 1) % pages.length;
     showPage(currentPage);
   }
 
   function prevPage() {
+    if (isTransitioning) return;
     currentPage = (currentPage - 1 + pages.length) % pages.length;
     showPage(currentPage);
   }
@@ -1980,20 +2223,34 @@ function initializeMp3Script() {
   setInterval(checkOverflow, 5000);
 }
 
-// Назначаем обработчики кликов на каждый nav-item
-document
-  .getElementById("backpack-content")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("backpack-content", initializeBackpackScript);
-  });
+// Назначаем обработчики кликов на каждый nav-item (делегирование для backpack/luggage — капча + подгрузка)
+document.addEventListener("click", function (event) {
+  var target = event.target.closest ? event.target.closest("a") : null;
+  if (!target || !target.id) return;
 
-document
-  .getElementById("luggage-content")
-  .addEventListener("click", function (event) {
+  if (target.id === "backpack-content") {
     event.preventDefault();
-    loadContent("luggage-content", initializeLuggageScript);
-  });
+    if (typeof window.showCaptcha === "function") {
+      window.showCaptcha(function () {
+        loadContent("backpack-content", initializeBackpackScript);
+      });
+    } else {
+      loadContent("backpack-content", initializeBackpackScript);
+    }
+    return;
+  }
+  if (target.id === "luggage-content") {
+    event.preventDefault();
+    if (typeof window.showCaptcha === "function") {
+      window.showCaptcha(function () {
+        loadContent("luggage-content", initializeLuggageScript);
+      });
+    } else {
+      loadContent("luggage-content", initializeLuggageScript);
+    }
+    return;
+  }
+});
 
 document
   .getElementById("iphone-content")

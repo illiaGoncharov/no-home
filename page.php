@@ -45,8 +45,8 @@
 <div class="translator-wrapper">
 
   <div class="items-background">
-    <img class="noise-blik" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/blik.png">
-    <img class="noise-blik" src="https://nohome.cloud/wp-content/themes/blankslate/files/items/noise.png">
+    <img class="noise-blik" src="/wp-content/themes/blankslate/files/items/blik.png">
+    <img class="noise-blik" src="/wp-content/themes/blankslate/files/items/noise.png">
   </div>
 
 
@@ -59,7 +59,7 @@
   </ul>
           
   <div class="items-hi">
-      <img src="https://nohome.cloud/wp-content/themes/blankslate/files/items/items-hi.png" alt="Horse Indicator">
+      <img src="/wp-content/themes/blankslate/files/items/items-hi.png" alt="Horse Indicator">
       <div class="items-hi-wrapper">
           <div class="items-hi-text">My dirty stuff</div>
       </div>
