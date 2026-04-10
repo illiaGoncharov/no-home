@@ -526,9 +526,7 @@ function setVolume(volume) {
   applyVolumeToAudio(volume);
 }
 
-volumeButton.addEventListener("mouseenter", showVolumeScreen);
-
-// Переключение экрана громкости по клику: открыть/закрыть
+// Переключение экрана громкости только по клику (mouseenter убран — вызывал случайные срабатывания)
 volumeButton.addEventListener("click", () => {
   const isVisible =
     volumeScreen.style.display === "block" &&
@@ -576,6 +574,7 @@ function showVolumeScreen() {
   setTimeout(() => {
     volumeScreen.style.opacity = "1";
     volumeScreen.style.filter = "blur(0)";
+    volumeScreen.style.transform = "scale(1)";
   }, 10);
   updateRedSquarePosition();
 }
@@ -583,10 +582,11 @@ function showVolumeScreen() {
 function hideVolumeScreen() {
   volumeScreen.style.opacity = "0";
   volumeScreen.style.filter = "blur(10px)";
+  volumeScreen.style.transform = "scale(0.85)";
   setTimeout(() => {
     volumeScreen.style.display = "none";
     volumeButton.classList.remove("volume-hidden", "volume-button-over");
-  }, 300);
+  }, 350);
 }
 
 function getSavedVolume() {

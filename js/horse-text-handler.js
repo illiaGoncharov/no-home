@@ -124,26 +124,31 @@
                 horseTextEl.appendChild(scrollTextEl);
             }
             
-            scrollTextEl.textContent = textToSet;
+            // Fade-out старого текста, затем fade-in нового
+            scrollTextEl.style.transition = 'opacity 0.15s ease';
+            scrollTextEl.style.opacity = '0';
             
-            // Останавливаем предыдущую анимацию
-            if (scrollTextEl.animationInterval) {
-                clearInterval(scrollTextEl.animationInterval);
-                scrollTextEl.animationInterval = null;
-            }
-            
-            // Новый текст всегда выезжает справа
-            let position = horseTextEl.offsetWidth;
-            scrollTextEl.style.transform = `translateX(${position}px)`;
-            
-            scrollTextEl.animationInterval = setInterval(() => {
-                position -= 1.5;
-                scrollTextEl.style.transform = `translateX(${position}px)`;
+            setTimeout(() => {
+                scrollTextEl.textContent = textToSet;
                 
-                if (position < -scrollTextEl.offsetWidth - 50) {
-                    position = horseTextEl.offsetWidth + 20;
+                if (scrollTextEl.animationInterval) {
+                    clearInterval(scrollTextEl.animationInterval);
+                    scrollTextEl.animationInterval = null;
                 }
-            }, 16);
+                
+                let position = horseTextEl.offsetWidth;
+                scrollTextEl.style.transform = `translateX(${position}px)`;
+                scrollTextEl.style.opacity = '1';
+                
+                scrollTextEl.animationInterval = setInterval(() => {
+                    position -= 1.5;
+                    scrollTextEl.style.transform = `translateX(${position}px)`;
+                    
+                    if (position < -scrollTextEl.offsetWidth - 50) {
+                        position = horseTextEl.offsetWidth + 20;
+                    }
+                }, 16);
+            }, 150);
             
             log('🎬 Новая титра:', textToSet);
 

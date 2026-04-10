@@ -299,14 +299,17 @@ document.addEventListener("keydown", function (e) {
 (function () {
   var captchaData = null;
   var successTimeout = null;
+  var captchaLocked = false;
 
-  // Нормализация URL к pathname для сравнения (JSON с относительными путями, img.src — полный URL)
+  // Нормализация URL: decodeURIComponent гарантирует одинаковый формат
+  // (img.src может декодировать %20, а JSON хранит закодированные пути)
   function captchaPath(url) {
     if (!url) return "";
     try {
-      return url.indexOf("http") === 0 ? new URL(url).pathname : url;
+      var path = url.indexOf("http") === 0 ? new URL(url).pathname : url;
+      return decodeURIComponent(path);
     } catch (e) {
-      return url;
+      try { return decodeURIComponent(url); } catch (e2) { return url; }
     }
   }
 
@@ -315,11 +318,17 @@ document.addEventListener("keydown", function (e) {
       fetch('/wp-content/themes/blankslate/files/captcha/captcha.json')
         .then(function (r) { return r.json(); })
         .then(function (data) {
+          if (!Array.isArray(data) || data.length === 0) {
+            console.error('Captcha: пустые или невалидные данные');
+            window.hideCaptcha();
+            return;
+          }
           captchaData = data;
           setupCaptchaRound(data);
         })
         .catch(function (err) {
           console.error('Captcha JSON load error:', err);
+          window.hideCaptcha();
         });
     } else {
       setupCaptchaRound(captchaData);
@@ -327,6 +336,8 @@ document.addEventListener("keydown", function (e) {
   };
 
   function setupCaptchaRound(data) {
+    captchaLocked = false;
+
     if (successTimeout) {
       clearTimeout(successTimeout);
       successTimeout = null;
@@ -334,7 +345,6 @@ document.addEventListener("keydown", function (e) {
     var captchaPics = document.querySelectorAll('.captcha-pic');
     var skipButton = document.getElementById('skip-captcha');
     var selectedImages = new Set();
-    var incorrectSelections = 0;
     var currentCaptcha = data[Math.floor(Math.random() * data.length)];
 
     var redEl = document.querySelector('.captcha-choose .captcha-red');
@@ -349,12 +359,13 @@ document.addEventListener("keydown", function (e) {
       if (img && currentCaptcha.images[index]) img.src = currentCaptcha.images[index];
       pic.classList.remove('correct', 'incorrect');
 
-      // Клонируем, чтобы сбросить старые обработчики
       var newPic = pic.cloneNode(true);
       pic.parentNode.replaceChild(newPic, pic);
       captchaPics[index] = newPic;
 
       newPic.addEventListener('click', function () {
+        if (captchaLocked) return;
+
         var imgSrc = newPic.querySelector('img').src;
         var imgPath = captchaPath(imgSrc);
         var isCorrect = false;
@@ -374,7 +385,7 @@ document.addEventListener("keydown", function (e) {
           selectedImages.add(index);
         } else {
           newPic.classList.add('incorrect');
-          incorrectSelections++;
+          captchaLocked = true;
           if (successTimeout) {
             clearTimeout(successTimeout);
             successTimeout = null;
@@ -383,17 +394,11 @@ document.addEventListener("keydown", function (e) {
           return;
         }
 
-        // «none» — все картинки неправильные, нужно было нажать skip
-        if (currentCaptcha.correct_answer === 'none' && incorrectSelections === 4) {
-          setTimeout(function () { setupCaptchaRound(data); }, 1000);
-          return;
-        }
-
         // Проверяем, все ли правильные выбраны
         var allCorrect = false;
         if (currentCaptcha.correct_answer === 'any') {
           allCorrect = true;
-        } else         if (currentCaptcha.correct_answer !== 'none') {
+        } else if (currentCaptcha.correct_answer !== 'none') {
           var correctArr = Array.isArray(currentCaptcha.correct_answer)
             ? currentCaptcha.correct_answer
             : [currentCaptcha.correct_answer];
@@ -404,6 +409,7 @@ document.addEventListener("keydown", function (e) {
         }
 
         if (allCorrect) {
+          captchaLocked = true;
           successTimeout = setTimeout(function () {
             successTimeout = null;
             if (typeof window.onCaptchaSuccess === 'function') {
@@ -414,17 +420,18 @@ document.addEventListener("keydown", function (e) {
       });
     });
 
-    // Skip — при «none» это правильный ответ, иначе показываем новый раунд
     if (skipButton) {
       var newSkip = skipButton.cloneNode(true);
       skipButton.parentNode.replaceChild(newSkip, skipButton);
       newSkip.addEventListener('click', function () {
+        if (captchaLocked) return;
         if (currentCaptcha.correct_answer === 'none') {
           if (typeof window.onCaptchaSuccess === 'function') {
             window.onCaptchaSuccess();
           }
         } else {
-          setupCaptchaRound(data);
+          captchaLocked = true;
+          setTimeout(function () { setupCaptchaRound(data); }, 1000);
         }
       });
     }
