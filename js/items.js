@@ -2277,7 +2277,13 @@ document
   .getElementById("camera-content")
   .addEventListener("click", function (event) {
     event.preventDefault();
-    loadContent("camera-content", initializeCameraScript);
+    if (typeof window.showCaptcha === "function") {
+      window.showCaptcha(function () {
+        loadContent("camera-content", initializeCameraScript);
+      });
+    } else {
+      loadContent("camera-content", initializeCameraScript);
+    }
   });
 
 document

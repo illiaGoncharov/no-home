@@ -1281,32 +1281,44 @@ html {
   align-items: center;
 }
 
-/* Экран громкости */
+/* Обёртка для кнопки громкости и экрана — якорь для позиционирования */
+.volume-control-wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Экран громкости — позиционируется относительно обёртки через JS */
 #volume-screen {
-  height: 17vh;
   position: absolute;
-  bottom: 20px;
-  left: 30px;
+  height: 17vh;
   padding: 30px 0 30px 0;
   display: none;
   opacity: 0;
   filter: blur(10px);
   transform: scale(0.85);
-  transform-origin: bottom left;
+  transform-origin: center left;
+  z-index: 1001;
 }
 
-/* Переходы для кнопки громкости и экрана */
+/* Ухо чуть меньше остальных кнопок */
+#volume-button img {
+  height: 55%;
+}
+
+/* Переходы для кнопки громкости и экрана — быстрые и одинаковые */
 #volume-button,
 #volume-screen {
-  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+  transition: opacity 0.2s ease, filter 0.2s ease, transform 0.2s ease;
 }
 
-/* Скрытый элемент громкости (кнопка остаётся кликабельной для закрытия по клику) */
+/* Скрытый элемент громкости */
 .volume-hidden {
   opacity: 0 !important;
 }
 
-/* Кнопка поверх экрана громкости, чтобы клик по «уху» закрывал экран */
+/* Кнопка поверх экрана, чтобы клик по «уху» закрывал экран */
 #volume-button.volume-button-over {
   position: relative;
   z-index: 1002;

@@ -90,21 +90,21 @@
 
     <!-- Нижняя навигация -->
     <div class="nav-bottom">
-        <!-- Кнопка управления громкостью -->
-    <button id="volume-button">
-            <img src="<?php echo get_template_directory_uri(); ?>/files/nav/volume.png" alt="Volume"><p>volume</p>
-        </button>
-
-        <!-- Экран управления громкостью -->
-        <div id="volume-screen">
-            <img src="<?php echo get_template_directory_uri(); ?>/files/nav/volume-screen.png">
-            <div class="drop-wrapper">
-                <div class="slider-container">
-                    <input type="range" min="1" max="100" value="80" class="drop-range" id="volume-range">
-                    <svg id="red-square" width="24" height="40">
-                        <path d="M11.0912 0H12.5519V2.18099C13.037 2.18099 13.9861 2.18099 13.9861 2.18099H14.0178V2.20955V4.84421H15.4731V8.07705H16.9249C16.9249 8.90206 16.9249 11.5569 16.9249 11.5569H18.7494V17.3051H16.9232C16.9232 17.3051 16.9249 18.735 16.9249 18.9232H15.4678V20.1464H14.0072V21H9.64818V20.1464H8.16647V18.9232H6.71111C6.71111 17.8529 6.71111 18.3973 6.71111 17.3337C6.71111 17.3286 6.70936 17.3219 6.70584 17.3169C6.70233 17.3118 6.69881 17.3068 6.69529 17.3034H5.25049V11.5552H6.71111V8.07537H8.1735V4.84253H9.63588V2.18771C9.88371 2.18771 10.1263 2.18771 10.3688 2.18771C10.6096 2.18771 10.8504 2.19443 11.0912 2.18267V0Z" fill="#D42318"/>
-                        <text x="5" y="33" id="volume-value" fill="#D42318">80</text>
-                    </svg>
+        <!-- Обёртка громкости: кнопка + экран в одном контейнере -->
+        <div class="volume-control-wrapper">
+            <button id="volume-button">
+                <img src="<?php echo get_template_directory_uri(); ?>/files/nav/volume.png" alt="Volume"><p>volume</p>
+            </button>
+            <div id="volume-screen">
+                <img src="<?php echo get_template_directory_uri(); ?>/files/nav/volume-screen.png">
+                <div class="drop-wrapper">
+                    <div class="slider-container">
+                        <input type="range" min="1" max="100" value="80" class="drop-range" id="volume-range">
+                        <svg id="red-square" width="24" height="40">
+                            <path d="M11.0912 0H12.5519V2.18099C13.037 2.18099 13.9861 2.18099 13.9861 2.18099H14.0178V2.20955V4.84421H15.4731V8.07705H16.9249C16.9249 8.90206 16.9249 11.5569 16.9249 11.5569H18.7494V17.3051H16.9232C16.9232 17.3051 16.9249 18.735 16.9249 18.9232H15.4678V20.1464H14.0072V21H9.64818V20.1464H8.16647V18.9232H6.71111C6.71111 17.8529 6.71111 18.3973 6.71111 17.3337C6.71111 17.3286 6.70936 17.3219 6.70584 17.3169C6.70233 17.3118 6.69881 17.3068 6.69529 17.3034H5.25049V11.5552H6.71111V8.07537H8.1735V4.84253H9.63588V2.18771C9.88371 2.18771 10.1263 2.18771 10.3688 2.18771C10.6096 2.18771 10.8504 2.19443 11.0912 2.18267V0Z" fill="#D42318"/>
+                            <text x="5" y="33" id="volume-value" fill="#D42318">80</text>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>

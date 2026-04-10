@@ -568,14 +568,37 @@ volumeRange.addEventListener("input", () => {
 // Инициализация значения при загрузке страницы
 setVolume(getSavedVolume());
 
+function alignVolumeScreen() {
+  const btnImg = volumeButton.querySelector("img");
+  const btnRect = btnImg.getBoundingClientRect();
+  const wrapperRect = volumeButton.parentElement.getBoundingClientRect();
+
+  const screenImg = volumeScreen.querySelector("img");
+  const screenH = volumeScreen.offsetHeight;
+  const screenW = screenImg.offsetWidth || (screenH * (694 / 182));
+
+  // Центр уха на volume-screen.png: ~13% по ширине, ~50% по высоте
+  const earXOnScreen = screenW * 0.13;
+  const earYOnScreen = screenH * 0.5;
+
+  // Центр кнопки-уха относительно обёртки
+  const earCenterX = (btnRect.left - wrapperRect.left) + btnRect.width / 2;
+  const earCenterY = (btnRect.top - wrapperRect.top) + btnRect.height / 2;
+
+  volumeScreen.style.left = (earCenterX - earXOnScreen) + "px";
+  volumeScreen.style.top = (earCenterY - earYOnScreen) + "px";
+}
+
 function showVolumeScreen() {
-  volumeButton.classList.add("volume-hidden", "volume-button-over");
   volumeScreen.style.display = "block";
-  setTimeout(() => {
+  alignVolumeScreen();
+  // Кнопка и экран меняются одновременно
+  requestAnimationFrame(() => {
+    volumeButton.classList.add("volume-hidden", "volume-button-over");
     volumeScreen.style.opacity = "1";
     volumeScreen.style.filter = "blur(0)";
     volumeScreen.style.transform = "scale(1)";
-  }, 10);
+  });
   updateRedSquarePosition();
 }
 
@@ -583,10 +606,11 @@ function hideVolumeScreen() {
   volumeScreen.style.opacity = "0";
   volumeScreen.style.filter = "blur(10px)";
   volumeScreen.style.transform = "scale(0.85)";
+  volumeButton.classList.remove("volume-hidden");
   setTimeout(() => {
     volumeScreen.style.display = "none";
-    volumeButton.classList.remove("volume-hidden", "volume-button-over");
-  }, 350);
+    volumeButton.classList.remove("volume-button-over");
+  }, 220);
 }
 
 function getSavedVolume() {
