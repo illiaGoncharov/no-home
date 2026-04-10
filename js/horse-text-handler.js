@@ -106,7 +106,7 @@
         return null;
     };
 
-    // 🔄 СИСТЕМА ОБНОВЛЕНИЯ ТЕКСТА: стабильная анимация + принудительная видимость
+    // 🔄 СИСТЕМА ОБНОВЛЕНИЯ ТЕКСТА: каждая смена — новая «титра» справа
     const updateHorseText = (text, options = {}) => {
         if (window.horseTextBlocked) return;
         const { duration = 0, force = true } = options;
@@ -116,7 +116,6 @@
         try {
             const textToSet = text || DEFAULT_TEXT;
             
-            // Создаем/находим элемент для прокрутки текста
             let scrollTextEl = horseTextEl.querySelector('#horse-text-original');
             if (!scrollTextEl) {
                 scrollTextEl = document.createElement('div');
@@ -127,50 +126,45 @@
             
             scrollTextEl.textContent = textToSet;
             
-            // 🎬 СТАБИЛЬНАЯ АНИМАЦИЯ: начинаем справа от контейнера
-            let position = 20; 
-            scrollTextEl.style.transform = `translateX(${position}px)`;
-            
-            // Очищаем предыдущую анимацию
+            // Останавливаем предыдущую анимацию
             if (scrollTextEl.animationInterval) {
                 clearInterval(scrollTextEl.animationInterval);
+                scrollTextEl.animationInterval = null;
             }
             
-            // Запускаем плавную анимацию прокрутки
+            // Новый текст всегда выезжает справа
+            let position = horseTextEl.offsetWidth;
+            scrollTextEl.style.transform = `translateX(${position}px)`;
+            
             scrollTextEl.animationInterval = setInterval(() => {
-                position -= 1;
+                position -= 1.5;
                 scrollTextEl.style.transform = `translateX(${position}px)`;
                 
-                // Сброс когда текст ушел за левый край
                 if (position < -scrollTextEl.offsetWidth - 50) {
                     position = horseTextEl.offsetWidth + 20;
                 }
             }, 16);
             
-            log('🎬 Анимация запущена для текста:', textToSet);
+            log('🎬 Новая титра:', textToSet);
 
-            // 🔧 ПРИНУДИТЕЛЬНАЯ ВИДИМОСТЬ пульта
             if (force) {
                 Object.assign(horseTextEl.style, {
-                    opacity: '1 !important',
-                    visibility: 'visible !important',
-                    display: 'block !important',
-                    color: 'white !important',
-                    transform: 'none !important',
-                    textShadow: '0 0 10px rgba(255,255,255,0.7)',
+                    opacity: '1',
+                    visibility: 'visible',
+                    display: 'block',
+                    textShadow: '0 0 8px rgba(255,255,255,0.3)',
                     transition: 'all 0.3s ease'
                 });
 
                 const parentWrapper = horseTextEl.closest('.horse-indicator-text-wrapper');
                 if (parentWrapper) {
                     Object.assign(parentWrapper.style, {
-                        opacity: '1 !important',
-                        visibility: 'visible !important'
+                        opacity: '1',
+                        visibility: 'visible'
                     });
                 }
             }
 
-            // ⏰ Авто-сброс через duration (если указан)
             if (duration > 0) {
                 setTimeout(() => updateHorseText(DEFAULT_TEXT, { duration: 0 }), duration);
             }

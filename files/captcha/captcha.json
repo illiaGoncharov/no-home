@@ -4,13 +4,13 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg",
       "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2055.jpg",
       "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2053.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
       "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2055.jpg"
     ]
   },
@@ -19,115 +19,108 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/12/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2055.jpg",
+      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2056.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2055.jpg"
     ]
   },
   {
-    "question": "space",
+    "question": "screens",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2055.jpg"
-    ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2055.jpg"
-    ]
-  },
-  {
-    "question": "space",
-    "text": "Choose all squares with ",
-    "description": "If there are none, click \"skip\"",
-    "images": [
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg"
-    ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2054.jpg"
-    ]
-  },
-  {
-    "question": "documents",
-    "text": "Choose all squares with ",
-    "description": "If there are none, click \"skip\"",
-    "images": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg"
-    ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg"
-    ]
-  },
-  {
-    "question": "documents",
-    "text": "Choose all squares with ",
-    "description": "If there are none, click \"skip\"",
-    "images": [
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg",
       "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg"
-    ],
-    "correct_answer": [
       "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg"
-    ]
+      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg",
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2056.jpg"
+    ],
+    "correct_answer": "none"
   },
   {
-    "question": "exit",
+    "question": "space",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
       "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg"
     ],
     "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2055.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2054.jpg",
       "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2056.jpg",
+      "/wp-content/themes/blankslate/files/captcha/12/Rectangle%2053.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2056.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg"
+    ],
+    "correct_answer": "none"
+  },
+  {
+    "question": "documents",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg",
+      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg",
+      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg",
+      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2056.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg",
       "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg"
     ]
   },
   {
-    "question": "exit",
+    "question": "documents",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2056.jpg",
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg",
       "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/12/Rectangle%2055.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2056.jpg"
     ]
   },
   {
-    "question": "screens",
+    "question": "documents",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg"
+      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2055.jpg",
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2056.jpg"
     ],
     "correct_answer": "none"
   },
@@ -136,10 +129,40 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2055.jpg",
+      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2055.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2053.jpg",
+      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2055.jpg"
+    ]
+  },
+  {
+    "question": "exit",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg",
+      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2056.jpg",
+      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2053.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2056.jpg"
+    ]
+  },
+  {
+    "question": "exit",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg",
+      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2054.jpg",
+      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2053.jpg"
     ],
     "correct_answer": "none"
   }

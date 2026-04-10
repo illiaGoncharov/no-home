@@ -76,37 +76,7 @@
         display: none;
     }
 
-    .mouse-spiral {
-        position: absolute;
-        width: 150%;
-        height: 150%;
-        top: -25%;
-        left: -25%;
-        object-fit: cover;
-        animation: rotate 10s linear infinite;
-    }
-
-    @keyframes rotate {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-    .mouse-mask { 
-        position: absolute;
-        top: 0;
-        left: 0;
-        -webkit-mask-image: url(/wp-content/themes/blankslate/files/items/diary/mouse/mask.png);
-        mask-image: url(/wp-content/themes/blankslate/files/items/diary/mouse/mask.png);
-        -webkit-mask-size: 100% 100%;
-        mask-size: 100% 100%;
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
+    /* Стили .mouse-spiral, .mouse-mask, @keyframes rotate — в style.css */
     }
     .ice-square {
         height: 19.8%;
