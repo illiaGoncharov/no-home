@@ -4,14 +4,14 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2053.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_01/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_01/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_01/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_01/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_01/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_01/03.jpg"
     ]
   },
   {
@@ -19,14 +19,14 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/12/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_02/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_02/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_02/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_02/03.jpg"
     ]
   },
   {
@@ -34,68 +34,46 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2056.jpg"
-    ],
-    "correct_answer": "none"
-  },
-  {
-    "question": "space",
-    "text": "Choose all squares with ",
-    "description": "If there are none, click \"skip\"",
-    "images": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_03/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/2/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_03/02.jpg"
     ]
   },
   {
-    "question": "space",
+    "question": "screens",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/12/Rectangle%2053.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/6/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_04/04.jpg"
     ]
   },
   {
-    "question": "space",
+    "question": "screens",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg"
-    ],
-    "correct_answer": "none"
-  },
-  {
-    "question": "documents",
-    "text": "Choose all squares with ",
-    "description": "If there are none, click \"skip\"",
-    "images": [
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/04.jpg"
     ]
   },
   {
@@ -103,13 +81,13 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/12/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_01/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_01/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_01/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_01/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_01/04.jpg"
     ]
   },
   {
@@ -117,26 +95,58 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/1/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_02/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_02/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_02/04.jpg"
     ],
-    "correct_answer": "none"
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_02/04.jpg"
+    ]
   },
   {
-    "question": "exit",
+    "question": "documents",
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2053.jpg",
-      "/wp-content/themes/blankslate/files/captcha/8/Rectangle%2055.jpg"
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_03/04.jpg"
+    ]
+  },
+  {
+    "question": "documents",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_04/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_04/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_04/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_04/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_04/04.jpg"
+    ]
+  },
+  {
+    "question": "documents",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_05/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_05/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_05/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_05/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/DOCUMENTS/DOCUMENTS_05/04.jpg"
     ]
   },
   {
@@ -144,14 +154,13 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2056.jpg",
-      "/wp-content/themes/blankslate/files/captcha/7/Rectangle%2053.jpg"
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/17/Rectangle%2056.jpg"
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/02.jpg"
     ]
   },
   {
@@ -159,11 +168,138 @@
     "text": "Choose all squares with ",
     "description": "If there are none, click \"skip\"",
     "images": [
-      "/wp-content/themes/blankslate/files/captcha/3/Rectangle%2055.jpg",
-      "/wp-content/themes/blankslate/files/captcha/4/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/13/Rectangle%2054.jpg",
-      "/wp-content/themes/blankslate/files/captcha/16/Rectangle%2053.jpg"
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/04.jpg"
     ],
-    "correct_answer": "none"
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/03.jpg"
+    ]
+  },
+  {
+    "question": "exit",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/04.jpg"
+    ]
+  },
+  {
+    "question": "exit",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/03.jpg"
+    ]
+  },
+  {
+    "question": "exit",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/03.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/03.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/03.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/04.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/04.jpg"
+    ]
+  },
+  {
+    "question": "space",
+    "text": "Choose all squares with ",
+    "description": "If there are none, click \"skip\"",
+    "images": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/04.jpg"
+    ],
+    "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/04.jpg"
+    ]
   }
 ]
