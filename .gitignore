@@ -13,8 +13,8 @@ Thumbs.db
 *~
 
 # WordPress [local] files - НЕ должны попадать в GitHub
-[local]*.php
-*[local]*
+# [local] — буквальный префикс, не glob-класс символов
+[[]local[]]*
 
 # Исключения - разрешаем документацию
 !docs/

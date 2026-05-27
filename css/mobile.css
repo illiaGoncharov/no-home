@@ -1,0 +1,549 @@
+/* =============================================================================
+   NOHOME — Mobile CSS
+   Базовые стили мобильной версии. Подключается только на мобильных устройствах.
+   ============================================================================= */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    background-color: #1e1e1e;
+    color: #b0b0b0;
+    font-family: inherit;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* --- Скрываем десктопные элементы на мобайле --- */
+.mobile-hide,
+.horse-indicator,
+#display-button,
+.nav-bottom,
+.volume-control-wrapper,
+#volume-screen {
+    display: none !important;
+}
+
+/* --- Мобильная верхняя навигация --- */
+.mobile-nav-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    background: transparent;
+}
+
+/* about-link наследует стиль из style.css (шрифт Avara, белый, blur-glow).
+   Дополнительно: увеличиваем tap-область на мобилке */
+.mobile-nav-top .about-link {
+    padding: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0;
+}
+
+/* --- Основной контент --- */
+.mobile-interface {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* =============================================================================
+   МОБИЛЬНАЯ ГЛАВНАЯ СТРАНИЦА — m-home
+   =============================================================================
+   Архитектура:
+   - .m-home           — полноэкранный контейнер
+   - .m-rooms-scroll   — flex-контейнер с 3 секциями (300vw суммарно)
+   - .m-section        — 100vw каждая, scroll-snap-align: start
+   - .m-section-center — содержит дом, по центру
+   - Стикеры раскиданы по всем трём секциям через position: absolute
+   ============================================================================= */
+
+.m-home {
+    position: fixed;
+    inset: 0;
+    background: #34332f;
+    overflow: hidden;
+    z-index: 100;
+}
+
+/* -----------------------------------------------------------------------
+   Бегущая строка — лошадь фиксирована слева, текст бежит
+----------------------------------------------------------------------- */
+
+.m-marquee-wrap {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 30;
+}
+
+.m-marquee-horse {
+    flex-shrink: 0;
+    padding: 0 6px 0 12px;
+}
+
+.m-marquee-horse img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    opacity: 1;
+    display: block;
+}
+
+.m-marquee-scroll {
+    flex: 1;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 28px,
+        #000 calc(100% - 40px),
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent 0,
+        #000 28px,
+        #000 calc(100% - 40px),
+        transparent 100%
+    );
+}
+
+.m-marquee-track {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    white-space: nowrap;
+    animation: m-marquee 30s linear infinite;
+    will-change: transform;
+    padding-left: 8px;
+}
+
+.m-marquee-track span {
+    font-family: 'Avara', sans-serif;
+    font-size: 12px;
+    color: #b0b0b0;
+    opacity: 0.8;
+    letter-spacing: 0.03em;
+}
+
+.m-marquee-track span::after {
+    content: ' —';
+    opacity: 0.3;
+}
+
+@keyframes m-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* -----------------------------------------------------------------------
+   Скролл-контейнер + трек + оверлей стикеров
+----------------------------------------------------------------------- */
+
+.m-rooms-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    z-index: 5;
+}
+
+.m-rooms-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Трек — 300vw, flex-контейнер для 3 секций */
+.m-rooms-track {
+    display: flex;
+    width: 300vw;
+    height: 100%;
+    position: relative; /* якорь для .m-stickers-overlay */
+}
+
+/* Каждая секция — одна «страница» 100vw */
+.m-section {
+    min-width: 100vw;
+    width: 100vw;
+    height: 100%;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+/* Центральная — дом по центру */
+.m-section-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Единый overlay — абсолютный поверх всего трека, не мешает свайпу */
+.m-stickers-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* сквозной клик, кроме кнопок */
+}
+
+/* -----------------------------------------------------------------------
+   Дом — обёртка + img + SVG-оверлей с комнатами
+----------------------------------------------------------------------- */
+
+/* Обёртка определяет размер, z-index поверх стикеров */
+.m-house-wrap {
+    position: relative;
+    width: 82vw;
+    height: 82vw;
+    max-width: 370px;
+    max-height: 370px;
+    flex-shrink: 0;
+    z-index: 10;
+}
+
+.m-house-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* SVG поверх картинки — кликабельные полигоны комнат */
+.m-house-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 11;
+    pointer-events: auto;
+}
+
+.m-house-svg path {
+    fill: transparent;
+    cursor: pointer;
+    transition: fill 0.15s ease;
+}
+
+.m-house-svg a:active path,
+.m-house-svg a:focus path {
+    fill: rgba(255, 80, 0, 0.15);
+}
+
+/* -----------------------------------------------------------------------
+   Стикеры — все позиции от .m-stickers-overlay (300vw × 100vh)
+   left = позиция в vw / 3  (т.к. трек = 300vw)
+   Зоны: 0–33.3% левая | 33.3–66.7% центр | 66.7–100% правая
+----------------------------------------------------------------------- */
+
+.m-sticker {
+    position: absolute;
+    width: auto;
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+/* Кнопка-стикер (пустой серый note8) — кликабельная */
+button.m-note-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    position: absolute;
+    width: auto;
+    user-select: none;
+}
+button.m-note-btn img {
+    display: block;
+    height: 100%;
+    width: auto;
+    pointer-events: none;
+}
+
+/* =======================================================================
+   ПОЗИЦИИ И УГЛЫ — 11 стикеров, каждый ровно 1 раз
+   Формула: left% = vw / 3
+======================================================================= */
+
+/* ── ЛЕВАЯ ЗОНА (0–100vw = 0–33.3%) ── */
+
+/* note1: крупный список, top-left */
+.ms-note1 {
+    left: 0.67%;  /* 2vw  */
+    top: 7%;
+    height: 25vh;
+    transform: rotate(-2deg);
+}
+
+/* worksheet: крупный SUBJECTIVITY REPORT, top-right левой зоны → в центр */
+.ms-worksheet {
+    left: 12%;    /* 36vw */
+    top: 6%;
+    height: 38vh;
+    transform: rotate(5deg);
+    transform-origin: top left;
+}
+
+/* gobag: крупный GO BAG, bottom-left */
+.ms-gobag {
+    left: 1%;     /* 3vw  */
+    top: 47%;
+    height: 42vh;
+    transform: rotate(-3deg);
+}
+
+/* note2: "Send the brief", малый, bottom-centre левой зоны */
+.ms-note2 {
+    left: 6.67%;  /* 20vw */
+    top: 53%;
+    height: 15vh;
+    transform: rotate(6deg);
+}
+
+/* note3: "Ask to be added...", правая часть левой зоны (виден при свайпе в центр) */
+.ms-note3 {
+    left: 20%;    /* 60vw */
+    top: 60%;
+    height: 14vh;
+    transform: rotate(-4deg);
+}
+
+/* ── ЦЕНТРАЛЬНАЯ ЗОНА (100–200vw = 33.3–66.7%) ── */
+
+/* note8: ПУСТОЙ серый — кликабельный, top-right центра */
+.ms-note8-btn {
+    left: 55%;    /* 165vw */
+    top: 7%;
+    height: 14vh;
+    transform: rotate(3deg);
+}
+
+/* note4: "Write out the time codes...", правый край центра → правая зона */
+.ms-note4 {
+    left: 57%;    /* 171vw */
+    top: 28%;
+    height: 28vh;
+    transform: rotate(-5deg);
+}
+
+/* ── ПРАВАЯ ЗОНА (200–300vw = 66.7–100%) ── */
+
+/* note5: жёлтая "Organise the files...", top правой зоны */
+.ms-note5 {
+    left: 73.33%; /* 220vw */
+    top: 5%;
+    height: 16vh;
+    transform: rotate(4deg);
+}
+
+/* note6: жёлтая лента "Pack", mid правой зоны */
+.ms-note6 {
+    left: 69.33%; /* 208vw */
+    top: 42%;
+    height: 7vh;
+    transform: rotate(3deg);
+}
+
+/* survival: крупный SURVIVAL GUIDES, центр-низ правой зоны */
+.ms-survival {
+    left: 71.67%; /* 215vw */
+    top: 46%;
+    height: 38vh;
+    transform: rotate(-2deg);
+}
+
+/* note7: "Clean cache / Make a new playlist...", bottom-right */
+.ms-note7 {
+    left: 86%;    /* 258vw */
+    top: 65%;
+    height: 22vh;
+    transform: rotate(5deg);
+}
+
+/* -----------------------------------------------------------------------
+   Оверлей заметки
+----------------------------------------------------------------------- */
+.m-note-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(14, 13, 11, 0.75);
+    align-items: center;
+    justify-content: center;
+}
+.m-note-overlay.is-open {
+    display: flex;
+}
+.m-note-overlay-inner {
+    background: #f5f0e8;
+    border-radius: 2px;
+    padding: 20px;
+    width: 80vw;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.m-note-textarea {
+    width: 100%;
+    height: 120px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #aaa;
+    font-family: inherit;
+    font-size: 15px;
+    color: #1a1a1a;
+    resize: none;
+    outline: none;
+}
+.m-note-overlay-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+.m-note-send,
+.m-note-cancel {
+    background: none;
+    border: none;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: #1a1a1a;
+    text-transform: lowercase;
+}
+.m-note-send { font-weight: 600; }
+.m-note-status {
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    min-height: 16px;
+    margin: 0;
+}
+
+/* мелкий: note4 (устаревшее правило, оставлено для совместимости) */
+.m-s-note4 {
+    left: 3%;
+    top: 7%;
+    height: 14vh;
+    transform: rotate(-2deg);
+}
+
+/* -----------------------------------------------------------------------
+   Нижний градиент — почти чёрный, поверх стикеров, за скелетом
+----------------------------------------------------------------------- */
+
+.m-bottom-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(20, 19, 17, 0.85) 50%,
+        #0e0d0b 100%
+    );
+    pointer-events: none;
+    z-index: 18;
+}
+
+/* -----------------------------------------------------------------------
+   Стрелки — пульсируют (подсказка навигации), над градиентом
+----------------------------------------------------------------------- */
+
+.m-arrow {
+    position: absolute;
+    bottom: 17px; /* уровень рук скелета (240×57px, руки ~y:40 → bottom 17px) */
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 20;
+    opacity: 0.7;
+    -webkit-tap-highlight-color: transparent;
+    animation: m-arrow-pulse 2.5s ease-in-out infinite;
+}
+
+.m-arrow:active {
+    opacity: 1;
+    animation: none;
+}
+
+.m-arrow img {
+    width: 28px;
+    height: auto;
+    display: block;
+}
+
+.m-arrow-left  { left: 4px; }
+.m-arrow-right { right: 4px; }
+
+/* Стрелка недоступна — темнее, не скрывается */
+.m-arrow.is-dimmed {
+    opacity: 0.2;
+    pointer-events: none;
+    animation: none;
+}
+
+@keyframes m-arrow-pulse {
+    0%,  100% { opacity: 0.5; }
+    50%        { opacity: 1;   }
+}
+
+/* -----------------------------------------------------------------------
+   Скелет — статичный, без пульсации (кнопка меню)
+----------------------------------------------------------------------- */
+
+.m-skeleton-btn {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 25;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.m-skeleton-btn img {
+    width: 240px;
+    height: auto;
+    display: block;
+}

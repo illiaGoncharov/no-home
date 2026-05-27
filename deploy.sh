@@ -31,6 +31,23 @@ FILES_TO_DEPLOY=(
     "functions.php"
 )
 
+# Mobile files - всё что нужно для мобайла
+MOBILE_FILES=(
+    "functions.php"
+    "header.php"
+    "footer.php"
+    "css/mobile.css"
+    "js/mobile.js"
+    "mobile/mobile.php"
+    "mobile/header-mobile.php"
+    "mobile/footer-mobile.php"
+    "mobile/pages/home.php"
+    "files/mobile/home/skeleton-bottom.png"
+    "files/mobile/home/arrow-left.png"
+    "files/mobile/home/arrow-right.png"
+    "files/mobile/home/red-horse-running-text.png"
+)
+
 # Image files - картинки пультика (все варианты)
 IMAGE_FILES=(
     "files/remote-control/пультик.png"
@@ -97,26 +114,26 @@ function deploy_to_server() {
         if [ -f "$file" ]; then
             echo -e "${GREEN}📤 Uploading $file${NC}"
             
-            # Создаем директорию если нужно
+            # Создаем директорию если нужно (только если файл в поддиректории)
             DIR="${file%/*}"
-            if [ "$DIR" != "." ]; then
+            if [[ "$file" == */* ]]; then
                 $LFTP_CMD -c "
                 set ftp:ssl-allow no
                 set ftp:passive-mode on
                 open -u $USER,$PASS $HOST
                 cd $PATH
-                mkdir -p $DIR
+                mkdir -pf $DIR
                 bye
                 "
             fi
             
-            # Загружаем файл
+            # Загружаем файл (с явным указанием пути назначения)
             $LFTP_CMD -c "
             set ftp:ssl-allow no
             set ftp:passive-mode on
             open -u $USER,$PASS $HOST
             cd $PATH
-            put '$file'
+            put '$file' -o '$file'
             bye
             "
             
@@ -156,6 +173,10 @@ case $1 in
     "staging"|"stage")
         echo -e "${YELLOW}🧪 STAGING DEPLOYMENT${NC}"
         deploy_to_server $STAGING_HOST $STAGING_USER $STAGING_PASS $STAGING_PATH "STAGING" FILES_TO_DEPLOY[@]
+        ;;
+    "mobile")
+        echo -e "${YELLOW}📱 MOBILE DEPLOYMENT${NC}"
+        deploy_to_server $PROD_HOST $PROD_USER $PROD_PASS $PROD_PATH "PRODUCTION (MOBILE)" MOBILE_FILES[@]
         ;;
     "hotfix")
         echo -e "${YELLOW}🔥 HOTFIX DEPLOYMENT (JS only)${NC}"
