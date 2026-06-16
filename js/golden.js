@@ -303,6 +303,31 @@ function initializeGolden() {
           passive: true,
         });
 
+        // Тач-мост: на телефоне OrbitControls забирает touch на вращение,
+        // синтетические mouse-события не приходят. Ловим короткий тап (без
+        // заметного движения) и прогоняем его через ту же raycaster-логику.
+        let tStartX = 0, tStartY = 0, tStartT = 0;
+        renderer.domElement.addEventListener("touchstart", (e) => {
+          if (e.touches.length === 1) {
+            tStartX = e.touches[0].clientX;
+            tStartY = e.touches[0].clientY;
+            tStartT = Date.now();
+            userInteracted = true;
+            loadSounds();
+          }
+        }, { passive: true });
+        renderer.domElement.addEventListener("touchend", (e) => {
+          if (e.changedTouches.length !== 1) return;
+          const t = e.changedTouches[0];
+          const moved = Math.abs(t.clientX - tStartX) > 12 ||
+                        Math.abs(t.clientY - tStartY) > 12;
+          const tooLong = Date.now() - tStartT > 400;
+          if (moved || tooLong) return; // это был жест вращения, не тап
+          const fake = { clientX: t.clientX, clientY: t.clientY, preventDefault() {} };
+          onMouseDown(fake);
+          onMouseUp(fake);
+        }, { passive: true });
+
         // Добавляем обработчик первого взаимодействия
         document.addEventListener(
           "click",
@@ -788,6 +813,14 @@ function initializeGolden() {
         updateAsciiArtPosition(event);
       }
     });
+    // Тач: на телефоне hover не существует — тап по крысе показывает
+    // ASCII-значения в точке касания (clientX/Y берём из touch).
+    element.addEventListener("touchstart", function (event) {
+      if (event.touches.length !== 1) return;
+      const t = event.touches[0];
+      isHovering = true;
+      showAsciiArt({ clientX: t.clientX, clientY: t.clientY });
+    }, { passive: true });
   });
 
   function showAsciiArt(event) {

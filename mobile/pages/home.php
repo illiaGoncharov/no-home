@@ -51,19 +51,19 @@
                     <!-- SVG с кликабельными комнатами -->
                     <svg class="m-house-svg" viewBox="0 0 762 759" fill="none"
                          xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-                        <a href="/0selectedarea1" aria-label="Bedroom">
+                        <a href="<?php echo esc_url( nohome_mobile_url( '/0selectedarea1' ) ); ?>" aria-label="Bedroom">
                             <path d="M174 707L101.5 505.5H368.5L370.5 707H174Z"/>
                         </a>
-                        <a href="/0selectedarea2" aria-label="Cave">
+                        <a href="<?php echo esc_url( nohome_mobile_url( '/0selectedarea2' ) ); ?>" aria-label="Cave">
                             <path d="M579.5 706.5L652 505H385L383 706.5H579.5Z"/>
                         </a>
-                        <a href="/0selectedarea3" aria-label="Table room">
+                        <a href="<?php echo esc_url( nohome_mobile_url( '/0selectedarea3' ) ); ?>" aria-label="Table room">
                             <path d="M383 303H702H719L653.5 496.5H383V303Z"/>
                         </a>
-                        <a href="/0selectedarea4" aria-label="Attic">
+                        <a href="<?php echo esc_url( nohome_mobile_url( '/0selectedarea4' ) ); ?>" aria-label="Attic">
                             <path d="M374 48.5L84 271.5L684.5 272.5L374 48.5Z"/>
                         </a>
-                        <a href="/0selectedarea5" aria-label="Golden room">
+                        <a href="<?php echo esc_url( nohome_mobile_url( '/0selectedarea5' ) ); ?>" aria-label="Golden room">
                             <path d="M370 303H51H34L99.5 496.5H370V303Z"/>
                         </a>
                     </svg>
@@ -102,14 +102,22 @@
                 <img class="m-sticker ms-note3"
                     src="<?php echo get_template_directory_uri(); ?>/files/main-page/note3.png" alt="">
 
-                <!-- ── ЦЕНТРАЛЬНАЯ ЗОНА ── -->
+                <!-- ── ЦЕНТРАЛЬНАЯ ЗОНА (рядом с домом, по эталону center.png) ── -->
 
-                <!-- note8: ПУСТОЙ серый — кликабельный, открывает оверлей email -->
+                <!-- SUBJECTIVITY REPORT (дубль worksheet) — слева сверху от дома -->
+                <img class="m-sticker ms-c-worksheet"
+                    src="<?php echo get_template_directory_uri(); ?>/files/main-page/subjectivity-worksheet.png" alt="">
+
+                <!-- note3 (дубль) "Ask to be added..." — слева снизу от дома -->
+                <img class="m-sticker ms-c-note3"
+                    src="<?php echo get_template_directory_uri(); ?>/files/main-page/note3.png" alt="">
+
+                <!-- note8: ПУСТОЙ серый — справа сверху от дома, кликабельный -->
                 <button class="m-sticker ms-note8-btn m-note-btn" id="mNoteBtn" aria-label="Оставить заметку">
                     <img src="<?php echo get_template_directory_uri(); ?>/files/main-page/note8.png" alt="">
                 </button>
 
-                <!-- note4: "Write out the time codes...", правый край центра → правую зону -->
+                <!-- note4: "Write out the time codes...", справа ниже -->
                 <img class="m-sticker ms-note4"
                     src="<?php echo get_template_directory_uri(); ?>/files/main-page/note4.png" alt="">
 
@@ -170,5 +178,9 @@
         <p class="m-note-status" id="mNoteStatus"></p>
     </div>
 </div>
+
+<!-- Оверлеи меню — общие партиалы для главной и комнат -->
+<?php include get_template_directory() . '/mobile/partials/skeleton-menu.php'; ?>
+<?php include get_template_directory() . '/mobile/partials/apple-menu.php'; ?>
 
 <?php get_footer(); ?>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎛️ Remote Control Test - NO HOME</title>
+    <style>
+        body {
+            font-family: 'Avara', Arial, sans-serif;
+            background: #34332f;
+            color: #b0b0b0;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .test-section {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-item:hover {
+            background: #2a2a2a;
+            border-color: #666;
+        }
+        
+        .test-element {
+            width: 60px;
+            height: 40px;
+            background: #666;
+            border-radius: 4px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .test-element:hover {
+            background: #888;
+        }
+        
+        .test-info {
+            flex: 1;
+        }
+        
+        .test-name {
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .test-expected {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status.pass {
+            background: #2d5a2d;
+            color: #4CAF50;
+        }
+        
+        .status.fail {
+            background: #5a2d2d;
+            color: #f44336;
+        }
+        
+        .status.pending {
+            background: #5a5a2d;
+            color: #FFC107;
+        }
+        
+        .remote-control-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 20px;
+            border: 2px solid #444;
+        }
+        
+        .remote-image {
+            width: 100%;
+            height: 150px;
+            background: #666;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            background-image: url('/wp-content/themes/blankslate/files/remote-control/remote-default.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        .remote-text {
+            min-height: 60px;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .btn {
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #666;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="header">
+            <h1>🎛️ Remote Control Test</h1>
+            <p>Тестирование текстов пультика при наведении и кликах</p>
+        </div>
+        
+        <!-- Remote Control Display -->
+        <div class="remote-control-display">
+            <div class="remote-image" id="remote-image"></div>
+            <div class="remote-text" id="remote-text">
+                you can move me and listen to me. you can close me by pressing the button at the top.
+            </div>
+            <div class="controls">
+                <button class="btn" onclick="runAllTests()">Run All Tests</button>
+                <button class="btn" onclick="clearResults()">Clear</button>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="pass-count">0</div>
+                    <div class="stat-label">PASS</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="fail-count">0</div>
+                    <div class="stat-label">FAIL</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="total-count">0</div>
+                    <div class="stat-label">TOTAL</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Sections -->
+        <div class="test-section">
+            <h2>📝 Основные стикеры</h2>
+            <div class="test-item">
+                <div class="test-element sticker-img note1" data-test="sticker-basic">📄</div>
+                <div class="test-info">
+                    <div class="test-name">Любая бумажка/стикер</div>
+                    <div class="test-expected">Expected: "sorry for being weird it's my first time being alive"</div>
+                </div>
+                <div class="status pending" id="status-sticker-basic">PENDING</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="test-element sticker-img note8" data-test="sticker-email">✉️</div>
+                <div class="test-info">
+                    <div class="test-name">Note8 (email стикер)</div>
+                    <div class="test-expected">Expected: "you can leave a note or leave nothing"</div>
+                </div>
+                <div class="status pending" id="status-sticker-email">PENDING</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🏠 Главная страница - Ховеры</h2>
+            <div class="test-item">
+                <div class="test-element" data-test="mirror" id="mirror-svg-overlay">🪞</div>
+                <div class="test-info">
+                    <div class="test-name">Зеркало</div>
+                    <div class="test-expected">Expected: "sorry, your reflection is not renderable"</div>
+                </div>
+                <div class="status pending" id="status-mirror">PENDING</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="test-element" data-test="cave" id="just-cave">🕳️</div>
+                <div class="test-info">
+                    <div class="test-name">Пещера</div>
+                    <div class="test-expected">Expected: "do you feel your body temperature right now?"</div>
+                </div>
+                <div class="status pending" id="status-cave">PENDING</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="test-element" data-test="flashlight" class="fly">🔦</div>
+                <div class="test-info">
+                    <div class="test-name">Фонарик</div>
+                    <div class="test-expected">Expected: "set yourself up for lighting the space"</div>
+                </div>
+                <div class="status pending" id="status-flashlight">PENDING</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🖱️ Главная страница - Клики</h2>
+            <div class="test-item">
+                <div class="test-element overlay-svg skeleton-chair-room" data-test="coffee-table">☕</div>
+                <div class="test-info">
+                    <div class="test-name">Кофейный столик</div>
+                    <div class="test-expected">Expected: "the ground knows so many steps…"</div>
+                </div>
+                <div class="status pending" id="status-coffee-table">PENDING</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="test-element overlay-svg table-in-table-room" data-test="table">🪑</div>
+                <div class="test-info">
+                    <div class="test-name">Стол</div>
+                    <div class="test-expected">Expected: "I hope this table is adaptive enough for you"</div>
+                </div>
+                <div class="status pending" id="status-table">PENDING</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="test-element" data-test="laptop" id="laptop-on-table">💻</div>
+                <div class="test-info">
+                    <div class="test-name">Планшет/Ноутбук</div>
+                    <div class="test-expected">Expected: "my heart is surrounded by bones..."</div>
+                </div>
+                <div class="status pending" id="status-laptop">PENDING</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔘 Кнопки и элементы управления</h2>
+            <div class="test-item">
+                <div class="test-element skeleton-button" data-test="skeleton-btn" data-horse-click="please, select one of my limbs">🦴</div>
+                <div class="test-info">
+                    <div class="test-name">Кнопка скелета</div>
+                    <div class="test-expected">Expected: "please, select one of my limbs"</div>
+                </div>
+                <div class="status pending" id="status-skeleton-btn">PENDING</div>
+            </div>
+            
+            <div class="test-item">
+                <div class="test-element pause-button" data-test="pause-btn">⏸️</div>
+                <div class="test-info">
+                    <div class="test-name">Кнопка паузы</div>
+                    <div class="test-expected">Expected: "this is a separate pause button for the player mode..."</div>
+                </div>
+                <div class="status pending" id="status-pause-btn">PENDING</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Test results storage
+        let testResults = {
+            pass: 0,
+            fail: 0,
+            total: 0
+        };
+        
+        // Mock horse text handler for testing
+        let currentHorseText = "you can move me and listen to me. you can close me by pressing the button at the top.";
+        
+        // Mock updateHorseText function
+        window.updateHorseText = function(text, duration = 0) {
+            currentHorseText = text;
+            document.getElementById('remote-text').textContent = text;
+            console.log('🐴 Horse Text Updated:', text);
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    currentHorseText = "you can move me and listen to me. you can close me by pressing the button at the top.";
+                    document.getElementById('remote-text').textContent = currentHorseText;
+                }, duration);
+            }
+        };
+        
+        // Test function
+        function testElement(elementSelector, expectedText, testName) {
+            const element = document.querySelector(elementSelector);
+            if (!element) {
+                updateTestStatus(testName, 'fail', 'Element not found');
+                return false;
+            }
+            
+            // Simulate hover
+            element.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+            
+            // Check after small delay
+            setTimeout(() => {
+                const actualText = currentHorseText;
+                const passed = actualText === expectedText;
+                
+                updateTestStatus(testName, passed ? 'pass' : 'fail', 
+                    passed ? 'Text matches' : `Got: "${actualText}"`);
+                
+                // Simulate mouse leave
+                element.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+            }, 100);
+            
+            return true;
+        }
+        
+        // Update test status
+        function updateTestStatus(testName, status, message = '') {
+            const statusEl = document.getElementById(`status-${testName}`);
+            if (statusEl) {
+                statusEl.className = `status ${status}`;
+                statusEl.textContent = status.toUpperCase();
+                if (message) {
+                    statusEl.title = message;
+                }
+            }
+            
+            // Update stats
+            if (status === 'pass') {
+                testResults.pass++;
+            } else if (status === 'fail') {
+                testResults.fail++;
+            }
+            testResults.total++;
+            
+            updateStats();
+        }
+        
+        // Update stats display
+        function updateStats() {
+            document.getElementById('pass-count').textContent = testResults.pass;
+            document.getElementById('fail-count').textContent = testResults.fail;
+            document.getElementById('total-count').textContent = testResults.total;
+        }
+        
+        // Run all tests
+        function runAllTests() {
+            clearResults();
+            
+            console.log('🧪 Starting Remote Control Tests...');
+            
+            // Test stickers
+            testElement('.sticker-img:not(.note8)', 'sorry for being weird it\'s my first time being alive', 'sticker-basic');
+            testElement('.note8', 'you can leave a note or leave nothing', 'sticker-email');
+            
+            // Test main page hovers
+            testElement('#mirror-svg-overlay', 'sorry, your reflection is not renderable', 'mirror');
+            testElement('#just-cave', 'do you feel your body temperature right now?', 'cave');
+            testElement('.fly', 'set yourself up for lighting the space', 'flashlight');
+            
+            // Test main page clicks
+            testElement('.skeleton-chair-room', 'the ground knows so many steps…', 'coffee-table');
+            testElement('.table-in-table-room', 'I hope this table is adaptive enough for you', 'table');
+            testElement('#laptop-on-table', 'my heart is surrounded by bones. I am able to hear both the heart and the bones. What about you?', 'laptop');
+            
+            // Test buttons
+            testElement('.skeleton-button', 'please, select one of my limbs', 'skeleton-btn');
+            testElement('.pause-button', 'this is a separate pause button for the player mode (pause changes to play button and vice versa)', 'pause-btn');
+        }
+        
+        // Clear results
+        function clearResults() {
+            testResults = { pass: 0, fail: 0, total: 0 };
+            updateStats();
+            
+            // Reset all status indicators
+            document.querySelectorAll('.status').forEach(status => {
+                status.className = 'status pending';
+                status.textContent = 'PENDING';
+                status.title = '';
+            });
+        }
+        
+        // Add individual test handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎛️ Remote Control Test Page Loaded');
+            
+            // Add click handlers to test elements
+            document.querySelectorAll('.test-element').forEach(element => {
+                element.addEventListener('click', () => {
+                    const testName = element.getAttribute('data-test');
+                    if (testName) {
+                        console.log(`Testing: ${testName}`);
+                        // Run individual test logic here
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

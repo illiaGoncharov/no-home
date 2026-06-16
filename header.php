@@ -1,14 +1,34 @@
 <!DOCTYPE html>
+<?php if ( nohome_mobile_render_header() ) return; ?>
 <html <?php language_attributes(); ?> <?php blankslate_schema_type(); ?>>
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Пустой favicon чтобы избежать 404 ошибки -->
 <link rel="icon" href="data:,">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <?php wp_head(); ?>
 </head>
-<body <?php body_class(); ?>>
+<?php
+$nh_body_extra = '';
+if ( ! empty( $_GET['desktop'] ) ) {
+    $nh_body_extra .= ' in-iframe';
+    if ( ! empty( $_GET['item'] ) ) {
+        $nh_body_extra .= ' in-iframe-item';
+    }
+}
+?>
+<body <?php body_class( trim( $nh_body_extra ) ); ?>>
+<?php
+// IFRAME + ITEM: в item-frame iframe (родитель = мобайл скелет-меню)
+// не выводим desktop interface-elements / skeleton-* / wrapper —
+// внутри iframe нужен только items-content. CSS-скрытие — это костыль,
+// правильно вообще не отдавать DOM.
+if ( ! empty( $_GET['desktop'] ) && ! empty( $_GET['item'] ) ) {
+    echo '<main id="content" role="main"><div id="wrapper"><div id="container">';
+    return;
+}
+?>
 	
 <!-- Основные элементы интерфейса -->
 <div class="interface-elements">

@@ -4,6 +4,12 @@ const canvas = document.querySelector('.fluid, #fluid');
 // Если canvas не найден на странице — не запускаем WebGL
 if (!canvas) {
     console.log('[Fluid] Canvas не найден, скрипт не запущен');
+} else if (document.body && document.body.classList.contains('in-iframe')) {
+    // МОБАЙЛ (iframe-обёртка ?desktop=1): fluid-симуляцию НЕ запускаем.
+    // Она вешает touchstart/touchmove c preventDefault (глушит все клики)
+    // и крутит тяжёлый WebGL на 300vw → комната «зависает».
+    canvas.style.display = 'none';
+    console.log('[Fluid] in-iframe (mobile) — fluid отключён (клики/производительность)');
 } else {
 
 resizeCanvas();

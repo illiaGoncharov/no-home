@@ -71,9 +71,7 @@
     ],
     "correct_answer": [
       "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/01.jpg",
-      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/02.jpg",
-      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/03.jpg",
-      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/04.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SCREENS/SCREENS_05/02.jpg"
     ]
   },
   {
@@ -159,9 +157,7 @@
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/03.jpg",
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/04.jpg"
     ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_01/02.jpg"
-    ]
+    "correct_answer": "none"
   },
   {
     "question": "exit",
@@ -173,10 +169,7 @@
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/03.jpg",
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/04.jpg"
     ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/02.jpg",
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_02/03.jpg"
-    ]
+    "correct_answer": "none"
   },
   {
     "question": "exit",
@@ -188,12 +181,7 @@
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/03.jpg",
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/04.jpg"
     ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/01.jpg",
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/02.jpg",
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/03.jpg",
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_03/04.jpg"
-    ]
+    "correct_answer": "none"
   },
   {
     "question": "exit",
@@ -205,9 +193,7 @@
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/03.jpg",
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/04.jpg"
     ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_04/03.jpg"
-    ]
+    "correct_answer": "none"
   },
   {
     "question": "exit",
@@ -219,13 +205,11 @@
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/03.jpg",
       "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/04.jpg"
     ],
-    "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/EXIT/EXIT_05/03.jpg"
-    ]
+    "correct_answer": "none"
   },
   {
     "question": "space",
-    "text": "Choose all squares with ",
+    "text": "It's time to choose your ",
     "description": "If there are none, click \"skip\"",
     "images": [
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/01.jpg",
@@ -234,12 +218,15 @@
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/04.jpg"
     ],
     "correct_answer": [
-      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/03.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/01.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/02.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_01/04.jpg"
     ]
   },
   {
     "question": "space",
-    "text": "Choose all squares with ",
+    "text": "It's time to choose your ",
     "description": "If there are none, click \"skip\"",
     "images": [
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/01.jpg",
@@ -248,13 +235,15 @@
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/04.jpg"
     ],
     "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/01.jpg",
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/02.jpg",
-      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/03.jpg"
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/03.jpg",
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_02/04.jpg"
     ]
   },
   {
     "question": "space",
-    "text": "Choose all squares with ",
+    "text": "It's time to choose your ",
     "description": "If there are none, click \"skip\"",
     "images": [
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_03/01.jpg",
@@ -271,7 +260,7 @@
   },
   {
     "question": "space",
-    "text": "Choose all squares with ",
+    "text": "It's time to choose your ",
     "description": "If there are none, click \"skip\"",
     "images": [
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_04/01.jpg",
@@ -288,7 +277,7 @@
   },
   {
     "question": "space",
-    "text": "Choose all squares with ",
+    "text": "It's time to choose your ",
     "description": "If there are none, click \"skip\"",
     "images": [
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/01.jpg",
@@ -297,6 +286,7 @@
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/04.jpg"
     ],
     "correct_answer": [
+      "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/01.jpg",
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/02.jpg",
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/03.jpg",
       "/wp-content/themes/blankslate/files/captcha/SPACE/SPACE_05/04.jpg"

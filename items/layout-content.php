@@ -19,7 +19,7 @@
     <div class="items-hi">
         <img src="/wp-content/themes/blankslate/files/items/items-hi.png" alt="Horse Indicator">
         <div class="items-hi-wrapper">
-            <div class="items-hi-text">My dirty stuff</div>
+            <div class="items-hi-text"></div>
         </div>
     </div>
 		

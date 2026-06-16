@@ -1,30 +1,24 @@
 <?php
+// Мобильный модуль — вся логика в одном месте
+require_once get_template_directory() . '/mobile/mobile.php';
+
 /**
- * Функция для загрузки скриптов и стилей
- * Подключает jQuery и пользовательский скрипт nav-tools.js
- * Также передает URL для AJAX-запросов
+ * Скрипты и стили — только десктоп.
+ * Мобильные ресурсы подключаются в mobile/mobile.php.
  */
 function my_enqueue_scripts() {
-    wp_enqueue_script('jquery'); // Загружаем jQuery
+    if ( nohome_is_mobile() ) return;
+
+    wp_enqueue_script('jquery');
     wp_enqueue_script('nav-tools', get_template_directory_uri() . '/js/nav-tools.js', array('jquery'), null, true);
-    
-    // Скрипт для пульта - ЗАГРУЖАЕМ ПЕРЕД ЛОКАЛИЗАЦИЕЙ
-    wp_enqueue_script('horse-text-handler', get_template_directory_uri() . '/js/horse-text-handler.js', array('jquery'), null, true); // Зависит от jQuery
-    
-    // Скрипт для чердака (attic)
+    wp_enqueue_script('horse-text-handler', get_template_directory_uri() . '/js/horse-text-handler.js', array('jquery'), null, true);
     wp_enqueue_script('attic', get_template_directory_uri() . '/js/attic.js', array('jquery'), filemtime(get_template_directory() . '/js/attic.js'), true);
 
-    // Передаем ДАННЫЕ ДЛЯ ОТПРАВКИ ПИСЬМА в horse-text-handler.js
-    wp_localize_script(
-        'horse-text-handler', // <- Целевой скрипт, которому передаем данные
-        'stickerEmailData',   // <- Имя JS объекта, который будет создан с данными
-        array(
-            'ajaxurl' => admin_url('admin-ajax.php'),         // URL для AJAX запросов WordPress
-            'nonce'   => wp_create_nonce('sticker_email_nonce') // Nonce (код безопасности) для проверки запроса
-        )
-    );
-    
-    // Передаем ajaxurl в nav-tools.js
+    wp_localize_script('horse-text-handler', 'stickerEmailData', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('sticker_email_nonce')
+    ));
+
     wp_localize_script('nav-tools', 'ajaxData', array(
         'ajaxurl' => admin_url('admin-ajax.php')
     ));
@@ -182,7 +176,13 @@ function blankslate_notice_dismissed() {
  */
 add_action('wp_enqueue_scripts', 'blankslate_enqueue');
 function blankslate_enqueue() {
-    wp_enqueue_style('blankslate-style', get_stylesheet_uri());
+    // Версия — filemtime, чтобы кэш браузера сбрасывался при изменениях
+    wp_enqueue_style(
+        'blankslate-style',
+        get_stylesheet_uri(),
+        array(),
+        filemtime( get_stylesheet_directory() . '/style.css' )
+    );
     wp_enqueue_script('jquery');
 }
 

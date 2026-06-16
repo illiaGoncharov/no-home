@@ -31,18 +31,14 @@ document.addEventListener("DOMContentLoaded", function () {
       // Добавляем класс к текущей нажатой ссылке
       this.classList.add("nav-items-link-now");
 
-      // Скрываем элемент .mp3 и показываем #items-content с соответствующим контентом
-      if (this.id !== "mp3-content") {
-        mp3Element.style.display = "none"; // Скрываем элемент с классом .mp3
-        itemsContent.style.display = "block";
-
-        // Загружаем контент, связанный с выбранным элементом
-        loadContent(this.id);
-      } else {
-        // Если mp3-content выбран, показываем .mp3 и скрываем items-content
+      if (this.id === "mp3-content") {
         mp3Element.style.display = "block";
         itemsContent.style.display = "none";
-        initializeMp3Script(); // Инициализируем MP3 скрипт
+        initializeMp3Script();
+      } else {
+        mp3Element.style.display = "none";
+        itemsContent.style.display = "block";
+        loadContent(this.id);
       }
     });
   });
@@ -201,61 +197,9 @@ jQuery(document).ready(function ($) {
     }
   }
   
-  // Делаем функцию глобальной для доступа из других скриптов
+  // Делаем функции глобальными для доступа из других скриптов
   window.showElements = showElements;
-
-  // Функция для закрытия капчи
-  function hideCaptcha() {
-    const captchaElement = document.getElementById("captcha");
-    if (captchaElement) {
-      captchaElement.style.display = "none";
-    }
-  }
-
-  // Обновленная функция для обработки клика по #iphone-on-zoomed-table
-  function handleIphoneZoomClick() {
-    // Показ капчи перед выполнением основной логики
-    showCaptcha();
-
-    // Функция обратного вызова при успешном прохождении капчи
-    window.onCaptchaSuccess = function () {
-      // Скрываем капчу
-      hideCaptcha();
-
-      // Вызываем showElements, чтобы применить стили и показать нужные элементы
-      showElements();
-
-      // Добавляем класс nav-items-link-now к #iphone-content
-      document
-        .getElementById("iphone-content")
-        .classList.add("nav-items-link-now");
-
-      // Делаем #items-content видимым
-      const itemsContent = document.getElementById("items-content");
-      itemsContent.style.display = "block";
-
-      // Скрываем элемент с классом .mp3
-      const mp3Element = document.querySelector(".mp3");
-      if (mp3Element) {
-        mp3Element.style.display = "none";
-      }
-
-      // Загружаем контент для iphone-content
-      fetch(
-        "/wp-content/themes/blankslate/items/iphone-content.php"
-      )
-        .then((response) => response.text())
-        .then((data) => {
-          // Вставляем контент в #items-content
-          itemsContent.innerHTML = data;
-          // Инициализируем скрипты для iphone-content
-          initializeIphoneScript();
-        })
-        .catch((error) =>
-          console.error("Error loading iPhone content:", error)
-        );
-    };
-  }
+  window.resetElements = resetElements;
 
   // При нажатии на кнопку items-button
   $("#items-button").click(function () {
@@ -263,6 +207,11 @@ jQuery(document).ready(function ($) {
       // Если элемент видим, то скрываем его (как при нажатии exit)
       resetElements();
     } else {
+      // Закрываем trnsltr если он открыт
+      var translatorWrapper = document.querySelector(".translator-wrapper");
+      if (translatorWrapper && translatorWrapper.style.display !== "none" && translatorWrapper.style.display !== "") {
+        translatorWrapper.style.display = "none";
+      }
       // Если элемент скрыт, то показываем его
       showElements();
     }
@@ -284,7 +233,11 @@ window.hideCaptcha = function () {
   const captchaElement = document.getElementById("captcha");
   if (captchaElement) {
     captchaElement.style.display = "none";
-    //deinitializeCaptcha();
+    captchaElement.querySelectorAll('.captcha-pic').forEach(function (pic) {
+      pic.classList.remove('correct', 'incorrect');
+      var img = pic.querySelector('img');
+      if (img) img.removeAttribute('src');
+    });
   }
 };
 
@@ -2230,65 +2183,84 @@ function initializeMp3Script() {
   setInterval(checkOverflow, 5000);
 }
 
-// Назначаем обработчики кликов на каждый nav-item (делегирование для backpack/luggage — капча + подгрузка)
-document.addEventListener("click", function (event) {
-  var target = event.target.closest ? event.target.closest("a") : null;
-  if (!target || !target.id) return;
+// Дублирующие обработчики навигации удалены —
+// вся навигация по табам обрабатывается общим обработчиком navLinks (DOMContentLoaded).
+// Капча вызывается только при входе через 3D-комнату (скелетон):
+// handleIphoneZoomClick, backpack-close-overlay, suitcase-close-overlay, speaker-to-mp3.
 
-  if (target.id === "backpack-content") {
-    event.preventDefault();
-    if (typeof window.showCaptcha === "function") {
-      window.showCaptcha(function () {
-        loadContent("backpack-content", initializeBackpackScript);
-      });
+// ---------------------------------------------------------------------------
+// Авто-открытие по URL-параметру ?item=<key>, когда страница грузится
+// в iframe из мобайл скелет-меню (через item-frame.php).
+// X-ray и trnsltr теперь обрабатываются локально в mobile.js — здесь не нужны.
+// ---------------------------------------------------------------------------
+(function autoOpenFromParam() {
+  var params = new URLSearchParams(window.location.search);
+  var item = params.get("item");
+  if (!item) return;
+
+  var map = {
+    iphone:   "iphone-content",
+    backpack: "backpack-content",
+    luggage:  "luggage-content",
+    camera:   "camera-content",
+    mp3:      "mp3-content",
+    diary:    "documents-content",
+  };
+  var contentId = map[item];
+  if (!contentId) return;
+
+  function openTab() {
+    var itemsContent = document.getElementById("items-content");
+    var mp3Element   = document.querySelector(".mp3");
+    if (!itemsContent) return;
+
+    itemsContent.style.display = "block";
+
+    if (contentId === "mp3-content") {
+      if (mp3Element) mp3Element.style.display = "block";
+      itemsContent.style.display = "none";
+      if (typeof initializeMp3Script === "function") initializeMp3Script();
+      var navLinks = document.querySelectorAll(".nav-items-link");
+      navLinks.forEach(function (l) { l.classList.remove("nav-items-link-now"); });
+      var activeLink = document.getElementById("mp3-content");
+      if (activeLink) activeLink.classList.add("nav-items-link-now");
     } else {
-      loadContent("backpack-content", initializeBackpackScript);
+      if (mp3Element) mp3Element.style.display = "none";
+      if (typeof loadContent === "function") loadContent(contentId);
     }
-    return;
   }
-  if (target.id === "luggage-content") {
-    event.preventDefault();
-    if (typeof window.showCaptcha === "function") {
-      window.showCaptcha(function () {
-        loadContent("luggage-content", initializeLuggageScript);
-      });
-    } else {
-      loadContent("luggage-content", initializeLuggageScript);
-    }
-    return;
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", openTab);
+  } else {
+    openTab();
   }
-});
+})();
 
-document
-  .getElementById("iphone-content")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("iphone-content", initializeIphoneScript);
-  });
+// ---------------------------------------------------------------------------
+// Авто-открытие переводчика по ?trnsltr=1 (страница грузится в iframe из
+// мобайл-меню в десктоп-режиме). Жмём штатную десктоп-кнопку #translate-button,
+// когда nav-tools.js навесит на неё обработчик. Same-origin → работает локально.
+// ---------------------------------------------------------------------------
+(function autoOpenTranslator() {
+  var params = new URLSearchParams(window.location.search);
+  if (params.get("trnsltr") !== "1") return;
 
-document
-  .getElementById("documents-content")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("documents-content", initializeDocumentsScript);
-  });
-
-document
-  .getElementById("camera-content")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    if (typeof window.showCaptcha === "function") {
-      window.showCaptcha(function () {
-        loadContent("camera-content", initializeCameraScript);
-      });
-    } else {
-      loadContent("camera-content", initializeCameraScript);
+  var attempts = 0;
+  function clickWhenReady() {
+    var btn = document.getElementById("translate-button");
+    var wrap = document.querySelector(".translator-wrapper");
+    // ждём, пока переводчик ещё скрыт — иначе toggle его закроет
+    if (btn && wrap && wrap.style.display !== "block") {
+      btn.click();
+      return;
     }
-  });
+    if (attempts++ < 60) setTimeout(clickWhenReady, 100);
+  }
 
-document
-  .getElementById("mp3-content")
-  .addEventListener("click", function (event) {
-    event.preventDefault();
-    loadContent("mp3-content", initializeMp3Script);
-  });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", clickWhenReady);
+  } else {
+    clickWhenReady();
+  }
+})();

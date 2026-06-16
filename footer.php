@@ -1,3 +1,4 @@
+<?php if ( nohome_mobile_render_footer() ) return; ?>
 <?php get_sidebar(); ?>
 </div>
 </main>

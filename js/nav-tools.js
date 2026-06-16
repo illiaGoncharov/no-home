@@ -371,22 +371,115 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /////////////// ПЕРЕВОДЧИК
 
-  const translateButton = document.getElementById("translate-button");
-  const translateDiv = document.querySelector(".trnsltr");
+  // Дополнить ссылки языков пунктирными линиями и кнопкой "choose"
+  document.querySelectorAll(".language-unit a").forEach(function (link) {
+    if (link.querySelector(".dashed-line")) return;
+    var textNode = link.textContent.trim();
+    link.textContent = "";
+    var nameSpan = document.createElement("span");
+    nameSpan.textContent = textNode;
+    var dashedSpan = document.createElement("span");
+    dashedSpan.className = "dashed-line";
+    var chooseSpan = document.createElement("span");
+    chooseSpan.className = "choose-text";
+    chooseSpan.textContent = "choose";
+    link.appendChild(nameSpan);
+    link.appendChild(dashedSpan);
+    link.appendChild(chooseSpan);
+  });
 
-  // Функция для переключения видимости элемента
+  const translateButton = document.getElementById("translate-button");
+  const translateDiv = document.querySelector(".translator-wrapper");
+  let translatorStatsInitialized = false;
+  let translatorStatsInterval = null;
+
+  var navTop = document.querySelector(".nav-top");
+  var skeletonButton = document.querySelector(".skeleton-button");
+
+  function showTranslator() {
+    // Закрываем items если он открыт (полный сброс через глобальную функцию)
+    var itemsWrapper = document.querySelector(".items-wrapper");
+    if (itemsWrapper && itemsWrapper.style.display !== "none" && itemsWrapper.style.display !== "") {
+      if (typeof window.resetElements === "function") {
+        window.resetElements();
+      }
+    }
+    translateDiv.style.display = "block";
+    if (navTop) navTop.style.display = "none";
+    if (skeletonButton) skeletonButton.style.display = "none";
+    if (!translatorStatsInitialized) {
+      initTranslatorStats();
+    }
+  }
+
+  function hideTranslator() {
+    translateDiv.style.display = "none";
+    if (navTop) navTop.style.display = "";
+    if (skeletonButton) skeletonButton.style.display = "";
+  }
+
   function toggleTranslateDiv() {
     if (
       translateDiv.style.display === "none" ||
       translateDiv.style.display === ""
     ) {
-      translateDiv.style.display = "block";
+      showTranslator();
     } else {
-      translateDiv.style.display = "none";
+      hideTranslator();
     }
   }
 
-  // Событие клика по кнопке перевода
+  var translatorExit = translateDiv.querySelector('.translator-exit');
+  if (translatorExit) {
+    translatorExit.addEventListener("click", function (e) {
+      e.preventDefault();
+      hideTranslator();
+    });
+  }
+
+  function formatTrDate(date) {
+    var mm = String(date.getMonth() + 1).padStart(2, "0");
+    var dd = String(date.getDate()).padStart(2, "0");
+    return mm + "-" + dd + "-" + date.getFullYear();
+  }
+
+  function initTranslatorStats() {
+    var dateEl = document.getElementById("tr-date");
+    var popEl = document.getElementById("tr-population");
+    var deathsEl = document.getElementById("tr-deaths");
+    var growthEl = document.getElementById("tr-growth");
+    if (!dateEl || !popEl || !deathsEl || !growthEl) return;
+
+    var birthsPerSec = 140500000 / 365.25 / 86400;
+    var deathsPerSec = 63800000 / 365.25 / 86400;
+    var growthPerSec = birthsPerSec - deathsPerSec;
+
+    function tick(basePopulation) {
+      var now = new Date();
+      var startOfYear = new Date(now.getFullYear(), 0, 1);
+      var secsThisYear = (now - startOfYear) / 1000;
+      var startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      var secsToday = (now - startOfDay) / 1000;
+
+      dateEl.textContent = formatTrDate(now);
+      popEl.textContent = Math.round(basePopulation + growthPerSec * secsThisYear).toLocaleString();
+      deathsEl.textContent = Math.round(deathsPerSec * secsToday).toLocaleString();
+      growthEl.textContent = Math.round(growthPerSec * secsToday).toLocaleString();
+    }
+
+    fetch("https://api.worldbank.org/v2/country/1W/indicator/SP.POP.TOTL?format=json&mrv=1")
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var basePopulation = data[1][0].value;
+        translatorStatsInitialized = true;
+        tick(basePopulation);
+        translatorStatsInterval = setInterval(function () { tick(basePopulation); }, 1000);
+      })
+      .catch(function (err) {
+        console.error("Translator stats API error:", err);
+      });
+  }
+
   translateButton.addEventListener("click", function (event) {
     event.preventDefault();
     toggleTranslateDiv();

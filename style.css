@@ -501,7 +501,7 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 999;
+  z-index: 1100;
   display: none;
   justify-content: center;
   align-items: center;
@@ -647,50 +647,68 @@ html {
 
 /* Основной контейнер */
 .translator-wrapper {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   font-family: "Avara-Bold";
   z-index: 999;
   display: none;
+  background-color: #2a2520;
+  background-image: url("/wp-content/themes/blankslate/files/items/translator-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.translator-wrapper .items-hi {
+  position: absolute;
+}
+
+.translator-wrapper .items-hi-text {
+  font-size: 1.3em;
+}
+
+.translator-exit {
+  color: #b0b0b0;
+  font-size: 21px;
+  text-decoration: none;
+  position: absolute;
+  top: 30px;
+  right: calc(30% + 40px);
+  font-family: "Avara-Bold";
+  z-index: 902;
 }
 
 .translator-container {
   display: flex;
-  height: 63vh;
+  align-items: stretch;
   position: absolute;
   width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 135px;
+  bottom: 22vh;
+  left: 0;
 }
 
 /* Контейнер списка языков */
 .language-container {
-  top: 50%;
-  left: calc(50% - 40px);
-  width: 100%;
+  width: 65%;
   height: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: block;
   box-sizing: border-box;
-  align-content: stretch;
-  align-items: stretch;
   margin: 0 40px;
   transition: all 0.5s ease-in-out;
   overflow-y: auto;
   overflow-x: hidden;
   mask-image: linear-gradient(
     to bottom,
-    black calc(100% - 210px),
-    rgba(0, 0, 0, 0.8) calc(100% - 210px),
-    rgba(0, 0, 0, 0.7) calc(100% - 180px),
-    rgba(0, 0, 0, 0.6) calc(100% - 150px),
-    rgba(0, 0, 0, 0.5) calc(100% - 120px),
-    rgba(0, 0, 0, 0.4) calc(100% - 90px),
-    rgba(0, 0, 0, 0.3) calc(100% - 60px),
-    rgba(0, 0, 0, 0.2) calc(100% - 30px),
-    rgba(0, 0, 0, 0.1) calc(100% - 0px)
+    black 45%,
+    rgba(0, 0, 0, 0.7) 60%,
+    rgba(0, 0, 0, 0.4) 75%,
+    rgba(0, 0, 0, 0.15) 88%,
+    transparent 100%
   );
 }
 
@@ -705,7 +723,7 @@ html {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 12px 0 12px 0;
+  padding: 10px 0;
 }
 
 .language-unit a:hover {
@@ -747,6 +765,37 @@ html {
 .language-unit a:hover .dashed-line {
   background-image: linear-gradient(to right, red 34%, transparent 18%),
     linear-gradient(to right, red 34%, transparent 18%);
+}
+
+/* Панель статистики справа */
+.translator-stats {
+  width: 30%;
+  height: 100%;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 18px;
+  font-family: "Avara";
+  color: #b0b0b0;
+  box-sizing: border-box;
+}
+
+.translator-stats-date {
+  font-family: "Avara-Bold";
+  font-size: 1.1em;
+  margin: 0;
+}
+
+.tr-stat-label {
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.tr-stat-value {
+  font-family: "Avara-Bold";
+  font-size: 1.3em;
+  color: #e0e0e0;
 }
 
 /* ==============================
@@ -838,6 +887,7 @@ html {
   right: 0;
   height: 12.5%;
   width: auto;
+  z-index: 902;
 }
 
 .items-hi-wrapper {
@@ -1226,12 +1276,11 @@ html {
   padding: 30px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-family: "Avara-Bold"; /* Рекомендация: добавить fallback-шрифты */
+  align-items: flex-end;
+  font-family: "Avara-Bold";
   height: 18vh;
   z-index: 1000;
-  box-sizing: border-box; /* Предотвращает проблемы с размерами */
-  /* Рекомендация: добавить background-color с прозрачностью для лучшей читаемости */
+  box-sizing: border-box;
 }
 
 /* Кнопки в нижней навигации */
@@ -1242,9 +1291,9 @@ html {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
   margin: 0;
   padding: 0;
-  /* Рекомендация: добавить cursor: pointer для улучшения UX */
 }
 
 /* Текст на кнопках нижней навигации */
@@ -1278,7 +1327,7 @@ html {
   height: 100%;
   display: flex;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end;
 }
 
 /* Обёртка для кнопки громкости и экрана — якорь для позиционирования */
@@ -1286,7 +1335,7 @@ html {
   position: relative;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
 }
 
 /* Экран громкости — позиционируется относительно обёртки через JS */
@@ -2033,4 +2082,209 @@ html {
   to {
     transform: translate(-50%, -50%) rotate(360deg);
   }
+}
+
+/* =======================================================================
+   IFRAME MODE — десктоп грузится через ?desktop=1 внутри мобайл-обёртки.
+   Прячем всё что дублируется мобайл-меню или мешает.
+======================================================================= */
+body.in-iframe .skeleton-button,
+body.in-iframe .skeleton-home,
+body.in-iframe #horseIndicator,
+body.in-iframe .horse-indicator-wrapper,
+body.in-iframe .items-hi,
+body.in-iframe .captcha,
+body.in-iframe .captcha-wrapper,
+body.in-iframe .preloader,
+body.in-iframe .nav-top,
+body.in-iframe .nav-bottom,
+body.in-iframe .about-link-wrapper,
+body.in-iframe #welcome-overlay,
+body.in-iframe .welcome-overlay {
+    display: none !important;
+}
+
+/* В iframe-режиме body не должен иметь паддинг от мобайл/десктоп шапок */
+body.in-iframe {
+    padding-top: 0 !important;
+    background: #0e0d0b !important;
+}
+
+/* -----------------------------------------------------------------------
+   F: страница about ("i") под мобайл.
+   Десктоп: списки width:70%, padding-left:15%, align-self flex-end/start,
+   letter-spacing:6px, font-size:125% — на узком экране текст уезжает за край.
+   На мобайле центрируем блок, ужимаем трекинг, разрешаем перенос строк.
+----------------------------------------------------------------------- */
+body.in-iframe .about-page-wrapper {
+    align-items: flex-start !important;
+    /* верхний отступ — чтобы первая строка не пряталась под бегущую строку
+       мобайл-обёртки (она лежит поверх iframe в верхних ~50px) */
+    padding: 72px 14px 14vh !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+}
+body.in-iframe .about-page-lists {
+    width: 100% !important;
+    padding-left: 0 !important;
+    align-items: center !important;
+    gap: 14px !important;
+}
+body.in-iframe .about-page-list,
+body.in-iframe .about-page-list:nth-child(1),
+body.in-iframe .about-page-list:nth-child(2),
+body.in-iframe .about-page-list:nth-child(3),
+body.in-iframe .about-page-list:nth-child(4) {
+    width: 100% !important;
+    align-self: center !important;
+    text-align: center !important;
+}
+body.in-iframe .about-page-block-list-item {
+    font-size: 100% !important;
+    letter-spacing: 1.5px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+}
+
+/* -----------------------------------------------------------------------
+   E3: стих в окне комнаты со столом — по центру, на всю ширину.
+   #currentPoem строится динамически (text8.js); форсим центрирование.
+----------------------------------------------------------------------- */
+body.in-iframe #currentPoem {
+    /* Комната — iframe 300vw, видна центральная треть. Центр страницы (50%)
+       совпадает с центром видимой области, поэтому центрируем по 50%, а не left:0. */
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 14px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+}
+body.in-iframe #currentPoem div,
+body.in-iframe #currentPoem span {
+    text-align: center !important;
+}
+
+/* -----------------------------------------------------------------------
+   IFRAME + ITEM — открыли конкретный предмет через ?item=<key>.
+   Шаблон item-frame.php грузит layout-content.php — там #items-content
+   сидит внутри .items-wrapper, которая на десктопе display: none.
+   Поднимаем wrapper, прячем десктоп-навигацию и пультик-дубликат.
+----------------------------------------------------------------------- */
+body.in-iframe-item .main-page,
+body.in-iframe-item canvas,
+body.in-iframe-item #scene,
+body.in-iframe-item .horse-indicator,
+body.in-iframe-item .horse-indicator-wrapper {
+    display: none !important;
+}
+
+/* items-wrapper на весь iframe.
+   Десктопный CSS прячет .items-wrapper (display:none) — поднимаем.
+   fixed inset:0 → растягиваем на весь viewport iframe, дочерний
+   #items-content внутри скроллится вертикально. */
+body.in-iframe-item .items-wrapper {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 1 !important;
+    background: #0e0d0b !important;
+}
+
+/* Внутри прячем десктопную навигацию по предметам, exit, дубль пультика —
+   на мобайле всё это уже даёт скелет-меню */
+body.in-iframe-item .items-background,
+body.in-iframe-item .nav-items,
+body.in-iframe-item #exit,
+body.in-iframe-item .items-hi,
+body.in-iframe-item .items-hi-wrapper,
+body.in-iframe-item .items-hi-text {
+    display: none !important;
+}
+
+/* B: дубли крестиков. Оставляем только верхний #mItemClose.
+   Прячем десктопные закрывашки внутри предметов:
+   - камера/багаж: ::before '×' на увеличенной картинке (тап по картинке всё равно закрывает);
+   - айфон: '-exit-' внутри инфо-стикера. */
+body.in-iframe-item .enlarged-img-container::before,
+body.in-iframe-item .luggage-container::before {
+    content: none !important;
+    display: none !important;
+}
+body.in-iframe-item .sticker-info-exit-i {
+    display: none !important;
+}
+
+/* Единый крестик — это крестик меню (родитель, top-center, поверх контента).
+   Свой крестик item-frame (#mItemClose) прячем, чтобы не было дубля.
+   Закрытие предмета по-прежнему работает: крестик меню → goHome,
+   свайп внутри предмета → postMessage (жест, без видимой кнопки). */
+body.in-iframe-item .m-item-close,
+body.in-iframe-item #mItemClose {
+    display: none !important;
+}
+
+/* #items-content — нормальный поток (не fixed!), иначе ломается position:
+   relative внутри iphone-content / camera-content и т.д. */
+body.in-iframe-item #items-content {
+    display: block !important;
+    position: relative !important;
+    inset: auto !important;
+    z-index: auto !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    background: #0e0d0b !important;
+    overflow: visible !important;
+}
+
+/* .mp3 — в layout-content.php имеет z-index: -1; нужно поднять. */
+body.in-iframe-item .mp3 {
+    z-index: 1 !important;
+}
+
+/* D: mp3-плеер на мобайле — контраст и читабельность, кнопки сохраняем.
+   Цвета десктопа (#b0b0b0 / opacity 30%) на телефоне теряются. */
+body.in-iframe-item .mp3-controls button {
+    color: #f3ede2 !important;
+    opacity: 0.9 !important;
+    font-size: 1.15em !important;
+    padding: 6px 4px !important; /* крупнее tap-зона, кнопки те же */
+}
+body.in-iframe-item .mp3-controls .play-stop {
+    text-shadow: 0 0 9px rgba(243, 237, 226, 0.6) !important;
+}
+body.in-iframe-item .mp3-controls span {
+    color: #f3ede2 !important;
+    opacity: 0.45 !important; /* разделители "|" видны, но не спорят с кнопками */
+}
+body.in-iframe-item .song-playing-title,
+body.in-iframe-item .now-playing-title,
+body.in-iframe-item .song-playing-time {
+    color: #f3ede2 !important;
+}
+
+/* D1: текст пультика/индикатора — белее (если где-то показывается на мобайле). */
+body.in-iframe .horse-indicator-text,
+body.in-iframe .items-hi-text,
+body.in-iframe-item .horse-indicator-text,
+body.in-iframe-item .items-hi-text {
+    color: #f3ede2 !important;
+    opacity: 0.95 !important;
+}
+
+/* m-item-shell — простой контейнер на весь iframe, items-wrapper
+   внутри сам растянется через fixed inset:0. */
+body.in-iframe-item .m-item-shell {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background: #0e0d0b;
 }

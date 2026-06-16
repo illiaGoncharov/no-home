@@ -23,8 +23,14 @@ html, body {
 /* --- Скрываем десктопные элементы на мобайле --- */
 .mobile-hide,
 .horse-indicator,
+#horseIndicator,
 #display-button,
 .nav-bottom,
+.nav-top,
+.skeleton-button,
+.skeleton-home,
+.captcha,
+.welcome-overlay,
 .volume-control-wrapper,
 #volume-screen {
     display: none !important;
@@ -103,11 +109,12 @@ html, body {
 }
 
 .m-marquee-horse img {
-    width: 18px;
-    height: 18px;
+    width: auto;
+    height: 28px;
     object-fit: contain;
-    opacity: 1;
     display: block;
+    filter: drop-shadow(0 0 6px rgba(255, 30, 0, 0.65))
+            drop-shadow(0 0 14px rgba(255, 30, 0, 0.35));
 }
 
 .m-marquee-scroll {
@@ -200,6 +207,32 @@ html, body {
     align-items: center;
     justify-content: center;
 }
+
+/* Iframe-оверлей inner-шаблона — растянут на весь трек (300vw),
+   по аналогии с .m-stickers-overlay на главной.
+   Сами .m-section остаются пустыми «направляющими» для scroll-snap. */
+.m-inner-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300vw;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #0e0d0b;
+    z-index: 1;
+    /* pointer-events: auto — клики внутри сцены работают.
+       Свайп между «экранами» идёт стрелками (нативный touch на iframe
+       перехватывает 3D-сцена). */
+}
+
+/* Текстовые (не-3D) inner-страницы (about и т.п.): один экран 100vw.
+   300vw-свайп оставлен только для 3D-комнат (.m-inner-room), иначе текст
+   рендерится втрое шире и не вмещается в экран. */
+.m-inner-flat .m-rooms-track  { width: 100vw; }
+.m-inner-flat .m-inner-iframe { width: 100vw; }
+.m-inner-flat .m-rooms-scroll { overflow-x: hidden; }
+.m-inner-flat .m-arrow        { display: none !important; }
 
 /* Единый overlay — абсолютный поверх всего трека, не мешает свайпу */
 .m-stickers-overlay {
@@ -342,19 +375,36 @@ button.m-note-btn img {
 
 /* ── ЦЕНТРАЛЬНАЯ ЗОНА (100–200vw = 33.3–66.7%) ── */
 
-/* note8: ПУСТОЙ серый — кликабельный, top-right центра */
-.ms-note8-btn {
-    left: 55%;    /* 165vw */
+/* Дубль worksheet: SUBJECTIVITY REPORT слева сверху от дома */
+.ms-c-worksheet {
+    left: 36.5%;  /* 109.5vw */
     top: 7%;
-    height: 14vh;
-    transform: rotate(3deg);
+    height: 22vh;
+    transform: rotate(-4deg);
+    transform-origin: top left;
 }
 
-/* note4: "Write out the time codes...", правый край центра → правая зона */
+/* Дубль note3: "Ask to be added..." слева снизу от дома */
+.ms-c-note3 {
+    left: 35%;    /* 105vw */
+    top: 62%;
+    height: 13vh;
+    transform: rotate(-5deg);
+}
+
+/* note8: ПУСТОЙ серый — кликабельный, справа сверху от дома (на скотче) */
+.ms-note8-btn {
+    left: 58%;    /* 174vw */
+    top: 8%;
+    height: 14vh;
+    transform: rotate(4deg);
+}
+
+/* note4: "Write out the time codes..." справа ниже от дома */
 .ms-note4 {
-    left: 57%;    /* 171vw */
-    top: 28%;
-    height: 28vh;
+    left: 60%;    /* 180vw */
+    top: 30%;
+    height: 24vh;
     transform: rotate(-5deg);
 }
 
@@ -488,13 +538,14 @@ button.m-note-btn img {
 
 .m-arrow {
     position: absolute;
-    bottom: 17px; /* уровень рук скелета (240×57px, руки ~y:40 → bottom 17px) */
+    /* Стрелки на уровне рук скелета (скелет приподнят, см. .m-skeleton-btn). */
+    bottom: 40px;
     background: none;
     border: none;
     padding: 10px;
     cursor: pointer;
     z-index: 20;
-    opacity: 0.7;
+    opacity: 0.9;
     -webkit-tap-highlight-color: transparent;
     animation: m-arrow-pulse 2.5s ease-in-out infinite;
 }
@@ -508,10 +559,14 @@ button.m-note-btn img {
     width: 28px;
     height: auto;
     display: block;
+    /* Тень — чтобы стрелки читались на пёстром фоне комнат */
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.9));
 }
 
-.m-arrow-left  { left: 4px; }
-.m-arrow-right { right: 4px; }
+/* Узкие стрелки вплотную к бокам скелета (картинка 240px, центр снизу).
+   Половина скелета = 120px; стрелки чуть снаружи его рук. */
+.m-arrow-left  { left:  calc(50% - 150px); }
+.m-arrow-right { right: calc(50% - 150px); }
 
 /* Стрелка недоступна — темнее, не скрывается */
 .m-arrow.is-dimmed {
@@ -531,19 +586,555 @@ button.m-note-btn img {
 
 .m-skeleton-btn {
     position: absolute;
-    bottom: 0;
+    /* Чуть приподнят над низом — раньше был слишком прижат/низко.
+       Padding только сверху/по бокам — даёт hit-area вокруг картинки. */
+    bottom: 12px;
     left: 50%;
     transform: translateX(-50%);
+    padding: 12px 20px 0 20px;
     background: none;
     border: none;
-    padding: 0;
     cursor: pointer;
     z-index: 25;
     -webkit-tap-highlight-color: transparent;
 }
 
 .m-skeleton-btn img {
-    width: 240px;
+    width: 260px;
     height: auto;
     display: block;
+}
+
+/* -----------------------------------------------------------------------
+   Кнопка закрыть item-frame — круглая, правый верхний угол.
+   Сообщает родительскому окну postMessage('nh-item-close'),
+   тот сам убирает iframe из .msk-content.
+----------------------------------------------------------------------- */
+.m-item-close {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    padding: 7px;
+    background: rgba(14, 13, 11, 0.65);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+    -webkit-tap-highlight-color: transparent;
+}
+.m-item-close img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    opacity: 0.85;
+}
+
+/* =======================================================================
+   СКЕЛЕТ-МЕНЮ — m-skeleton-menu
+   Полноэкранный оверлей с концентрическими кольцами, открывается по
+   клику на скелет. 6 текстовых подписей на дугах + центр items + углы.
+======================================================================= */
+
+/* Скрывать стрелки когда меню открыто */
+/* При открытом меню прячем всё с главной: стрелки, кнопку "i",
+   скелет, бегущую строку и нижний градиент. */
+/* При открытом скелет-меню скрываем декор-элементы фона */
+body.m-menu-open .about-link,
+body.m-menu-open .m-skeleton-btn,
+body.m-menu-open .m-marquee-wrap,
+body.m-menu-open .m-bottom-gradient {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Навбар (.mobile-nav-top, z-index 1000) не должен перехватывать клики
+   по крестику меню, который физически лежит в той же верхней зоне. */
+body.m-menu-open .mobile-nav-top {
+    pointer-events: none;
+}
+
+/* Стрелки — глухая блокировка при открытом меню.
+   Меню (z-index 200) и так перекрывает стрелки (z-index 20),
+   но pointer-events иногда пропускает клики на iOS — поэтому полный
+   display:none. Дополнительная страховка — guard в js/mobile.js goTo(). */
+body.m-menu-open .m-arrow {
+    display: none !important;
+}
+
+/* A2: заморозка фрейма комнаты при открытом меню/анимации скелета.
+   #mRoomsScroll уже display:none через JS, но это страховка от гонки
+   «жеста на лету» на iOS — three.js внутри iframe не должен ловить тач. */
+body.m-menu-open .m-inner-iframe {
+    pointer-events: none !important;
+}
+
+/* Замораживаем фоновый скролл-трек (главная и inner): свайпы по фону
+   не должны крутить экран, пока открыто меню. */
+/* Жёсткая заморозка фоновой страницы при открытом меню —
+   иначе iOS Safari доскролливает momentum-инерцию даже при
+   overflow: hidden на самом треке. */
+body.m-menu-open {
+    overflow: hidden !important;
+    touch-action: none !important;
+    overscroll-behavior: contain;
+}
+
+/* Замораживаем трек НА МЕСТЕ на время анимации скелета/меню.
+   Раньше тут был display:none + save/restore scrollLeft в JS — из-за
+   неточного восстановления комната «уезжала» вбок. Теперь не прячем и не
+   двигаем: overflow:hidden гасит скролл, pointer-events:none — взаимодействие.
+   scrollLeft не трогаем → дрейфа нет, фрейм фиксируется где был. */
+body.m-menu-open .m-rooms-scroll {
+    overflow: hidden !important;
+    touch-action: none !important;
+    pointer-events: none !important;
+}
+
+/* Контейнер */
+.m-skeleton-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1050; /* выше .mobile-nav-top (1000), иначе навбар перехватывает крестик */
+    background: #0e0d0b;
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    color: #b0b0b0;
+    overflow: hidden;
+}
+.m-skeleton-menu.is-open {
+    display: block;
+}
+
+/* Кольца — концентрические, центр под яблоком (50% 58%).
+   Более тонкие и контрастные линии, виньетка от центра к краям. */
+.msk-rings {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 50% 58%, transparent 11.4%, rgba(255,255,255,.18) 12%, transparent 12.6%),
+        radial-gradient(circle at 50% 58%, transparent 22.4%, rgba(255,255,255,.15) 23%, transparent 23.6%),
+        radial-gradient(circle at 50% 58%, transparent 33.4%, rgba(255,255,255,.13) 34%, transparent 34.6%),
+        radial-gradient(circle at 50% 58%, transparent 45.4%, rgba(255,255,255,.11) 46%, transparent 46.6%),
+        radial-gradient(circle at 50% 58%, transparent 58.4%, rgba(255,255,255,.09) 59%, transparent 59.6%),
+        radial-gradient(circle at 50% 58%, transparent 72.4%, rgba(255,255,255,.07) 73%, transparent 73.6%),
+        radial-gradient(circle at 50% 58%, #3a3631 0%, #1a1815 45%, #0a0908 90%);
+}
+
+/* Зерно поверх колец — сильнее и крупнее */
+.msk-noise {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0.42;
+    mix-blend-mode: overlay;
+    transform: scale(1.15);
+    pointer-events: none;
+}
+
+/* -----------------------------------------------------------------------
+   Крестик закрытия — top-center
+----------------------------------------------------------------------- */
+.msk-close {
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    z-index: 60; /* выше .msk-content (50): крестик инструмента (переводчик) не должен быть под iframe */
+    -webkit-tap-highlight-color: transparent;
+}
+/* Кнопка «домой» — верхний левый угол меню */
+.msk-home {
+    position: absolute;
+    top: 24px;
+    left: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+    z-index: 10;
+    -webkit-tap-highlight-color: transparent;
+}
+.msk-home img {
+    width: 30px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    opacity: 0.85;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.7));
+}
+.msk-home span {
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 12px;
+    color: #f3ede2;
+    opacity: 0.85;
+}
+
+.msk-close img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+    opacity: 0.75;
+}
+
+/* -----------------------------------------------------------------------
+   Подписи на дугах — точки на радиусе кольца от центра (50%, 60%).
+   Углы поворота = тангенс к окружности в точке подписи.
+   Якорь = центр текста (translateX(-50%) + rotate).
+----------------------------------------------------------------------- */
+.msk-label {
+    position: absolute;
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 19px;
+    color: #b0b0b0;
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    -webkit-tap-highlight-color: transparent;
+}
+.msk-label:active {
+    color: #ffffff;
+}
+
+/* Внешнее кольцо (r ≈ 46% от центра 58%) */
+.msk-iphone {
+    top: 22%;
+    left: 22%;
+    transform: translateX(-50%) rotate(-28deg);
+}
+.msk-backpack {
+    top: 16%;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+}
+.msk-luggage {
+    top: 22%;
+    left: 78%;
+    transform: translateX(-50%) rotate(28deg);
+}
+
+/* Среднее кольцо (r ≈ 33% от центра 58%) */
+.msk-camera {
+    top: 36%;
+    left: 27%;
+    transform: translateX(-50%) rotate(-34deg);
+}
+.msk-mp3 {
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+}
+.msk-diary {
+    top: 36%;
+    left: 73%;
+    transform: translateX(-50%) rotate(34deg);
+}
+
+/* -----------------------------------------------------------------------
+   Центр — items (яблоко) в центре колец (50%, 58%)
+----------------------------------------------------------------------- */
+.msk-center {
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    -webkit-tap-highlight-color: transparent;
+}
+.msk-center img {
+    width: 70px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 12px rgba(0,0,0,0.8));
+}
+.msk-center span {
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 15px;
+    color: #b0b0b0;
+    letter-spacing: 0.04em;
+}
+
+/* -----------------------------------------------------------------------
+   Углы — trnsltr (лево) и x-ray (право), нижние
+----------------------------------------------------------------------- */
+.msk-corner {
+    position: absolute;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    bottom: 14%;
+    -webkit-tap-highlight-color: transparent;
+}
+.msk-corner img {
+    width: 34px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.7));
+}
+.msk-corner span {
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 12px;
+    color: #b0b0b0;
+    letter-spacing: 0.04em;
+}
+.msk-trnsltr {
+    left: 6vw;
+}
+.msk-xray {
+    right: 6vw;
+}
+
+/* -----------------------------------------------------------------------
+   Контент — iframe ?desktop=1 подгружается сюда
+----------------------------------------------------------------------- */
+.msk-content {
+    position: absolute;
+    inset: 0;
+    display: none;
+    overflow: hidden;
+    background: #0e0d0b;
+    z-index: 50;
+}
+.msk-content.is-open {
+    display: block;
+}
+.msk-iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    background: #0e0d0b;
+}
+
+/* =======================================================================
+   APPLE MENU — сетка предметов, открывается по клику на яблоко
+======================================================================= */
+
+.m-apple-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1100; /* выше mobile-nav-top (1000), чтобы клики не перехватывались */
+    background: #34332f;
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    color: #b0b0b0;
+    overflow: hidden;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.m-apple-menu.is-open {
+    display: flex;
+    flex-direction: column;
+}
+
+.map-noise {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.35;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Верхняя полоса: лошадка + бегущая строка.
+   padding-top увеличен — бегущая строка идёт ПОД центральным крестиком. */
+.map-top {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: 48px 12px 14px;
+    gap: 8px;
+}
+.map-marquee-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    height: 28px;
+}
+.map-marquee-horse {
+    flex-shrink: 0;
+    padding: 0 6px 0 0;
+}
+.map-marquee-horse img {
+    height: 24px;
+    width: auto;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(255, 30, 0, 0.65))
+            drop-shadow(0 0 12px rgba(255, 30, 0, 0.3));
+}
+.map-marquee-scroll {
+    flex: 1;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
+}
+.map-marquee-track {
+    display: inline-flex;
+    gap: 16px;
+    white-space: nowrap;
+    animation: m-marquee 30s linear infinite;
+    will-change: transform;
+}
+.map-marquee-track span {
+    font-family: 'Avara', sans-serif;
+    font-style: italic;
+    font-size: 13px;
+    color: #b0b0b0;
+    opacity: 0.85;
+}
+.map-marquee-track span::after { content: ' —'; opacity: 0.3; }
+
+.map-close {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60; /* выше .msk-content (50): крестик всегда поверх контента предмета */
+    background: none;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.map-close img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+    opacity: 0.75;
+}
+
+/* Сетка предметов */
+.map-grid {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 18px;
+    padding: 6px 22px 14px;
+    min-height: 0;
+}
+.map-item {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    color: inherit;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 0;
+}
+.map-item-img {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 0;
+}
+.map-item-img img {
+    max-width: 90%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+}
+.map-item-img-placeholder {
+    border: 1px dashed rgba(176,176,176,0.4);
+    border-radius: 4px;
+    min-height: 80px;
+    color: #b0b0b0;
+    font-size: 12px;
+    opacity: 0.7;
+}
+.map-item-label {
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 14px;
+    color: #b0b0b0;
+    letter-spacing: 0.04em;
+    text-align: center;
+}
+
+/* Нижняя полоса */
+.map-bottom {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 8px 16px 20px;
+    gap: 8px;
+}
+.map-corner {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: inherit;
+    text-decoration: none;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+}
+.map-corner img {
+    width: 30px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+}
+.map-corner span {
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 11px;
+    color: #b0b0b0;
+    letter-spacing: 0.04em;
+}
+.map-corner .map-i {
+    font-family: 'Avara', sans-serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1;
+    color: #b0b0b0;
+}
+
+/* Контейнер iframe-контента внутри apple-menu — поверх сетки */
+#mapContent {
+    z-index: 50;
 }

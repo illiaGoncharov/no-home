@@ -54,14 +54,14 @@
     <li class="nav-item">
       <a class="nav-items-link nav-items-link-now" href="#">translator</a>
     </li>
-
-    <li class="nav-item"><a class="nav-items-link" href="#">-exit-</a></li>
   </ul>
+
+  <a class="translator-exit" href="#">-exit-</a>
           
   <div class="items-hi">
       <img src="/wp-content/themes/blankslate/files/items/items-hi.png" alt="Horse Indicator">
       <div class="items-hi-wrapper">
-          <div class="items-hi-text">My dirty stuff</div>
+          <div class="items-hi-text"></div>
       </div>
   </div>
 
@@ -157,12 +157,15 @@
 
   </ul>
   </div>
-  <!--div class="ip-data">
-  <p><span>temperature</span><span class="temperature">17</span></p> 
-  <p><span>location</span><span class="location">berlin</span></p>
-  <p><span>wind</span><span class="wind">18km/h</span></p> 
-  <p><span>humidity</span><span class="humidity">63%</span></p> 
-  </div-->
+  <div class="translator-stats">
+    <p class="translator-stats-date" id="tr-date"></p>
+    <p><span class="tr-stat-label">current world population</span><br>
+       <span class="tr-stat-value" id="tr-population"></span></p>
+    <p><span class="tr-stat-label">deaths today</span><br>
+       <span class="tr-stat-value" id="tr-deaths"></span></p>
+    <p><span class="tr-stat-label">net population growth today</span><br>
+       <span class="tr-stat-value" id="tr-growth"></span></p>
+  </div>
   </section>
 
 </div>

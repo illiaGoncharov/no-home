@@ -77,11 +77,11 @@
     }
 
     /* Стили .mouse-spiral, .mouse-mask, @keyframes rotate — в style.css */
-    }
-    .ice-square {
+
+    .iceberg-wrapper .ice-square {
         height: 19.8%;
         width: auto;
-        left: 37.7%;
+        left: 38%;
         top: 78%;
         position: absolute;
         animation: shakeICE 0.2s infinite;
@@ -164,11 +164,11 @@
         left: 2.4%;
         animation: shakeICE 0.45s infinite;
     }
-    .desktop-square {
+    .desktop-wrapper .desktop-square {
         height: 19.8%;
         width: auto;
-        left: 61.2%;
-        top: 18%;
+        left: 61%;
+        top: 15%;
         position: absolute;
         animation: shakeICE 0.2s infinite;
     }

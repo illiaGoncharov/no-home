@@ -11,13 +11,14 @@
 
 <div class="mobile-interface">
 
-    <!-- Верхняя полоса: ссылка i/x — те же классы что на десктопе (шрифт Avara) -->
+    <!-- Верхняя полоса: ссылка i/x — те же классы что на десктопе (шрифт Avara)
+         «i» показываем строго на мобайл-шаблоне home.php (флаг из mobile.php) -->
     <div class="mobile-nav-top">
         <?php if ( is_page('about') ) : ?>
-            <a href="<?php echo get_home_url(); ?>"
+            <a href="<?php echo esc_url( nohome_mobile_url( get_home_url() ) ); ?>"
                class="about-link" id="about-link" data-text="i">x</a>
-        <?php elseif ( is_front_page() ) : ?>
-            <a href="<?php echo get_permalink( get_page_by_path('about') ); ?>"
+        <?php elseif ( function_exists('nohome_mobile_is_home_template') && nohome_mobile_is_home_template() ) : ?>
+            <a href="<?php echo esc_url( nohome_mobile_url( get_permalink( get_page_by_path('about') ) ) ); ?>"
                class="about-link" id="about-link" data-text="x">i</a>
         <?php endif; ?>
     </div>
