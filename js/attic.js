@@ -2,13 +2,41 @@
   console.log('[Attic] Script loaded');
 
   var ATTIC_TEXT = "the sounds have been stolen by somebody and the moving creatures have been isolated. if you click on the central skeleton in this room 13 times in a row there will be no sound theft and the creatures will synchronize their movements.";
+  // На мобилке пасхалка с 13 кликами не нужна — текст без этой инструкции.
+  var ATTIC_TEXT_MOBILE = "the sounds have been stolen by somebody and the moving creatures have been isolated.";
+
+  function atticIsMobile() {
+    return document.body.classList.contains('in-iframe') ||
+      document.body.classList.contains('in-iframe-item') ||
+      document.body.classList.contains('mobile') ||
+      !!(new URLSearchParams(window.location.search).get('desktop')) ||
+      !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }
 
   window.atticState = window.atticState || {
     clickCount: 0,
     cursor: null,
     inactivityTimer: null,
     initialized: false,
-    activeVideoCount: 0
+    activeVideoCount: 0,
+    picLock: false,
+    is13thClickActive: false
+  };
+
+  // Мобайл: родительский свайп комнат блокируем, пока играет анимация скелета
+  window.atticNotifyParentLock = function(active) {
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'nh-attic-animating', active: !!active }, '*');
+      }
+    } catch (e) {}
+  };
+
+  window.atticSyncParentLock = function() {
+    var locked = (window.atticState.activeVideoCount > 0) ||
+      !!window.atticState.is13thClickActive ||
+      !!window.atticState.picLock;
+    window.atticNotifyParentLock(locked);
   };
 
   window.atticResetCursor = function() {
@@ -46,6 +74,9 @@
   };
 
   window.atticClick = function(event) {
+    // Десктопная пасхалка: 13 кликов → общее видео скелетов. На мобилке не считаем.
+    if (atticIsMobile()) return;
+
     var atticRoom = document.getElementById('attic-room-main');
     if (!atticRoom) return;
     
@@ -68,6 +99,7 @@
       console.log('[Attic] 13th click!');
       
       window.atticState.is13thClickActive = true;
+      window.atticSyncParentLock();
       
       if (window.atticState.cursor) {
         window.atticState.cursor.style.transform = 'translate(-50%, -50%) scale(500)';
@@ -82,7 +114,9 @@
       if (videoToPlay) {
         console.log('[Attic] Playing video 12');
         window.atticState.activeVideoCount++;
+        window.atticSyncParentLock();
         window.atticSetVolume(videoToPlay);
+        window.atticPrepareInline(videoToPlay);
         videoToPlay.style.display = 'block';
         videoToPlay.play().catch(function(err) {
           console.warn('[Attic] Video play blocked:', err.message);
@@ -90,13 +124,16 @@
         videoToPlay.addEventListener('ended', function() {
           window.atticHideVideo(videoToPlay);
           window.atticState.is13thClickActive = false;
+          window.atticSyncParentLock();
         }, { once: true });
         videoToPlay.addEventListener('click', function() {
           window.atticHideVideo(videoToPlay);
           window.atticState.is13thClickActive = false;
+          window.atticSyncParentLock();
         }, { once: true });
       } else {
         window.atticState.is13thClickActive = false;
+        window.atticSyncParentLock();
       }
       
       // Через 500мс убираем чёрную вспышку -- видео становится видимым
@@ -122,11 +159,21 @@
     if (window.atticState.activeVideoCount === 0) {
       window.atticRestorePlayerVolume();
     }
+    window.atticSyncParentLock();
   };
 
   window.atticSetVolume = function(video) {
     var savedVolume = (typeof getSavedVolume === 'function' ? getSavedVolume() : 80) / 100;
     video.volume = savedVolume;
+  };
+
+  // iOS без playsinline открывает нативный плеер: ландшафт → чёрные поля сверху/снизу.
+  window.atticPrepareInline = function(video) {
+    if (!video) return;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    video.playsInline = true;
+    video.controls = false;
   };
   
   // Dim player when skeleton video plays
@@ -172,26 +219,42 @@
     window.atticState.clickCount = 0;
     clearTimeout(window.atticState.inactivityTimer);
     
-    // Скрываем нативный курсор браузера на чердаке
-    var atticCursorStyle = document.getElementById('attic-cursor-style');
-    if (!atticCursorStyle) {
-      atticCursorStyle = document.createElement('style');
-      atticCursorStyle.id = 'attic-cursor-style';
-      atticCursorStyle.textContent = '#attic-room-main, #attic-room-main * { cursor: none !important; }';
-      document.head.appendChild(atticCursorStyle);
+    // На мобайле / в iframe красный курсор не нужен (залипает после тапа)
+    var isMobileContext = atticIsMobile();
+
+    if (isMobileContext) {
+      document.querySelectorAll('.attic-cursor, .custom-cursor').forEach(function (el) {
+        el.remove();
+      });
+      window.atticState.cursor = null;
+    } else {
+      // Скрываем нативный курсор браузера на чердаке
+      var atticCursorStyle = document.getElementById('attic-cursor-style');
+      if (!atticCursorStyle) {
+        atticCursorStyle = document.createElement('style');
+        atticCursorStyle.id = 'attic-cursor-style';
+        atticCursorStyle.textContent = '#attic-room-main, #attic-room-main * { cursor: none !important; }';
+        document.head.appendChild(atticCursorStyle);
+      }
+
+      var cursor = document.createElement('div');
+      cursor.className = 'attic-cursor';
+      cursor.style.cssText = 'position: fixed; left: 50%; top: 50%; width: 40px; height: 40px; border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%, -50%) scale(1); background: radial-gradient(circle, #FF0000 0%, #FF0000 30%, transparent 50%, #FF0000 70%, #FF0000 100%); transition: transform 0.3s ease-out, background 0.3s ease-out; box-shadow: 0 0 10px rgba(255,0,0,0.5);';
+      document.body.appendChild(cursor);
+      window.atticState.cursor = cursor;
     }
-    
-    var cursor = document.createElement('div');
-    cursor.className = 'attic-cursor';
-    cursor.style.cssText = 'position: fixed; left: 50%; top: 50%; width: 40px; height: 40px; border-radius: 50%; pointer-events: none; z-index: 99999; transform: translate(-50%, -50%) scale(1); background: radial-gradient(circle, #FF0000 0%, #FF0000 30%, transparent 50%, #FF0000 70%, #FF0000 100%); transition: transform 0.3s ease-out, background 0.3s ease-out; box-shadow: 0 0 10px rgba(255,0,0,0.5);';
-    document.body.appendChild(cursor);
-    window.atticState.cursor = cursor;
+
+    document.querySelectorAll('video.attic-video').forEach(window.atticPrepareInline);
+
     window.atticState.isInitializing = false;
     
     if (!window.atticState.initialized) {
       window.atticState.initialized = true;
-      document.addEventListener('mousemove', window.atticMouseMove);
-      document.addEventListener('mouseup', window.atticClick);
+      if (!isMobileContext) {
+        document.addEventListener('mousemove', window.atticMouseMove);
+        // 13 кликов — только десктоп (красный курсор + общее видео)
+        document.addEventListener('mouseup', window.atticClick);
+      }
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           document.querySelectorAll('video.attic-video').forEach(function(video) {
@@ -200,6 +263,7 @@
             }
           });
           window.atticState.is13thClickActive = false;
+          window.atticSyncParentLock();
         }
       });
       console.log('[Attic] Global handlers added');
@@ -231,9 +295,15 @@
           if (imageToShow) {
             imageToShow.style.display = 'block';
             setTimeout(function() { imageToShow.style.opacity = '1'; }, 0);
+            window.atticState.picLock = true;
+            window.atticSyncParentLock();
             setTimeout(function() {
               imageToShow.style.opacity = '0';
-              setTimeout(function() { imageToShow.style.display = 'none'; }, 600);
+              setTimeout(function() {
+                imageToShow.style.display = 'none';
+                window.atticState.picLock = false;
+                window.atticSyncParentLock();
+              }, 600);
             }, 5000);
           }
           return false;
@@ -250,9 +320,11 @@
           });
 
           window.atticState.activeVideoCount++;
+          window.atticSyncParentLock();
           window.atticDimPlayerVolume();
           window.atticSetVolume(videoToPlay);
-            
+          window.atticPrepareInline(videoToPlay);
+
           videoToPlay.style.display = 'block';
           setTimeout(function() {
             videoToPlay.style.opacity = '1';
@@ -299,7 +371,7 @@
     // Задержка, чтобы текст установился после cleanupRoomState при AJAX-навигации
     setTimeout(function() {
       if (typeof window.updateHorseText === 'function') {
-        window.updateHorseText(ATTIC_TEXT, 0);
+        window.updateHorseText(isMobileContext ? ATTIC_TEXT_MOBILE : ATTIC_TEXT, 0);
       }
     }, 600);
 
@@ -323,6 +395,7 @@
     clearTimeout(window.atticState.inactivityTimer);
     window.atticState.clickCount = 0;
     window.atticState.is13thClickActive = false;
+    window.atticState.picLock = false;
     // Reset initialized so handlers get re-added on next visit
     window.atticState.initialized = false;
 
@@ -335,6 +408,7 @@
     });
     window.atticState.activeVideoCount = 0;
     window.atticRestorePlayerVolume();
+    window.atticSyncParentLock();
 
     if (typeof window.updateHorseText === 'function') {
       window.updateHorseText("you can move me and listen to me. you can close me by pressing the button at the top.", 0);

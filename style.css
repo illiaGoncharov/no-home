@@ -422,52 +422,90 @@ html {
   left: 0;
   z-index: 45;
   opacity: 0.21;
+  /* Клики должны проходить к SVG-предметам под canvas */
+  pointer-events: none;
 }
 
 /* ==============================
    4. Custom Cursor
+   Только мышь (fine pointer). На таче/мобилке красная точка не нужна.
 ============================== */
 
-* {
-  cursor: none;
+@media (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none;
+  }
+
+  .custom-cursor {
+    position: fixed;
+    width: 25px;
+    height: 25px;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    transition: transform 0.1s ease;
+    background: radial-gradient(
+      circle,
+      #ff0000 0%,
+      #ff0000 25%,
+      rgba(0, 0, 0, 0) 40%,
+      #ff0000 60%,
+      #ff0000 100%
+    );
+    background-size: 100% 100%;
+    background-position: center;
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+
+  .custom-cursor.pulse {
+    animation: pulse 0.6s infinite alternate;
+  }
+
+  .custom-cursor.clicked {
+    background: radial-gradient(
+      circle,
+      #000000 0%,
+      #000000 25%,
+      rgba(0, 0, 0, 0) 40%,
+      rgba(0, 0, 0, 0) 60%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    filter: blur(2px);
+  }
 }
 
-.custom-cursor {
-  position: fixed;
-  width: 25px;
-  height: 25px;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 99999;
-  transition: transform 0.1s ease;
-  background: radial-gradient(
-    circle,
-    #ff0000 0%,
-    #ff0000 25%,
-    rgba(0, 0, 0, 0) 40%,
-    #ff0000 60%,
-    #ff0000 100%
-  );
-  background-size: 100% 100%;
-  background-position: center;
-  border-radius: 50%;
-  filter: blur(2px);
+/* Мобайл / iframe / тач: никогда не показываем красный курсор */
+@media (hover: none), (pointer: coarse) {
+  .custom-cursor,
+  .attic-cursor {
+    display: none !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    cursor: auto !important;
+  }
 }
 
-.custom-cursor.pulse {
-  animation: pulse 0.6s infinite alternate;
+/* iframe внутри мобайл-шелла — даже если устройство определилось как fine */
+body.in-iframe .custom-cursor,
+body.in-iframe .attic-cursor,
+body.in-iframe-item .custom-cursor,
+body.in-iframe-item .attic-cursor,
+body.mobile .custom-cursor,
+body.mobile .attic-cursor {
+  display: none !important;
 }
 
-.custom-cursor.clicked {
-  background: radial-gradient(
-    circle,
-    #000000 0%,
-    #000000 25%,
-    rgba(0, 0, 0, 0) 40%,
-    rgba(0, 0, 0, 0) 60%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  filter: blur(2px);
+body.in-iframe,
+body.in-iframe *,
+body.in-iframe-item,
+body.in-iframe-item *,
+body.mobile,
+body.mobile * {
+  cursor: auto !important;
 }
 
 @keyframes pulse {
@@ -1681,6 +1719,65 @@ html {
   height: 100%;
 }
 
+/* Проценты загрузки (#loadUpdate): влезают в ширину экрана, строго по центру.
+   В контенте страницы часто font-size: 50vh — «100%» уезжает за края на мобайле. */
+#loadUpdate {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  box-sizing: border-box;
+  width: min(92vw, 100%);
+  max-width: 92vw;
+  padding: 0 12px;
+  margin: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1;
+  font-family: 'Henny Penny', cursive;
+  -webkit-text-stroke: 1px white;
+  color: transparent;
+  /* ~4 символа («100%») должны влезать в 92vw */
+  font-size: clamp(42px, 22vw, 28vh);
+  pointer-events: none;
+}
+body.in-iframe #loadingScreen {
+  position: fixed !important;
+  inset: 0 !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100vw !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  z-index: 9999 !important;
+}
+body.in-iframe #loadingProgress {
+  width: 100% !important;
+  height: 100% !important;
+}
+body.in-iframe .loading-horse {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+body.in-iframe #loadUpdate {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(92vw, 100%) !important;
+  max-width: 92vw !important;
+  font-size: clamp(40px, 20vw, 22vh) !important;
+  z-index: 10000 !important;
+}
+
 /* Обертка комнаты */
 .room-wrapper {
   position: relative;
@@ -1713,11 +1810,15 @@ html {
   object-fit: fill;
 }
 
-/* Активация интерактивности для SVG элементов */
+/* Активация интерактивности для SVG элементов.
+   bounding-box — Chrome-only; в Firefox значение невалидно и path/rect
+   наследуют pointer-events:none с .object-overlay → клики «мёртвые».
+   all работает везде (в т.ч. fill:transparent). !important — чтобы
+   инлайн-стили страниц и presentation-атрибут bounding-box не перебили. */
 .object-overlay rect,
-.object-overlay path {
-  pointer-events: bounding-box;
-  /* Рекомендация: использовать pointer-events: all для всей области элемента */
+.object-overlay path,
+.overlay-svg {
+  pointer-events: all !important;
 }
 
 /* Анимация свечения */
@@ -2170,6 +2271,38 @@ body.in-iframe #currentPoem span {
 }
 
 /* -----------------------------------------------------------------------
+   IFRAME (комнаты на мобайле) — кликабельность объектов на тач-экранах.
+   Объекты комнат — прозрачные <path class="overlay-svg"> (fill/stroke
+   transparent) без cursor/pointer-events. На десктопе мышь кликает всегда,
+   а iOS Safari генерирует click по тапу только для «кликабельных» элементов
+   (cursor:pointer / ссылка / onclick) — иначе тап по прозрачному SVG не
+   доходит до делегированных click-обработчиков (рюкзак/чемодан/walkiephone
+   /зеркало/стол и т.д.). pointer-events:all нужен, чтобы прозрачная заливка
+   вообще ловила касание (и elementFromPoint в тач-шиме видел сам path).
+   Скоуп body.in-iframe → только комнаты внутри мобайла (?desktop=1),
+   реальный десктоп (без ?desktop=1) этого класса не имеет и не затронут. */
+body.in-iframe .overlay-svg {
+    cursor: pointer;
+    pointer-events: all;
+}
+
+/* Чердак: видео скелета в портретном iframe.
+   Без object-fit:cover ландшафтный ролик даёт чёрные поля сверху/снизу
+   (как в нативном плеере iOS). Обрезаем края — как фон комнаты. */
+body.in-iframe .attic-video-container {
+    overflow: hidden;
+}
+body.in-iframe .attic-video {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center;
+    background: #000;
+}
+
+/* -----------------------------------------------------------------------
    IFRAME + ITEM — открыли конкретный предмет через ?item=<key>.
    Шаблон item-frame.php грузит layout-content.php — там #items-content
    сидит внутри .items-wrapper, которая на десктопе display: none.
@@ -2245,9 +2378,147 @@ body.in-iframe-item #items-content {
     overflow: visible !important;
 }
 
-/* .mp3 — в layout-content.php имеет z-index: -1; нужно поднять. */
+/* Под крестиком (+ полоска items из комнаты) — чуть ниже центр */
+body.in-iframe-item .iphone-container {
+    top: 56% !important;
+}
+
+/* -----------------------------------------------------------------------
+   Luggage (мобайл item-frame): 2×2 = 4 слота на страницу, листание fade.
+   Десктоп (слайд left/right по 8) не трогаем — только body.in-iframe-item.
+----------------------------------------------------------------------- */
+body.in-iframe-item .luggage-container.left.is-mobile-paged {
+    left: 50% !important;
+    right: auto !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 36px) !important;
+    max-width: 420px;
+    margin: 0 !important;
+    height: min(58vh, 420px) !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-content: stretch;
+    align-items: stretch;
+    opacity: 1;
+    transition: opacity 0.32s ease;
+    border-top: 1px dashed rgba(255, 255, 255, 0.3);
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+body.in-iframe-item .luggage-container.left.is-mobile-paged.is-fading {
+    opacity: 0;
+}
+body.in-iframe-item .luggage-container.right[hidden] {
+    display: none !important;
+}
+
+body.in-iframe-item .luggage-container.is-mobile-paged > .cell,
+body.in-iframe-item .luggage-container.is-mobile-paged > .upload-button {
+    flex: none !important;
+    width: auto !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0;
+    padding: 10px !important;
+    box-sizing: border-box;
+    border: none !important;
+    overflow: hidden;
+}
+body.in-iframe-item .luggage-container.is-mobile-paged > .is-page-hidden {
+    display: none !important;
+}
+
+/* Границы 2×2 через классы со слотов (см. items.js) */
+body.in-iframe-item .luggage-container.is-mobile-paged > .is-grid-tl,
+body.in-iframe-item .luggage-container.is-mobile-paged > .is-grid-bl {
+    border-right: 1px dashed rgba(255, 255, 255, 0.3) !important;
+}
+body.in-iframe-item .luggage-container.is-mobile-paged > .is-grid-tl,
+body.in-iframe-item .luggage-container.is-mobile-paged > .is-grid-tr {
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3) !important;
+}
+
+body.in-iframe-item .luggage-container.is-mobile-paged .cell img {
+    max-height: 78% !important;
+    max-width: 78% !important;
+}
+
+/* Upload — влезает в клетку, без гигантского «pload» */
+body.in-iframe-item .upload-button {
+    position: relative;
+}
+body.in-iframe-item .upload-button #upload-button,
+body.in-iframe-item .upload-button .up-frame {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+body.in-iframe-item .upload-text {
+    font-size: clamp(0.95rem, 4.2vw, 1.25rem) !important;
+    line-height: 1.1 !important;
+    filter: none !important;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+body.in-iframe-item .upload-mb {
+    font-size: clamp(0.65rem, 2.8vw, 0.8rem) !important;
+    filter: none !important;
+    margin-top: 2px;
+}
+body.in-iframe-item .upload-qm {
+    overflow: hidden;
+}
+body.in-iframe-item .upload-qm span {
+    font-size: clamp(0.7rem, 3vw, 0.95rem) !important;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.55) !important;
+    /* Короткие float’ы на мобайле тяжелее — оставляем лёгкое мерцание */
+    animation-duration: 12s !important;
+}
+body.in-iframe-item .upload-qm span:nth-child(6),
+body.in-iframe-item .upload-qm span:nth-child(7) {
+    display: none; /* меньше шума в маленькой клетке */
+}
+
+body.in-iframe-item .luggage-switch {
+    bottom: 12px !important;
+    padding-bottom: 18px !important;
+    z-index: 5;
+}
+body.in-iframe-item #luggage-left,
+body.in-iframe-item #luggage-right {
+    filter: blur(1px);
+    opacity: 0.4;
+}
+body.in-iframe-item #luggage-left.luggage-switch-now,
+body.in-iframe-item #luggage-right.luggage-switch-now {
+    filter: blur(0) !important;
+    opacity: 1;
+}
+
+/* .mp3 — в layout-content.php имеет z-index: -1; нужно поднять.
+   display:none по умолчанию (БЕЗ !important): иначе при открытии любого
+   НЕ-mp3 предмета плеер успевает мелькнуть поверх контента, пока items.js
+   его не спрячет. Для mp3 items.js ставит inline display:block — inline
+   перебивает non-important правило, плеер показывается штатно. */
 body.in-iframe-item .mp3 {
     z-index: 1 !important;
+    display: none;
+}
+
+/* VHS-shake 0.01s + translate/scale на тайле — жжёт GPU на мобайле.
+   Паттерн оставляем статичным; зерно и так читается. */
+body.in-iframe-item .mp3-vhs-wrapper,
+body.in-iframe-item .mp3-vhs-background-img {
+    animation: none !important;
+}
+body.in-iframe-item .mp3-controls {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 /* D: mp3-плеер на мобайле — контраст и читабельность, кнопки сохраняем.
@@ -2288,3 +2559,198 @@ body.in-iframe-item .m-item-shell {
     height: 100vh;
     background: #0e0d0b;
 }
+
+/* Camera (мобайл): пагинация / имя файла — всегда внизу по центру экрана.
+   Было absolute → при схлопнутом родителе «bottom:0» оказывался сверху. */
+body.in-iframe-item .album-switcher {
+    position: fixed !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: max(16px, env(safe-area-inset-bottom, 0px)) !important;
+    top: auto !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    width: max-content !important;
+    max-width: calc(100vw - 16px) !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 80 !important;
+}
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    flex: 0 0 auto !important;
+}
+/* Открытая фотка: только «< имя >», без страниц 1…13
+   (иначе display:flex !important перебивает JS display:none) */
+body.in-iframe-item.is-camera-enlarged .number-switcher,
+body.in-iframe-item .number-switcher.is-enlarged-hidden {
+    display: none !important;
+}
+body.in-iframe-item .page-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto !important;
+    padding: 0 7px !important;
+    white-space: nowrap !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+}
+/* JS прячет дальние страницы классом — !important нужен против старых inline */
+body.in-iframe-item .page-button.is-page-hidden {
+    display: none !important;
+}
+body.in-iframe-item .nav-arrow {
+    flex: 0 0 auto !important;
+    padding: 0 14px !important;
+    white-space: nowrap !important;
+    transform: none !important; /* иначе translateY из desktop-CSS съезжает */
+}
+body.in-iframe-item .img-number-in-switcher {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    font-size: 16px !important;
+    display: none; /* имя файла только при открытой фотке */
+}
+body.in-iframe-item.is-camera-enlarged .img-number-in-switcher {
+    display: block !important;
+}
+
+/* Camera: открытая фотка — без free-pan (не «ездит» кадр).
+   Листание: свайп горизонтально + стрелки. Боковые side-img скрыты. */
+body.in-iframe-item.is-camera-enlarged,
+body.in-iframe-item.is-camera-enlarged .m-item-shell,
+body.in-iframe-item.is-camera-enlarged .items-wrapper,
+body.in-iframe-item.is-camera-enlarged #items-content,
+body.in-iframe-item.is-camera-enlarged .album-container,
+body.in-iframe-item.is-camera-enlarged .enlarged-img-container {
+    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    touch-action: none !important;
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: auto !important;
+}
+body.in-iframe-item.is-camera-enlarged .album-container {
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    transform: none !important;
+    margin: 0 !important;
+}
+body.in-iframe-item.is-camera-enlarged .enlarged-img-container {
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    position: absolute !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* Ниже пульта (.album-switcher z-index 60+), иначе тап по «стрелкам»
+       попадает в оверлей и closeEnlargedImage → галерея */
+    z-index: 5 !important;
+}
+body.in-iframe-item.is-camera-enlarged .enlarged-img {
+    /* Центр через flex-контейнер; rotate отдельно — иначе translate+rotate
+       в порядке из camera-content.php уезжает влево. */
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    max-width: min(86vw, 520px) !important;
+    max-height: 52vh !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    transform: rotate(3deg) !important;
+    pointer-events: auto !important;
+}
+body.in-iframe-item.is-camera-enlarged .side-img {
+    display: none !important;
+}
+body.in-iframe-item.is-camera-enlarged .album-switcher,
+body.in-iframe-item.is-camera-enlarged .nav-arrow {
+    touch-action: manipulation !important;
+    pointer-events: auto !important;
+    z-index: 80 !important;
+}
+
+/* -----------------------------------------------------------------------
+   Мобайл iframe-комнаты: левая «стрелка назад» → glowing Back
+   (как .m-level-back у нативного стола). Та же нижняя точка, что home.
+   Правые стрелки (войти в пещеру и т.п.) не трогаем.
+   При is-detail-lock Back рисует родитель (#mIframeBack) — iframe-кнопку
+   прячем, иначе на треке 300vw она часто вне видимого экрана.
+----------------------------------------------------------------------- */
+body.in-iframe .arrow-button.arrow-left-button {
+    position: fixed !important;
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: min(calc(72vw * 0.24 + 8px), 88px) !important;
+    transform: translateX(-50%);
+    width: auto !important;
+    height: auto !important;
+    min-width: 72px;
+    min-height: 44px;
+    padding: 6px 18px !important;
+    z-index: 200 !important;
+    pointer-events: auto !important;
+    overflow: visible !important;
+    font-family: 'This Reality', cursive;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: #e8e2d6 !important;
+    -webkit-text-fill-color: #e8e2d6 !important;
+    appearance: none;
+    -webkit-appearance: none;
+    filter: none;
+    text-shadow:
+        0 0 4px rgba(255, 255, 255, 0.4),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    -webkit-tap-highlight-color: transparent;
+}
+body.in-iframe .arrow-button.arrow-left-button::before {
+    display: none !important;
+}
+body.in-iframe .arrow-button.arrow-left-button::after {
+    content: 'Back';
+    color: #e8e2d6;
+    -webkit-text-fill-color: #e8e2d6;
+}
+body.in-iframe .arrow-button.arrow-left-button img,
+body.in-iframe .arrow-button.arrow-left-button .arrow {
+    display: none !important;
+}
+body.in-iframe .arrow-button.arrow-left-button:active {
+    opacity: 0.8;
+}
+body.in-iframe.is-detail-lock .arrow-button.arrow-left-button {
+    /* Логика клика остаётся (parent шлёт nh-room-back → btn.click()),
+       визуально Back только на родителе */
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* Зум рюкзака/чемодана/окна: не давать тачу уехать в родительский свайп */
+body.in-iframe.is-detail-lock,
+body.in-iframe.is-detail-lock .room-wrapper {
+    touch-action: none !important;
+    overscroll-behavior: none;
+}
+

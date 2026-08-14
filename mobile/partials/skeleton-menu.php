@@ -12,26 +12,51 @@
          src="<?php echo get_template_directory_uri(); ?>/files/items/noise.png"
          alt="" aria-hidden="true">
 
+    <!-- Скелет — декоративный, как в макете. Некликабелен: открытие меню
+         уже происходит с другой кнопки на главной (m-skeleton-btn). -->
+    <img class="msk-skeleton"
+         src="<?php echo get_template_directory_uri(); ?>/files/mobile/home/skeleton-bottom.png"
+         alt="" aria-hidden="true">
+
     <!-- Крестик закрытия -->
     <button class="msk-close" id="mskClose" aria-label="Close menu">
         <img src="<?php echo get_template_directory_uri(); ?>/files/mobile/skeleton-menu/cross.png" alt="">
     </button>
 
-    <!-- Кнопка «домой» — обычная ссылка (без data-target), браузер сам переходит -->
+    <!-- Горизонтальное меню предметов — из комнаты или из apple Items.
+         См. mobile.js → setItemStrip (is-item-from-room / is-overlay). -->
+    <nav class="m-item-strip" id="mItemStrip" hidden aria-label="Items">
+        <button type="button" class="m-item-strip-link" data-item="backpack">backp</button>
+        <span class="m-item-strip-sep" aria-hidden="true">|</span>
+        <button type="button" class="m-item-strip-link" data-item="luggage">lugg</button>
+        <span class="m-item-strip-sep" aria-hidden="true">|</span>
+        <button type="button" class="m-item-strip-link" data-item="iphone">iphone</button>
+        <span class="m-item-strip-sep" aria-hidden="true">|</span>
+        <button type="button" class="m-item-strip-link" data-item="diary">diary</button>
+        <span class="m-item-strip-sep" aria-hidden="true">|</span>
+        <button type="button" class="m-item-strip-link" data-item="camera">cam.</button>
+        <span class="m-item-strip-sep" aria-hidden="true">|</span>
+        <button type="button" class="m-item-strip-link" data-item="mp3">.mp3</button>
+    </nav>
+
+    <!-- Кнопка «домой» — над черепом скелета. Обычная ссылка, без data-target. -->
     <a class="msk-home" href="<?php echo esc_url( nohome_mobile_url( home_url( '/' ) ) ); ?>" aria-label="Home">
         <img src="<?php echo get_template_directory_uri(); ?>/files/nav/skeleton-home-rooms.png" alt="">
         <span>home</span>
     </a>
 
-    <!-- Внешнее кольцо: iphone / backpack / luggage -->
-    <a href="#" class="msk-label msk-iphone"   data-target="iphone">iphone</a>
-    <a href="#" class="msk-label msk-backpack" data-target="backpack">backpack</a>
-    <a href="#" class="msk-label msk-luggage"  data-target="luggage">luggage</a>
+    <!-- Внешнее кольцо: iphone / backpack / luggage.
+         <button>, а не <a href="#"> — кнопки нативно кликабельны на iOS
+         и НИКОГДА не дают переход по якорю (иначе на тапе иногда успевал
+         сработать переход на #, и плеер мелькал/страница «уезжала»). -->
+    <button type="button" class="msk-label msk-iphone"   data-target="iphone">iphone</button>
+    <button type="button" class="msk-label msk-backpack" data-target="backpack">backpack</button>
+    <button type="button" class="msk-label msk-luggage"  data-target="luggage">luggage</button>
 
     <!-- Среднее кольцо: camera / mp3 / diary -->
-    <a href="#" class="msk-label msk-camera"   data-target="camera">camera</a>
-    <a href="#" class="msk-label msk-mp3"      data-target="mp3">mp3</a>
-    <a href="#" class="msk-label msk-diary"    data-target="diary">diary</a>
+    <button type="button" class="msk-label msk-camera"   data-target="camera">camera</button>
+    <button type="button" class="msk-label msk-mp3"      data-target="mp3">mp3</button>
+    <button type="button" class="msk-label msk-diary"    data-target="diary">diary</button>
 
     <!-- Центр: items (яблоко) — открывает apple-menu -->
     <button class="msk-center" id="mskCenter" data-target="items">

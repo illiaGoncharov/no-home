@@ -20,6 +20,35 @@ html, body {
     -webkit-text-size-adjust: 100%;
 }
 
+/* На мобайле не наследуем десктопный flex-center с style.css —
+   иначе иногда ломается ширина/старт горизонтального трека. */
+html:has(body.mobile),
+body.mobile {
+    display: block;
+    justify-content: initial;
+    flex-direction: initial;
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+/* Нижняя точка «выход»: home в скелет-меню и Back на зумах — одно место. */
+:root {
+    --m-exit-slot-bottom: min(calc(72vw * 0.24 + 52px), 148px);
+}
+
+/* Красный десктоп-курсор на мобайле не показываем */
+body.mobile .custom-cursor,
+body.mobile .attic-cursor,
+.custom-cursor,
+.attic-cursor {
+    display: none !important;
+}
+body.mobile,
+body.mobile * {
+    cursor: auto !important;
+}
+
 /* --- Скрываем десктопные элементы на мобайле --- */
 .mobile-hide,
 .horse-indicator,
@@ -149,9 +178,12 @@ html, body {
 .m-marquee-track span {
     font-family: 'Avara', sans-serif;
     font-size: 12px;
-    color: #b0b0b0;
-    opacity: 0.8;
+    color: #fff;
+    opacity: 1;
     letter-spacing: 0.03em;
+    /* белый текст со свечением */
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.7),
+                 0 0 10px rgba(255, 255, 255, 0.35);
 }
 
 .m-marquee-track span::after {
@@ -201,6 +233,30 @@ html, body {
     position: relative;
 }
 
+/* Только главная (.m-home-main): секции сами больше
+   не являются точками прилипания (снимаем snap с их границ 0/100/200vw) —
+   вместо них прилипание держат невидимые .m-snap-point на 35/100/165vw
+   (см. ниже). Так дом центрируется как раньше,
+   а лево/право «недоезжают» до полного экрана — нативный snap плавный,
+   без ручной JS-подгонки и связанного с ней дёрганья. */
+.m-home-main .m-section {
+    scroll-snap-align: none;
+}
+
+/* Невидимые точки прилипания для главной. Ширина/высота — 1px, значения
+   не важны: scroll-snap-align: start ловит именно левый край элемента. */
+.m-snap-point {
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    scroll-snap-align: start;
+    pointer-events: none;
+}
+.m-snap-left   { left: 35vw; }
+.m-snap-center { left: 100vw; }
+.m-snap-right  { left: 165vw; }
+
 /* Центральная — дом по центру */
 .m-section-center {
     display: flex;
@@ -226,6 +282,577 @@ html, body {
        перехватывает 3D-сцена). */
 }
 
+/* -----------------------------------------------------------------------
+   Нативная комната (без iframe) — см. mobile/rooms/<slug>.php.
+   Занимает то же место/z-index, что и .m-inner-iframe у комнат без
+   собственной нативной вёрстки (fallback остаётся прежним).
+----------------------------------------------------------------------- */
+.m-native-room {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300vw;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Один уровень сцены (main / table-zoom / chair-zoom) — виден только
+   активный, остальные скрыты. Переключение — этап 2 (mobile-native-room.js). */
+.m-level {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.m-level.is-active {
+    display: block;
+}
+
+/* main: 3 портретных кадра встык — левый/центр/правый ракурс, каждый
+   ровно 100vw. Свайп идёт по .m-rooms-scroll как обычно. */
+.m-room-strip {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+.m-room-frame {
+    width: 100vw;
+    height: 100%;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+}
+
+/* Растушёвка стыков между кадрами — тонкая полоса с блюром подложки,
+   маскированная по краям (mask-image), чтобы эффект плавно затухал, а не
+   резал глаз собственной прямоугольной границей. Стены в кадре — почти
+   однородный бетон, поэтому лёгкого блюра достаточно, чтобы скрыть шов. */
+.m-seam {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 8vw;
+    pointer-events: none;
+    z-index: 2;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 35%, #000 65%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 35%, #000 65%, transparent);
+}
+.m-seam-1 { left: calc(100vw - 4vw); }
+.m-seam-2 { left: calc(200vw - 4vw); }
+
+/* -----------------------------------------------------------------------
+   Спальня — цельная панорама (как пещера), без склейки 3 кадров
+----------------------------------------------------------------------- */
+.m-home[data-room-slug="0selectedarea1"] #mRoomsScroll {
+    scroll-snap-type: none;
+}
+.m-home[data-room-slug="0selectedarea1"] .m-section {
+    display: none;
+}
+.m-home[data-room-slug="0selectedarea1"] .m-rooms-track {
+    width: max(100vw, calc(100dvh * 3840 / 2160));
+}
+.m-home[data-room-slug="0selectedarea1"] .m-native-room[data-room="bedroom"] {
+    width: 100%;
+}
+.m-bed-pano {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.m-bed-pano-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.m-native-room[data-room="bedroom"] .m-bed-pano-hit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+}
+
+/* Зумы рюкзака/чемодана/окна — fixed на весь экран */
+.m-home.is-bedroom-detail #mRoomsScroll {
+    overflow-x: hidden;
+    scroll-snap-type: none;
+}
+.m-home.is-bedroom-detail .m-arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+.m-native-room[data-room="bedroom"] .m-level.m-bed-detail {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 19;
+    background: #0e0d0b;
+}
+.m-bed-detail-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+}
+/* Зум чемодана — кадр смещён влево */
+.m-bed-detail-suitcase {
+    object-position: 36% center;
+}
+/* Зум рюкзака — совсем чуть правее центра */
+.m-bed-detail-backpack {
+    object-position: 48% center;
+}
+/* Тап по центру зума → открыть item (рюкзак/чемодан) */
+.m-bed-hit-open {
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    top: 22%;
+    bottom: 18%;
+    z-index: 4;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* table-zoom: три ОТДЕЛЬНЫХ экрана (не бесшовная склейка).
+   Свайп не таскает ленту — карусель с тёмным фейдом (см. JS). */
+.m-level[data-level="table-zoom"] .m-seam {
+    display: none;
+}
+.m-home.is-table-zoom #mRoomsScroll {
+    overflow-x: hidden; /* свободный свайп выключен — только карусель */
+    scroll-snap-type: none;
+}
+/* camera-zoom: без свободного скролла; свайп/стрелки отключены — только Back */
+.m-home.is-camera-zoom #mRoomsScroll {
+    overflow-x: hidden;
+    scroll-snap-type: none;
+}
+.m-home.is-camera-zoom .m-arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Пещера: свободный скролл по цельной панораме (без snap на 100vw) */
+.m-home[data-room-slug="0selectedarea2"] #mRoomsScroll {
+    scroll-snap-type: none;
+}
+.m-home[data-room-slug="0selectedarea2"] .m-section {
+    display: none; /* секции только для snap — панораме не нужны */
+}
+/* Ширина трека = высота × 16:9 → картинка без crop и без сжатия */
+.m-home[data-room-slug="0selectedarea2"] .m-rooms-track {
+    width: max(100vw, calc(100dvh * 3840 / 2160));
+}
+.m-home[data-room-slug="0selectedarea2"] .m-native-room[data-room="cave"] {
+    width: 100%;
+}
+
+/* Пещера: детальные уровни — без свайпа панорамы, только Back */
+.m-home.is-cave-detail #mRoomsScroll {
+    overflow-x: hidden;
+    scroll-snap-type: none;
+}
+.m-home.is-cave-detail .m-arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+/* Стена с вещами — стрелки видны, крутят панораму стены */
+.m-home.is-cave-wall .m-arrow {
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 25;
+}
+
+/* Цельная панорама */
+.m-cave-pano {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.m-cave-pano-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* бокс уже 16:9 — без letterbox и без обрезки */
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+/* Слои поверх базы — те же пропорции, что у панорамы */
+.m-cave-pano-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+.m-cave-mirror-png {
+    z-index: 2;
+}
+.m-cave-light {
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+.m-cave-pano.is-classiki-on .m-cave-light {
+    opacity: 1;
+}
+.m-cave-classiki {
+    z-index: 4;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+.m-cave-pixel-mirror {
+    z-index: 5;
+}
+.m-native-room[data-room="cave"] .m-cave-pano-hit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+}
+
+/* Зумы пещеры — fixed на весь экран (панорама шире 300vw) */
+.m-native-room[data-room="cave"] .m-level.m-cave-detail {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 19;
+    background: #0e0d0b;
+}
+.m-cave-detail-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* just-cave / walkie — фуллскрин */
+    display: block;
+}
+.m-cave-helmet-img,
+.m-cave-flash-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 2;
+}
+.m-level.is-helmet-on .m-cave-helmet-img { opacity: 1; }
+.m-level.is-flash-on .m-cave-flash-img { opacity: 1; }
+
+/* Стена с вещами — цельная 16:9 панорама, свайп внутри оверлея */
+.m-cave-detail-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    touch-action: pan-x;
+}
+.m-cave-detail-scroll::-webkit-scrollbar {
+    display: none;
+}
+.m-cave-detail-pano {
+    position: relative;
+    height: 100%;
+    width: max(100vw, calc(100dvh * 3840 / 2160));
+}
+.m-level[data-level="items-wall"] .m-cave-detail-img,
+.m-level[data-level="items-wall"] .m-cave-helmet-img,
+.m-level[data-level="items-wall"] .m-cave-flash-img {
+    object-fit: fill; /* бокс уже 16:9 — вся стена без crop */
+}
+
+/* Хитбоксы на стене — % от панорамы */
+.m-level[data-level="items-wall"] .m-cave-hit-jbl {
+    left: 18%;
+    top: 62%;
+    width: 18%;
+    height: 22%;
+}
+.m-level[data-level="items-wall"] .m-cave-hit-walkie {
+    left: 55%;
+    top: 52%;
+    width: 22%;
+    height: 32%;
+}
+.m-level[data-level="items-wall"] .m-cave-hit-helmet {
+    left: 38%;
+    top: 28%;
+    width: 24%;
+    height: 28%;
+}
+.m-level[data-level="items-wall"] .m-cave-hit-flash {
+    left: 58%;
+    top: 12%;
+    width: 18%;
+    height: 18%;
+}
+.m-level[data-level="walkie-zoom"] .m-cave-hit-walkie-play {
+    left: 28%;
+    top: 18%;
+    width: 44%;
+    height: 64%;
+}
+.m-level[data-level="speaker-zoom"] .m-cave-hit-speaker-mp3 {
+    left: 22%;
+    top: 12%;
+    width: 56%;
+    height: 76%;
+}
+
+/* Муха внутри пещеры (как .fly на десктопе) */
+.m-cave-fly {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    left: 40%;
+    top: 40%;
+    background-image: url('../files/test/fly2.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transition: transform 0.5s, left 0.5s, top 0.5s;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 8;
+}
+
+.m-zoom-fade {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 18;
+}
+
+/* chair-zoom — не панорама, один экран. Показываем его по центру 300vw-трека
+   (в той же трети, куда мы центрируем скролл при переходе — см.
+   goToLevel() в mobile-native-room.js), лево/право трети остаются пустыми. */
+.m-chair-base,
+.m-chair-dark {
+    position: absolute;
+    top: 0;
+    left: 100vw;
+    width: 100vw;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.m-chair-dark {
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.m-level.is-open .m-chair-dark {
+    opacity: 1;
+}
+
+/* Тап-зоны (SVG-оверлей поверх кадров) — полностью прозрачные, без вспышек */
+.m-tap-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300vw;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3;
+}
+/* chair-zoom — оверлей только над центральной третью (там же картинка) */
+.m-level[data-level="chair-zoom"] .m-tap-overlay {
+    left: 100vw;
+    width: 100vw;
+}
+.m-tap-zone {
+    fill: transparent;
+    stroke: transparent;
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+/* HTML-хитбоксы (table-zoom / camera-zoom) — прозрачные кнопки поверх кадров */
+.m-tap-hit {
+    position: absolute;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    cursor: pointer;
+    z-index: 4;
+}
+/* экран ноутбука — центральный кадр */
+.m-level[data-level="table-zoom"] .m-tap-hit[data-nh-cycle] {
+    left: calc(100vw + 26vw);
+    top: 24%;
+    width: 48vw;
+    height: 32%;
+}
+/* iPhone / камера — оверлей только над правым кадром (200vw),
+   slice синхронизирован с object-fit: cover у .m-room-frame */
+.m-level[data-level="table-zoom"] .m-tap-overlay-right {
+    left: 200vw;
+    width: 100vw;
+    height: 100%;
+}
+
+/* camera-zoom — один экран по центру трека (как chair-zoom) */
+.m-camera-zoom-img {
+    position: absolute;
+    top: 0;
+    left: 100vw;
+    width: 100vw;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.m-level[data-level="camera-zoom"] .m-tap-overlay-camera {
+    left: 100vw;
+    width: 100vw;
+}
+/* (стрелки на camera-zoom скрыты — см. .m-home.is-camera-zoom .m-arrow выше) */
+
+/* Кнопка «Back» на zoom-уровнях — та же нижняя точка, что home в меню.
+   Шрифт This Reality как у поэмы/референса, ровная строка без дуги. */
+.m-level-back {
+    position: fixed;
+    top: auto;
+    left: 50%;
+    bottom: min(calc(72vw * 0.24 + 8px), 88px);
+    transform: translateX(-50%);
+    z-index: 30; /* выше .m-skeleton-btn (25), чтобы тап не уходил в скелет */
+    margin: 0;
+    border: 0;
+    background: transparent;
+    padding: 6px 18px;
+    font-family: 'This Reality', cursive;
+    font-size: 30px;
+    font-weight: normal;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: #e8e2d6 !important;
+    -webkit-text-fill-color: #e8e2d6 !important;
+    appearance: none;
+    -webkit-appearance: none;
+    filter: none;
+    text-shadow:
+        0 0 4px rgba(255, 255, 255, 0.4),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.m-level-back:active {
+    opacity: 0.8;
+}
+
+/* ASCII-арт (chair-zoom) — перенос из десктопного [local]table.php, тот же
+   текст/стили. На десктопе позиция считается под курсор (mousemove) — на
+   мобиле фиксируем по центру экрана, показ по .is-open (tap-toggle),
+   а не hover. */
+p#ascii-art.c2 {
+    position: fixed;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0);
+    z-index: 21;
+    pointer-events: none;
+    text-align: center;
+    max-width: 90vw;
+}
+.m-level.is-open #ascii-art {
+    display: block;
+}
+p#ascii-art.c2::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    width: calc(100% + 80px);
+    height: calc(100% + 80px);
+    background: rgba(0, 0, 0, 0.8);
+    z-index: -1;
+    border-radius: 55px;
+    filter: blur(20px);
+}
+p#ascii-art.c2 .c0,
+p#ascii-art.c2 .c6,
+p#ascii-art.c2 .c11 {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+    text-decoration: none;
+    vertical-align: baseline;
+    font-size: 9pt;
+    font-style: normal;
+}
+p#ascii-art.c2 .c0 { font-family: "Courier New"; }
+p#ascii-art.c2 .c6,
+p#ascii-art.c2 .c11 { font-family: "Arial"; }
+p#ascii-art.c2 .c13,
+p#ascii-art.c2 .c2 {
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 1.15;
+    text-align: center;
+}
+p#ascii-art.c2 .c7,
+p#ascii-art.c2 .c8 {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    vertical-align: baseline;
+    font-style: normal;
+}
+p#ascii-art.c2 .c3 {
+    font-size: 7pt;
+    font-family: "Courier New";
+    font-weight: 400;
+}
+p#ascii-art.c2 .c1 {
+    color: inherit;
+    text-decoration: inherit;
+}
+p#ascii-art.c2 .c5 {
+    font-family: "Courier New";
+    font-weight: 400;
+}
+p#ascii-art.c2 .c15 { font-size: 6pt; }
+p#ascii-art.c2 .c14 { font-size: 10pt; }
+p#ascii-art.c2 .c4  { font-size: 8pt; }
+p#ascii-art.c2 .c12 { font-size: 7pt; }
+p#ascii-art.c2 .c9  { height: 11pt; }
+
 /* Текстовые (не-3D) inner-страницы (about и т.п.): один экран 100vw.
    300vw-свайп оставлен только для 3D-комнат (.m-inner-room), иначе текст
    рендерится втрое шире и не вмещается в экран. */
@@ -233,6 +860,14 @@ html, body {
 .m-inner-flat .m-inner-iframe { width: 100vw; }
 .m-inner-flat .m-rooms-scroll { overflow-x: hidden; }
 .m-inner-flat .m-arrow        { display: none !important; }
+
+/* Золотая комната: один экран (дверь в кадре). Свайп 300vw ломал aspect
+   Three.js и уводил стартовый ракурс от дверей. Огляд внутри — OrbitControls. */
+.m-inner-single .m-rooms-track  { width: 100vw; }
+.m-inner-single .m-inner-iframe { width: 100vw; left: 0; }
+.m-inner-single .m-rooms-scroll { overflow-x: hidden; scroll-snap-type: none; }
+.m-inner-single .m-section      { display: none; }
+.m-inner-single .m-arrow        { display: none !important; }
 
 /* Единый overlay — абсолютный поверх всего трека, не мешает свайпу */
 .m-stickers-overlay {
@@ -303,7 +938,11 @@ html, body {
     width: auto;
     user-select: none;
     -webkit-user-drag: none;
-    pointer-events: none;
+    /* Кликабельны, как на десктопе — тап открывает #mStickerInfo/#mNoteOverlay.
+       Свайпу по .m-rooms-scroll это не мешает (аналогично кнопке note8). */
+    pointer-events: auto;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Кнопка-стикер (пустой серый note8) — кликабельная */
@@ -334,43 +973,44 @@ button.m-note-btn img {
 
 /* note1: крупный список, top-left */
 .ms-note1 {
-    left: 0.67%;  /* 2vw  */
+    left: 13.5%;  /* 2vw  */
     top: 7%;
     height: 25vh;
-    transform: rotate(-2deg);
+    transform: rotate(-10deg);
 }
 
 /* worksheet: крупный SUBJECTIVITY REPORT, top-right левой зоны → в центр */
 .ms-worksheet {
-    left: 12%;    /* 36vw */
+    left: 33%;    /* 36vw */
     top: 6%;
-    height: 38vh;
-    transform: rotate(5deg);
+    height: 34vh;
+    transform: rotate(9deg);
     transform-origin: top left;
 }
 
 /* gobag: крупный GO BAG, bottom-left */
 .ms-gobag {
-    left: 1%;     /* 3vw  */
-    top: 47%;
+    left: 13%;     /* 3vw  */
+    top: 52%;
     height: 42vh;
     transform: rotate(-3deg);
 }
 
 /* note2: "Send the brief", малый, bottom-centre левой зоны */
 .ms-note2 {
-    left: 6.67%;  /* 20vw */
-    top: 53%;
+    left: 15%;  /* 20vw */
+    top: 45%;
     height: 15vh;
-    transform: rotate(6deg);
+    transform: rotate(12deg);
 }
 
 /* note3: "Ask to be added...", правая часть левой зоны (виден при свайпе в центр) */
 .ms-note3 {
-    left: 20%;    /* 60vw */
-    top: 60%;
+    left: 36%;
+    top: 72%;
     height: 14vh;
-    transform: rotate(-4deg);
+    transform: rotate(12deg);
+    z-index: 999;
 }
 
 /* ── ЦЕНТРАЛЬНАЯ ЗОНА (100–200vw = 33.3–66.7%) ── */
@@ -394,18 +1034,18 @@ button.m-note-btn img {
 
 /* note8: ПУСТОЙ серый — кликабельный, справа сверху от дома (на скотче) */
 .ms-note8-btn {
-    left: 58%;    /* 174vw */
+    left: 56%;
     top: 8%;
     height: 14vh;
-    transform: rotate(4deg);
+    transform: rotate(-6deg);
 }
 
 /* note4: "Write out the time codes..." справа ниже от дома */
 .ms-note4 {
-    left: 60%;    /* 180vw */
-    top: 30%;
-    height: 24vh;
-    transform: rotate(-5deg);
+    left: 62%;
+    top: 22%;
+    height: 21vh;
+    transform: rotate(5deg);
 }
 
 /* ── ПРАВАЯ ЗОНА (200–300vw = 66.7–100%) ── */
@@ -420,89 +1060,356 @@ button.m-note-btn img {
 
 /* note6: жёлтая лента "Pack", mid правой зоны */
 .ms-note6 {
-    left: 69.33%; /* 208vw */
-    top: 42%;
+    left: 70.33%;
+    top: 38%;
     height: 7vh;
-    transform: rotate(3deg);
+    transform: rotate(2deg);
 }
 
 /* survival: крупный SURVIVAL GUIDES, центр-низ правой зоны */
 .ms-survival {
-    left: 71.67%; /* 215vw */
-    top: 46%;
-    height: 38vh;
-    transform: rotate(-2deg);
+    left: 63.67%;
+    top: 50%;
+    height: 31vh;
+    transform: rotate(7deg);
 }
 
 /* note7: "Clean cache / Make a new playlist...", bottom-right */
 .ms-note7 {
-    left: 86%;    /* 258vw */
-    top: 65%;
-    height: 22vh;
+    left: 78%;
+    top: 77%;
+    height: 14vh;
     transform: rotate(5deg);
 }
 
 /* -----------------------------------------------------------------------
-   Оверлей заметки
+   Оверлей заметки (note8) — тёмная тема, единый визуальный язык с
+   #mStickerInfo (десктопный .sticker-info: фон #151413, подпись/exit
+   в углах, шрифт Avara).
 ----------------------------------------------------------------------- */
 .m-note-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    z-index: 100;
-    background: rgba(14, 13, 11, 0.75);
+    z-index: 1200;
+    background: #151413;
     align-items: center;
     justify-content: center;
 }
 .m-note-overlay.is-open {
     display: flex;
 }
-.m-note-overlay-inner {
-    background: #f5f0e8;
-    border-radius: 2px;
-    padding: 20px;
-    width: 80vw;
-    max-width: 320px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.m-note-textarea {
-    width: 100%;
-    height: 120px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #aaa;
-    font-family: inherit;
+.m-note-overlay-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 24px 0 0 20px;
+    font-family: 'Avara', sans-serif;
     font-size: 15px;
-    color: #1a1a1a;
-    resize: none;
-    outline: none;
+    color: #b0b0b0;
+    opacity: 0.5;
 }
-.m-note-overlay-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-}
-.m-note-send,
-.m-note-cancel {
+.m-note-overlay-exit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 24px 20px 0 0;
     background: none;
     border: none;
+    font-family: 'Avara', sans-serif;
+    font-size: 15px;
+    color: #f5f0e8;
+    opacity: 0.85;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.m-note-overlay-exit:active {
+    opacity: 1;
+}
+.m-note-overlay {
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Сцена стикера — сам note8.png в натуральных пропорциях (0.95 = w/h),
+   поверх него — прозрачный textarea, «пишем прямо на бумаге» (как на
+   десктопе: transform: rotate(-10deg) поверх .note8). */
+.m-note-stage {
+    position: relative;
+    height: 56vh;
+    width: calc(56vh * 0.95);
+    max-width: 78vw;
+}
+.m-note-stage-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+}
+.m-note-textarea {
+    position: absolute;
+    top: 35%;
+    left: 24%;
+    width: 53%;
+    height: 31%;
+    transform: rotate(-8deg);
+    background: none;
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 0;
+    font-family: 'Avara', sans-serif;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #3a3a3a;
+}
+
+.m-note-textarea::placeholder {
+    color: rgba(58, 58, 58, 0.55);
+}
+
+.m-note-overlay-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+.m-note-send {
+    background: #3a3733;
+    border: none;
+    border-radius: 3px;
+    padding: 7px 24px;
+    font-family: 'Avara', sans-serif;
     font-size: 13px;
     letter-spacing: 0.05em;
+    color: #d8d3c8;
     cursor: pointer;
-    padding: 4px 8px;
-    color: #1a1a1a;
     text-transform: lowercase;
+    -webkit-tap-highlight-color: transparent;
 }
-.m-note-send { font-weight: 600; }
+.m-note-send:active {
+    opacity: 0.8;
+}
 .m-note-status {
     font-size: 12px;
-    color: #666;
+    color: #8a8a8a;
     text-align: center;
     min-height: 16px;
     margin: 0;
 }
+
+/* -----------------------------------------------------------------------
+   Оверлей стикера #mStickerInfo — общий для всех стикеров главной.
+   Визуальный язык — как десктопный .sticker-info: тёмный фон #151413,
+   подпись слева-сверху, -exit- справа-сверху, шрифт Avara.
+   Режим переключается классами на корневом элементе:
+     is-simple    → .m-sticker-simple-img
+     is-flip      → .m-sticker-flip (+ footer prev/download/next)
+     is-worksheet → .m-sw-detail
+----------------------------------------------------------------------- */
+.m-sticker-info {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1200;
+    background: #151413;
+}
+.m-sticker-info.is-open {
+    display: block;
+}
+
+.m-sticker-info-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 24px 0 0 20px;
+    font-family: 'Avara', sans-serif;
+    font-size: 14px;
+    color: #b0b0b0;
+    opacity: 0.5;
+    max-width: 55vw;
+    word-break: break-word;
+    z-index: 2;
+}
+.m-sticker-info-exit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 24px 20px 0 0;
+    background: none;
+    border: none;
+    font-family: 'Avara', sans-serif;
+    font-size: 14px;
+    color: #f5f0e8;
+    opacity: 0.85;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-tap-highlight-color: transparent;
+}
+.m-sticker-info-exit:active {
+    opacity: 1;
+}
+
+/* Режим: простой стикер — одна увеличенная картинка по центру */
+.m-sticker-simple-img {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 82vw;
+    max-height: 68vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+}
+.m-sticker-info.is-simple .m-sticker-simple-img {
+    display: block;
+}
+
+/* Режим: флип go bag / survival guides — 2 стадии друг над другом,
+   переключение прозрачностью (аналог desktop .sticker-under/.sticker-second).
+   Реальные файлы (go bag.jpg, survival guides.jpg и т.п.) — ~0.71, а не 0.81
+   (0.81 — общая константа с десктопа, там не критично из-за object-fit:
+   contain, но даёт лишние поля по бокам — тут считаем точнее). */
+.m-sticker-flip {
+    --flip-h: min(68vh, calc(82vw / 0.71));
+    display: none;
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: var(--flip-h);
+    width: calc(var(--flip-h) * 0.71);
+}
+.m-sticker-info.is-flip .m-sticker-flip {
+    display: block;
+}
+.m-sticker-flip-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 0.6s ease-in-out;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+}
+.m-sticker-flip-stage1 { opacity: 1; }
+.m-sticker-flip-stage2 { opacity: 0; }
+/* is-stage2 висит на корне #mStickerInfo (не на .m-sticker-flip) — так же
+   footer prev/next читает этот же класс с корня, см. ниже. */
+.m-sticker-info.is-stage2 .m-sticker-flip-stage1 { opacity: 0; }
+.m-sticker-info.is-stage2 .m-sticker-flip-stage2 { opacity: 1; }
+
+/* Режим: subjectivity worksheet — подложка + тап-грид из 12 фото.
+   Позиции ячеек — % от размеров контейнера, поэтому контейнер обязан
+   иметь ТОЧНО те же пропорции, что и сама картинка (иначе появляются
+   пустые поля от object-fit: contain, и грид уезжает относительно фото).
+   Реальный файл subjectivity worksheet.jpg — 1004×1416px (0.709) —
+   считаем контейнер под него отдельно, с ограничением и по высоте
+   (68vh), и по ширине (82vw). */
+.m-sw-detail {
+    --sw-h: min(68vh, calc(82vw / 0.709));
+    display: none;
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: var(--sw-h);
+    width: calc(var(--sw-h) * 0.709);
+}
+.m-sticker-info.is-worksheet .m-sw-detail {
+    display: block;
+}
+.m-sw-detail-under {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+}
+.m-sw-grid {
+    position: absolute;
+    inset: 0;
+}
+.m-sw-cell {
+    position: absolute;
+    height: 11.28%;
+    width: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.m-sw-cell img {
+    display: block;
+    height: 100%;
+    width: auto;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+.m-sw-cell.is-revealed img {
+    opacity: 1;
+}
+.m-sw-c1 { left: 7.44%; }
+.m-sw-c2 { left: 36.9%; }
+.m-sw-c3 { left: 66.36%; }
+.m-sw-r1 { top: 25.88%; }
+.m-sw-r2 { top: 40.34%; }
+.m-sw-r3 { top: 54.72%; }
+.m-sw-r4 { top: 69.105%; }
+
+/* Футер флипа — одна строка внизу: download + стрелка сразу справа от
+   текста (как в макете), а не на всю высоту экрана по краям. */
+.m-sticker-info-footer {
+    display: none;
+    position: absolute;
+    bottom: 28px;
+    left: 20px;
+    align-items: center;
+    gap: 10px;
+    z-index: 2;
+}
+.m-sticker-info.is-flip .m-sticker-info-footer {
+    display: flex;
+}
+
+.m-sticker-info-download {
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 14px;
+    color: #b0b0b0;
+    opacity: 0.6;
+    text-decoration: none;
+}
+.m-sticker-info-download:active {
+    opacity: 0.9;
+}
+
+.m-sticker-info-prev,
+.m-sticker-info-next {
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: 'Avara-Bold', 'Avara', sans-serif;
+    font-size: 18px;
+    line-height: 1;
+    color: #b0b0b0;
+    opacity: 0.6;
+    -webkit-tap-highlight-color: transparent;
+}
+.m-sticker-info-prev:active,
+.m-sticker-info-next:active {
+    opacity: 0.9;
+}
+.m-sticker-info.is-stage2 .m-sticker-info-prev { display: inline-block; }
+.m-sticker-info:not(.is-stage2) .m-sticker-info-next { display: inline-block; }
 
 /* мелкий: note4 (устаревшее правило, оставлено для совместимости) */
 .m-s-note4 {
@@ -532,17 +1439,27 @@ button.m-note-btn img {
     z-index: 18;
 }
 
+/* Back на зуме — кнопка родителя (#mIframeBack, z:60), поверх градиента.
+   Кнопки внутри комнаты прячем: они под градиентом и выглядят серыми. */
+.m-home.is-native-zoom .m-iframe-back {
+    display: block !important;
+}
+.m-home.is-native-zoom .m-native-room .m-level-back {
+    display: none !important;
+}
+
 /* -----------------------------------------------------------------------
    Стрелки — пульсируют (подсказка навигации), над градиентом
 ----------------------------------------------------------------------- */
 
 .m-arrow {
     position: absolute;
-    /* Стрелки на уровне рук скелета (скелет приподнят, см. .m-skeleton-btn). */
-    bottom: 40px;
+    /* Стрелки на оси кистей скелета (скелет прижат к низу). Кисти уходят
+       почти к самому низу — держим центр стрелки на их уровне. */
+    bottom: 6px;
     background: none;
     border: none;
-    padding: 10px;
+    padding: 10px 6px;
     cursor: pointer;
     z-index: 20;
     opacity: 0.9;
@@ -563,10 +1480,9 @@ button.m-note-btn img {
     filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.9));
 }
 
-/* Узкие стрелки вплотную к бокам скелета (картинка 240px, центр снизу).
-   Половина скелета = 120px; стрелки чуть снаружи его рук. */
-.m-arrow-left  { left:  calc(50% - 150px); }
-.m-arrow-right { right: calc(50% - 150px); }
+/* Стрелки ближе к краям, но с небольшим отступом. */
+.m-arrow-left  { left:  8px; }
+.m-arrow-right { right: 8px; }
 
 /* Стрелка недоступна — темнее, не скрывается */
 .m-arrow.is-dimmed {
@@ -586,9 +1502,9 @@ button.m-note-btn img {
 
 .m-skeleton-btn {
     position: absolute;
-    /* Чуть приподнят над низом — раньше был слишком прижат/низко.
-       Padding только сверху/по бокам — даёт hit-area вокруг картинки. */
-    bottom: 12px;
+    /* Прижат к низу экрана. Padding только сверху/по бокам — hit-area
+       вокруг картинки, не отрывает её от низа. */
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     padding: 12px 20px 0 20px;
@@ -693,6 +1609,36 @@ body.m-menu-open .m-rooms-scroll {
     pointer-events: none !important;
 }
 
+/* Чердак: анимация скелета — блокируем свайп родителя, iframe оставляем кликабельным */
+body.is-attic-animating .m-rooms-scroll {
+    overflow: hidden !important;
+    touch-action: none !important;
+}
+body.is-attic-animating .m-arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Детальный экран комнаты (стена с вещами и т.п.) — кадр по центру, без свайпа */
+body.is-room-detail .m-rooms-scroll {
+    overflow: hidden !important;
+    touch-action: none !important;
+}
+body.is-room-detail .m-arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Back поверх iframe при зуме рюкзака/чемодана */
+.m-iframe-back {
+    display: none !important;
+    z-index: 60;
+    pointer-events: auto;
+}
+body.is-room-detail .m-iframe-back {
+    display: block !important;
+}
+
 /* Контейнер */
 .m-skeleton-menu {
     display: none;
@@ -708,23 +1654,32 @@ body.m-menu-open .m-rooms-scroll {
     display: block;
 }
 
-/* Кольца — концентрические, центр под яблоком (50% 58%).
-   Более тонкие и контрастные линии, виньетка от центра к краям. */
+/* Кольца — центр под яблоком (50% 64%). По макету: кольца крупнее, чем
+   расстояние до слов, — они не «подчёркивают» текст впритык, а образуют
+   широкий мягкий контур позади всей композиции. Из-за этого их нижняя
+   дуга уходит за пределы экрана (виден только верхний, более прямой
+   участок дуги — отсюда и ощущение «смещённости» относительно яблока). */
 .msk-rings {
     position: absolute;
     inset: 0;
     pointer-events: none;
+    /* Больше blur → мягче переход каждой линии («плавнее»), но зазоры
+       между линиями всё равно широкие (см. проценты ниже), поэтому
+       не сливаются в одно пятно. */
+    filter: blur(17px);
     background:
-        radial-gradient(circle at 50% 58%, transparent 11.4%, rgba(255,255,255,.18) 12%, transparent 12.6%),
-        radial-gradient(circle at 50% 58%, transparent 22.4%, rgba(255,255,255,.15) 23%, transparent 23.6%),
-        radial-gradient(circle at 50% 58%, transparent 33.4%, rgba(255,255,255,.13) 34%, transparent 34.6%),
-        radial-gradient(circle at 50% 58%, transparent 45.4%, rgba(255,255,255,.11) 46%, transparent 46.6%),
-        radial-gradient(circle at 50% 58%, transparent 58.4%, rgba(255,255,255,.09) 59%, transparent 59.6%),
-        radial-gradient(circle at 50% 58%, transparent 72.4%, rgba(255,255,255,.07) 73%, transparent 73.6%),
-        radial-gradient(circle at 50% 58%, #3a3631 0%, #1a1815 45%, #0a0908 90%);
+        /* светящийся кружок вокруг яблока */
+        radial-gradient(circle at 50% 64%, rgba(255,255,255,.6) 0%, rgba(255,255,255,.55) 8%, transparent 11%),
+        /* кольцо за camera / mp3 / diary — шире, край уходит к низу экрана */
+        radial-gradient(circle at 50% 64%, transparent 43%, rgba(255,255,255,.42) 53%, transparent 63%),
+        /* кольцо за iphone / backpack / luggage — крупнее, дуга уходит за нижний край */
+        radial-gradient(circle at 50% 64%, transparent 67%, rgba(255,255,255,.36) 78%, transparent 89%),
+        /* базовая виньетка */
+        radial-gradient(circle at 50% 64%, #4d4d4b 0%, #242321 55%, #0e0d0b 100%);
 }
 
-/* Зерно поверх колец — сильнее и крупнее */
+/* Зерно поверх колец — заметно тише и мельче, чем было, ближе к макету:
+   лёгкая дымка, а не выраженная фактура. */
 .msk-noise {
     position: absolute;
     inset: 0;
@@ -732,9 +1687,9 @@ body.m-menu-open .m-rooms-scroll {
     height: 100%;
     object-fit: cover;
     object-position: center;
-    opacity: 0.42;
-    mix-blend-mode: overlay;
-    transform: scale(1.15);
+    opacity: 0.22;
+    mix-blend-mode: soft-light;
+    transform: scale(1.05);
     pointer-events: none;
 }
 
@@ -753,32 +1708,106 @@ body.m-menu-open .m-rooms-scroll {
     z-index: 60; /* выше .msk-content (50): крестик инструмента (переводчик) не должен быть под iframe */
     -webkit-tap-highlight-color: transparent;
 }
-/* Кнопка «домой» — верхний левый угол меню */
+
+/* -----------------------------------------------------------------------
+   Полоска items под крестиком — из комнаты (.is-item-from-room) или
+   из apple-menu (.is-overlay, fixed поверх apple z:1100).
+   Как десктопный .nav-items: blur у неактивных, чёткий текущий.
+----------------------------------------------------------------------- */
+.m-item-strip {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 60;
+    width: min(94vw, 420px);
+    box-sizing: border-box;
+    padding: 8px 6px;
+    border-top: 1px dashed rgba(176, 176, 176, 0.55);
+    border-bottom: 1px dashed rgba(176, 176, 176, 0.55);
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    pointer-events: auto;
+}
+.m-skeleton-menu.is-item-from-room .m-item-strip:not([hidden]),
+.m-item-strip.is-visible:not([hidden]) {
+    display: flex !important;
+}
+/* Из Items (apple): полоска на body, выше всего apple-chrome */
+.m-item-strip.is-overlay:not([hidden]) {
+    display: flex !important;
+    position: fixed;
+    top: 72px;
+    z-index: 1200;
+}
+.m-item-strip[hidden] {
+    display: none !important;
+    pointer-events: none !important;
+}
+.m-item-strip-link {
+    margin: 0;
+    padding: 4px 7px;
+    border: 0;
+    background: transparent;
+    color: #b0b0b0;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 15px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    filter: blur(1px);
+    opacity: 0.5;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+.m-item-strip-link.is-active,
+.m-item-strip-link:active {
+    filter: blur(0);
+    opacity: 1;
+    color: #d8d2c6;
+}
+.m-item-strip-sep {
+    color: #b0b0b0;
+    opacity: 0.45;
+    font-size: 13px;
+    padding: 0 1px;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Кнопка «домой» — над черепом скелета, по центру.
+   Верх меню остаётся только крестику, дом читается как «выход вниз». */
 .msk-home {
     position: absolute;
-    top: 24px;
-    left: 18px;
+    top: auto;
+    left: 50%;
+    /* выше скелета, в зазоре между яблоком и черепом */
+    bottom: var(--m-exit-slot-bottom);
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 3px;
     text-decoration: none;
-    z-index: 10;
+    z-index: 12;
     -webkit-tap-highlight-color: transparent;
 }
 .msk-home img {
-    width: 30px;
+    width: 52px;
     height: auto;
     object-fit: contain;
     display: block;
-    opacity: 0.85;
+    opacity: 0.95;
     filter: drop-shadow(0 0 8px rgba(0,0,0,0.7));
 }
 .msk-home span {
     font-family: 'Avara-Bold', 'Avara', sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     color: #f3ede2;
-    opacity: 0.85;
+    opacity: 0.9;
 }
 
 .msk-close img {
@@ -790,64 +1819,72 @@ body.m-menu-open .m-rooms-scroll {
 }
 
 /* -----------------------------------------------------------------------
-   Подписи на дугах — точки на радиусе кольца от центра (50%, 60%).
+   Подписи на дугах — точки на радиусе кольца от центра (50%, 64%).
    Углы поворота = тангенс к окружности в точке подписи.
    Якорь = центр текста (translateX(-50%) + rotate).
 ----------------------------------------------------------------------- */
 .msk-label {
     position: absolute;
     font-family: 'Avara-Bold', 'Avara', sans-serif;
-    font-size: 19px;
+    font-size: 14px;
     color: #b0b0b0;
     text-decoration: none;
     white-space: nowrap;
     letter-spacing: 0.04em;
     -webkit-tap-highlight-color: transparent;
+    /* сброс дефолтных стилей <button> (раньше были <a>) */
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
 }
 .msk-label:active {
     color: #ffffff;
 }
 
-/* Внешнее кольцо (r ≈ 46% от центра 58%) */
+/* Внешнее кольцо (r ≈ 46% от центра 64%) */
 .msk-iphone {
-    top: 22%;
+    top: 28%;
     left: 22%;
     transform: translateX(-50%) rotate(-28deg);
 }
 .msk-backpack {
-    top: 16%;
+    top: 22%;
     left: 50%;
     transform: translateX(-50%) rotate(0deg);
 }
 .msk-luggage {
-    top: 22%;
+    top: 28%;
     left: 78%;
     transform: translateX(-50%) rotate(28deg);
 }
 
-/* Среднее кольцо (r ≈ 33% от центра 58%) */
+/* Среднее кольцо (r ≈ 33% от центра 64%) */
 .msk-camera {
-    top: 36%;
+    top: 42%;
     left: 27%;
     transform: translateX(-50%) rotate(-34deg);
 }
 .msk-mp3 {
-    top: 30%;
+    top: 36%;
     left: 50%;
     transform: translateX(-50%) rotate(0deg);
 }
 .msk-diary {
-    top: 36%;
+    top: 42%;
     left: 73%;
     transform: translateX(-50%) rotate(34deg);
 }
 
 /* -----------------------------------------------------------------------
-   Центр — items (яблоко) в центре колец (50%, 58%)
+   Центр — items (яблоко) в центре колец (50%, 64%)
 ----------------------------------------------------------------------- */
 .msk-center {
     position: absolute;
-    top: 58%;
+    top: 64%;
     left: 50%;
     bottom: auto;
     transform: translate(-50%, -50%);
@@ -907,6 +1944,26 @@ body.m-menu-open .m-rooms-scroll {
 }
 .msk-xray {
     right: 6vw;
+}
+
+/* -----------------------------------------------------------------------
+   Скелет — декоративный, как в макете. Некликабелен (pointer-events:
+   none), ниже углов trnsltr/x-ray, прижат к низу экрана.
+----------------------------------------------------------------------- */
+.msk-skeleton {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72vw;
+    max-width: 320px;
+    height: auto;
+    display: block;
+    opacity: 0.9;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
 }
 
 /* -----------------------------------------------------------------------
@@ -1008,8 +2065,11 @@ body.m-menu-open .m-rooms-scroll {
     font-family: 'Avara', sans-serif;
     font-style: italic;
     font-size: 13px;
-    color: #b0b0b0;
-    opacity: 0.85;
+    color: #fff;
+    opacity: 1;
+    /* белый текст со свечением */
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.7),
+                 0 0 10px rgba(255, 255, 255, 0.35);
 }
 .map-marquee-track span::after { content: ' —'; opacity: 0.3; }
 
@@ -1134,7 +2194,8 @@ body.m-menu-open .m-rooms-scroll {
     color: #b0b0b0;
 }
 
-/* Контейнер iframe-контента внутри apple-menu — поверх сетки */
+/* Контейнер iframe внутри apple-menu — на весь экран поверх сетки и
+   нижнего trnsltr/x-ray. Полоска items (lugg|iphone|…) — отдельный overlay. */
 #mapContent {
     z-index: 50;
 }
